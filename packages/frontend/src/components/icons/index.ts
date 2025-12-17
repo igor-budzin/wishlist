@@ -1,10 +1,14 @@
 export { AlertCircle } from './AlertCircle';
+export { Apple } from './Apple';
 export { ArrowLeft } from './ArrowLeft';
 export { Calendar } from './Calendar';
 export { Check } from './Check';
 export { ChevronDown } from './ChevronDown';
 export { ChevronUp } from './ChevronUp';
 export { ExternalLink } from './ExternalLink';
+export { Facebook } from './Facebook';
+export { GitHub } from './GitHub';
+export { Google } from './Google';
 export { Loader2 } from './Loader2';
 export { Monitor } from './Monitor';
 export { Moon } from './Moon';

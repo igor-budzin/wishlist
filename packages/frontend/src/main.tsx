@@ -7,6 +7,7 @@ import { WishlistProvider } from './contexts/WishlistContext';
 import HomePage from './pages/HomePage';
 import AddItemPage from './pages/AddItemPage';
 import EditItemPage from './pages/EditItemPage';
+import LoginPage from './pages/LoginPage';
 import './styles/index.css';
 
 const router = createBrowserRouter([
@@ -17,6 +18,7 @@ const router = createBrowserRouter([
       { index: true, element: <HomePage /> },
       { path: 'add', element: <AddItemPage /> },
       { path: 'edit/:id', element: <EditItemPage /> },
+      { path: 'login', element: <LoginPage /> },
     ],
   },
 ]);
