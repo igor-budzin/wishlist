@@ -1,0 +1,18 @@
+{
+  "extends": "../../tsconfig.json",
+  "compilerOptions": {
+    "composite": true,
+    "lib": ["ES2020", "DOM", "DOM.Iterable"],
+    "jsx": "react-jsx",
+    "noEmit": true,
+    "paths": {
+      "@wishlist/shared": ["../shared/src"]
+    }
+  },
+  "include": ["src"],
+  "references": [
+    {
+      "path": "../shared"
+    }
+  ]
+}

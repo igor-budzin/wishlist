@@ -1,0 +1,41 @@
+      {
+  "name": "wishlist-monorepo",
+  "version": "1.0.0",
+  "private": true,
+  "description": "Wishlist monorepo with React frontend and Express backend",
+  "workspaces": [
+    "packages/*"
+  ],
+  "scripts": {
+    "dev": "npm-run-all --parallel dev:*",
+    "dev:frontend": "npm run dev --workspace=@wishlist/frontend",
+    "dev:backend": "npm run dev --workspace=@wishlist/backend",
+    "build": "npm run build --workspaces --if-present",
+    "build:shared": "npm run build --workspace=@wishlist/shared",
+    "build:frontend": "npm run build --workspace=@wishlist/frontend",
+    "build:backend": "npm run build --workspace=@wishlist/backend",
+    "test": "npm run test --workspaces --if-present",
+    "test:smoke": "npm-run-all --parallel test:smoke:*",
+    "test:smoke:backend": "npm run test:smoke --workspace=@wishlist/backend",
+    "test:smoke:frontend": "npm run test:smoke --workspace=@wishlist/frontend",
+    "db:seed": "npm run db:seed --workspace=@wishlist/backend",
+    "lint": "eslint . --ext .ts,.tsx",
+    "lint:fix": "eslint . --ext .ts,.tsx --fix",
+    "format": "prettier --write \"**/*.{ts,tsx,json,md}\"",
+    "format:check": "prettier --check \"**/*.{ts,tsx,json,md}\"",
+    "type-check": "npm run type-check --workspaces --if-present",
+    "clean": "npm run clean --workspaces --if-present && rm -rf node_modules"
+  },
+  "devDependencies": {
+    "@types/node": "^20.10.0",
+    "@typescript-eslint/eslint-plugin": "^6.13.0",
+    "@typescript-eslint/parser": "^6.13.0",
+    "eslint": "^8.54.0",
+    "eslint-config-prettier": "^9.0.0",
+    "eslint-plugin-react": "^7.33.2",
+    "eslint-plugin-react-hooks": "^4.6.0",
+    "npm-run-all": "^4.1.5",
+    "prettier": "^3.1.0",
+    "typescript": "^5.3.0"
+  }
+}
