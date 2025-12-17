@@ -1,13 +1,32 @@
 import React from 'react';
 import ReactDOM from 'react-dom/client';
+import { createBrowserRouter, RouterProvider } from 'react-router-dom';
 import App from './components/App';
 import { ThemeProvider } from './components/theme-provider';
+import { WishlistProvider } from './contexts/WishlistContext';
+import HomePage from './pages/HomePage';
+import AddItemPage from './pages/AddItemPage';
+import EditItemPage from './pages/EditItemPage';
 import './styles/index.css';
+
+const router = createBrowserRouter([
+  {
+    path: '/',
+    element: <App />,
+    children: [
+      { index: true, element: <HomePage /> },
+      { path: 'add', element: <AddItemPage /> },
+      { path: 'edit/:id', element: <EditItemPage /> },
+    ],
+  },
+]);
 
 ReactDOM.createRoot(document.getElementById('root')!).render(
   <React.StrictMode>
     <ThemeProvider>
-      <App />
+      <WishlistProvider>
+        <RouterProvider router={router} />
+      </WishlistProvider>
     </ThemeProvider>
   </React.StrictMode>
 );

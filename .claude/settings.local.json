@@ -23,7 +23,23 @@
       "Bash(npm run test:smoke:*)",
       "Bash(npm run db:seed:*)",
       "mcp__playwright__browser_click",
-      "mcp__playwright__browser_resize"
+      "mcp__playwright__browser_resize",
+      "Bash(cat:*)",
+      "Bash(dir /s \"C:\\code\\wishlist\\packages\\frontend\\@wishlist\")",
+      "mcp__shadcn-ui__get_project_registries",
+      "mcp__shadcn-ui__search_items_in_registries",
+      "mcp__shadcn-ui__list_items_in_registries",
+      "mcp__shadcn-ui__get_add_command_for_items",
+      "Bash(npx shadcn@latest add:*)",
+      "mcp__shadcn-ui__view_items_in_registries",
+      "WebFetch(domain:ui.shadcn.com)",
+      "WebFetch(domain:raw.githubusercontent.com)",
+      "WebSearch",
+      "Bash(npm run build:*)",
+      "mcp__playwright__browser_type",
+      "mcp__playwright__browser_close",
+      "Bash(pnpm dlx shadcn@latest migrate radix:*)",
+      "Bash(npx shadcn@latest migrate:*)"
     ],
     "defaultMode": "plan"
   }

@@ -7,10 +7,12 @@ export default defineConfig({
   resolve: {
     alias: {
       '@wishlist/shared': path.resolve(__dirname, '../shared/src'),
+      'src': path.resolve(__dirname, './src'),
     },
   },
   server: {
     port: 3000,
+    allowedHosts: true,
     proxy: {
       '/api': {
         target: 'http://localhost:3002',
