@@ -1,6 +1,6 @@
 import { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { Sparkles, ExternalLink, Calendar, AlertCircle, Loader2, Plus, Pencil, Trash2 } from 'lucide-react';
+import { Sparkles, ExternalLink, Calendar, AlertCircle, Loader2, Plus, Pencil, Trash2 } from '../components/icons';
 import type { WishlistItem } from '@wishlist/shared';
 import { formatDate } from '@wishlist/shared';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '../components/ui/card';
