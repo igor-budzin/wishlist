@@ -1,6 +1,11 @@
 import { useState, useEffect } from 'react';
+import { Sparkles, ExternalLink, Calendar, AlertCircle, Loader2 } from 'lucide-react';
 import type { WishlistItem, ApiResponse } from '@wishlist/shared';
 import { formatDate } from '@wishlist/shared';
+import { Card, CardContent, CardDescription, CardHeader, CardTitle } from './ui/card';
+import { Badge } from './ui/badge';
+import { Button } from './ui/button';
+import { ThemeToggle } from './theme-toggle';
 
 function App() {
   const [items, setItems] = useState<WishlistItem[]>([]);
@@ -28,51 +33,120 @@ function App() {
     }
   };
 
-  return (
-    <div className="min-h-screen bg-gray-100">
-      <div className="container mx-auto px-4 py-8">
-        <h1 className="text-4xl font-bold text-gray-900 mb-8">My Wishlist</h1>
+  const getPriorityVariant = (priority: string) => {
+    switch (priority.toLowerCase()) {
+      case 'high':
+        return 'destructive';
+      case 'medium':
+        return 'warning';
+      case 'low':
+        return 'success';
+      default:
+        return 'default';
+    }
+  };
 
-        {loading && <div className="text-center text-gray-600">Loading...</div>}
+  return (
+    <div className="min-h-screen bg-background">
+      {/* Header */}
+      <header className="sticky top-0 z-50 w-full border-b bg-background/95 backdrop-blur supports-[backdrop-filter]:bg-background/60">
+        <div className="container flex h-14 max-w-screen-2xl items-center">
+          <div className="flex flex-1 items-center justify-between space-x-2 md:justify-between">
+            <div className="flex items-center space-x-2">
+              <Sparkles className="h-6 w-6 text-primary" />
+              <h1 className="text-xl font-bold md:text-2xl">My Wishlist</h1>
+            </div>
+            <ThemeToggle />
+          </div>
+        </div>
+      </header>
+
+      {/* Main Content */}
+      <main className="container max-w-screen-2xl py-6 md:py-8">
+        {loading && (
+          <div className="flex flex-col items-center justify-center py-12 space-y-4">
+            <Loader2 className="h-8 w-8 animate-spin text-muted-foreground" />
+            <p className="text-sm text-muted-foreground">Loading your wishlist...</p>
+          </div>
+        )}
 
         {error && (
-          <div className="bg-red-100 border border-red-400 text-red-700 px-4 py-3 rounded">
-            {error}
-          </div>
+          <Card className="border-destructive">
+            <CardHeader>
+              <div className="flex items-center space-x-2">
+                <AlertCircle className="h-5 w-5 text-destructive" />
+                <CardTitle className="text-destructive">Error</CardTitle>
+              </div>
+              <CardDescription>{error}</CardDescription>
+            </CardHeader>
+          </Card>
         )}
 
         {!loading && !error && items.length === 0 && (
-          <div className="text-center text-gray-600">
-            No items yet. Start adding to your wishlist!
-          </div>
+          <Card className="text-center py-12">
+            <CardHeader>
+              <CardTitle className="text-2xl">No items yet</CardTitle>
+              <CardDescription className="text-base">
+                Start adding items to your wishlist!
+              </CardDescription>
+            </CardHeader>
+          </Card>
         )}
 
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
+        {/* Responsive Grid */}
+        <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4">
           {items.map((item) => (
-            <div
+            <Card
               key={item.id}
-              className="bg-white rounded-lg shadow-md p-6 hover:shadow-lg transition-shadow"
+              className="flex flex-col transition-all hover:shadow-lg"
             >
-              <h2 className="text-xl font-semibold text-gray-800 mb-2">{item.title}</h2>
-              {item.description && <p className="text-gray-600 mb-4">{item.description}</p>}
-              <div className="flex justify-between items-center text-sm text-gray-500">
-                <span
-                  className={`px-2 py-1 rounded ${
-                    item.priority === 'high'
-                      ? 'bg-red-100 text-red-800'
-                      : item.priority === 'medium'
-                        ? 'bg-yellow-100 text-yellow-800'
-                        : 'bg-green-100 text-green-800'
-                  }`}
-                >
-                  {item.priority}
-                </span>
-                <span>{formatDate(new Date(item.createdAt))}</span>
-              </div>
-            </div>
+              <CardHeader className="space-y-3">
+                <div className="flex items-start justify-between gap-2">
+                  <CardTitle className="text-lg leading-tight line-clamp-2">
+                    {item.title}
+                  </CardTitle>
+                  <Badge variant={getPriorityVariant(item.priority)}>
+                    {item.priority}
+                  </Badge>
+                </div>
+                {item.description && (
+                  <CardDescription className="line-clamp-3">
+                    {item.description}
+                  </CardDescription>
+                )}
+              </CardHeader>
+
+              <CardContent className="flex-1 flex flex-col justify-end space-y-3">
+                <div className="flex items-center text-xs text-muted-foreground">
+                  <Calendar className="mr-1.5 h-3.5 w-3.5" />
+                  {formatDate(new Date(item.createdAt))}
+                </div>
+
+                {item.url && (
+                  <Button
+                    variant="outline"
+                    size="sm"
+                    className="w-full"
+                    onClick={() => window.open(item.url, '_blank')}
+                  >
+                    <ExternalLink className="mr-2 h-4 w-4" />
+                    View Link
+                  </Button>
+                )}
+              </CardContent>
+            </Card>
           ))}
         </div>
-      </div>
+      </main>
+
+      {/* Footer */}
+      <footer className="border-t py-6 md:py-8">
+        <div className="container max-w-screen-2xl text-center text-sm text-muted-foreground">
+          <p>
+            Made with <span className="text-primary">♥</span> for tracking your wishes
+          </p>
+        </div>
+      </footer>
     </div>
   );
 }
