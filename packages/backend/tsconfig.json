@@ -8,6 +8,8 @@
     "rootDir": "./src",
     "noEmit": false,
     "allowImportingTsExtensions": false,
+    "experimentalDecorators": true,
+    "emitDecoratorMetadata": true,
     "paths": {
       "@wishlist/shared": ["../shared/src"]
     }

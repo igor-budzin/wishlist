@@ -1,12 +1,18 @@
 import type { Request, Response, NextFunction } from 'express';
 import type { ApiResponse } from '@wishlist/shared';
+import { container } from '../container.js';
+import { TYPES } from '../types.js';
+import type { ILogger } from '../lib/logger.js';
 
 export const errorHandler = (err: Error, _req: Request, res: Response, _next: NextFunction) => {
-  console.error('Error:', err);
+  const logger = container.get<ILogger>(TYPES.Logger);
+  logger.error('Unhandled error:', err);
 
   const response: ApiResponse<null> = {
     success: false,
-    error: err.message || 'Internal server error',
+    error: process.env.NODE_ENV === 'production'
+      ? 'Internal server error'
+      : err.message,
   };
 
   res.status(500).json(response);
