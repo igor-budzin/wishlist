@@ -4,6 +4,7 @@ export interface WishlistItem {
   description?: string;
   url?: string;
   priority: 'low' | 'medium' | 'high';
+  userId: string;
   createdAt: Date;
   updatedAt: Date;
 }
@@ -18,4 +19,7 @@ export interface User {
   id: string;
   name: string;
   email: string;
+  provider: string;
+  avatar: string | null;
+  createdAt: Date;
 }

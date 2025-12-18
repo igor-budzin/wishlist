@@ -12,7 +12,8 @@ export class WishlistItemController {
 
   async getAll(req: Request, res: Response, next: NextFunction): Promise<void> {
     try {
-      const items = await this.service.getAllItems();
+      const userId = req.user!.id; // Safe after requireAuth middleware
+      const items = await this.service.getAllItems(userId);
       const response: ApiResponse<typeof items> = {
         success: true,
         data: items,
@@ -25,8 +26,9 @@ export class WishlistItemController {
 
   async getById(req: Request, res: Response, next: NextFunction): Promise<void> {
     try {
+      const userId = req.user!.id; // Safe after requireAuth middleware
       const { id } = req.params;
-      const item = await this.service.getItemById(id);
+      const item = await this.service.getItemById(id, userId);
       const response: ApiResponse<typeof item> = {
         success: true,
         data: item,
@@ -47,8 +49,9 @@ export class WishlistItemController {
 
   async create(req: Request, res: Response, next: NextFunction): Promise<void> {
     try {
+      const userId = req.user!.id; // Safe after requireAuth middleware
       // Validation happens in middleware, req.body is validated
-      const item = await this.service.createItem(req.body);
+      const item = await this.service.createItem(req.body, userId);
       const response: ApiResponse<typeof item> = {
         success: true,
         data: item,
@@ -61,8 +64,9 @@ export class WishlistItemController {
 
   async update(req: Request, res: Response, next: NextFunction): Promise<void> {
     try {
+      const userId = req.user!.id; // Safe after requireAuth middleware
       const { id } = req.params;
-      const item = await this.service.updateItem(id, req.body);
+      const item = await this.service.updateItem(id, userId, req.body);
       const response: ApiResponse<typeof item> = {
         success: true,
         data: item,
@@ -83,8 +87,9 @@ export class WishlistItemController {
 
   async delete(req: Request, res: Response, next: NextFunction): Promise<void> {
     try {
+      const userId = req.user!.id; // Safe after requireAuth middleware
       const { id } = req.params;
-      await this.service.deleteItem(id);
+      await this.service.deleteItem(id, userId);
       const response: ApiResponse<null> = {
         success: true,
         data: null,

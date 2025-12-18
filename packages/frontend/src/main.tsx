@@ -3,7 +3,9 @@ import ReactDOM from 'react-dom/client';
 import { createBrowserRouter, RouterProvider } from 'react-router-dom';
 import App from './components/App';
 import { ThemeProvider } from './components/theme-provider';
+import { AuthProvider } from './contexts/AuthContext';
 import { WishlistProvider } from './contexts/WishlistContext';
+import { ProtectedRoute } from './components/ProtectedRoute';
 import HomePage from './pages/HomePage';
 import AddItemPage from './pages/AddItemPage';
 import EditItemPage from './pages/EditItemPage';
@@ -17,12 +19,47 @@ const router = createBrowserRouter([
     path: '/',
     element: <App />,
     children: [
-      { index: true, element: <HomePage /> },
-      { path: 'add', element: <AddItemPage /> },
-      { path: 'edit/:id', element: <EditItemPage /> },
+      {
+        index: true,
+        element: (
+          <ProtectedRoute>
+            <HomePage />
+          </ProtectedRoute>
+        ),
+      },
+      {
+        path: 'add',
+        element: (
+          <ProtectedRoute>
+            <AddItemPage />
+          </ProtectedRoute>
+        ),
+      },
+      {
+        path: 'edit/:id',
+        element: (
+          <ProtectedRoute>
+            <EditItemPage />
+          </ProtectedRoute>
+        ),
+      },
       { path: 'login', element: <LoginPage /> },
-      { path: 'profile', element: <ProfilePage /> },
-      { path: 'subscriptions', element: <SubscriptionsPage /> },
+      {
+        path: 'profile',
+        element: (
+          <ProtectedRoute>
+            <ProfilePage />
+          </ProtectedRoute>
+        ),
+      },
+      {
+        path: 'subscriptions',
+        element: (
+          <ProtectedRoute>
+            <SubscriptionsPage />
+          </ProtectedRoute>
+        ),
+      },
     ],
   },
 ]);
@@ -30,9 +67,11 @@ const router = createBrowserRouter([
 ReactDOM.createRoot(document.getElementById('root')!).render(
   <React.StrictMode>
     <ThemeProvider>
-      <WishlistProvider>
-        <RouterProvider router={router} />
-      </WishlistProvider>
+      <AuthProvider>
+        <WishlistProvider>
+          <RouterProvider router={router} />
+        </WishlistProvider>
+      </AuthProvider>
     </ThemeProvider>
   </React.StrictMode>
 );

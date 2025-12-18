@@ -39,7 +39,12 @@
       "mcp__playwright__browser_type",
       "mcp__playwright__browser_close",
       "Bash(pnpm dlx shadcn@latest migrate radix:*)",
-      "Bash(npx shadcn@latest migrate:*)"
+      "Bash(npx shadcn@latest migrate:*)",
+      "Bash(npx prisma migrate dev:*)",
+      "Bash(npx prisma migrate:*)",
+      "Bash(npx prisma generate:*)",
+      "Bash(npm run build:backend:*)",
+      "Bash(npm run build:frontend:*)"
     ],
     "defaultMode": "plan"
   }

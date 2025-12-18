@@ -1,6 +1,6 @@
 import type { Request, Response, NextFunction } from 'express';
 import type { ApiResponse } from '@wishlist/shared';
-import { ZodSchema, ZodError } from 'zod';
+import { ZodSchema } from 'zod';
 
 export const validate = (schema: ZodSchema) => {
   return (req: Request, res: Response, next: NextFunction) => {
@@ -8,10 +8,10 @@ export const validate = (schema: ZodSchema) => {
 
     if (!result.success) {
       try {
-        const errorMessages = result.error.errors
-          .map(e => {
-            const path = e.path.length > 0 ? `${e.path.join('.')}:` : '';
-            return `${path} ${e.message}`;
+        const errorMessages = result.error.issues
+          .map((issue) => {
+            const path = issue.path.length > 0 ? `${issue.path.join('.')}:` : '';
+            return `${path} ${issue.message}`;
           })
           .join(', ');
 
@@ -20,7 +20,7 @@ export const validate = (schema: ZodSchema) => {
           error: errorMessages,
         };
         return res.status(400).json(response);
-      } catch (err) {
+      } catch (_err) {
         // Fallback error formatting
         const response: ApiResponse<null> = {
           success: false,

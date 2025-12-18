@@ -1,7 +1,6 @@
 import { useMemo } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { toast } from 'sonner';
-import type { User } from '@wishlist/shared';
 
 import { AppHeader } from '../components/AppHeader';
 import { BackButton } from '../components/BackButton';
@@ -9,21 +8,18 @@ import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '../co
 import { Badge } from '../components/ui/badge';
 import { Button } from '../components/ui/button';
 import { Input } from '../components/ui/input';
-import { Textarea } from '../components/ui/textarea';
 import { Label } from '../components/ui/label';
 import { useWishlist } from '../contexts/WishlistContext';
-
-const mockUser: User & { bio: string; joinedAt: string } = {
-  id: 'user_1',
-  name: 'Alex Wishlist',
-  email: 'alex@example.com',
-  bio: 'Loves discovering new gadgets, books, and experiences. Uses this wishlist to keep track of meaningful goals and treats.',
-  joinedAt: 'January 2025',
-};
+import { useAuth } from '../contexts/AuthContext';
 
 export default function ProfilePage() {
   const navigate = useNavigate();
   const { items, loading } = useWishlist();
+  const { user, logout } = useAuth();
+
+  if (!user) {
+    return null;
+  }
 
   const stats = useMemo(() => {
     const total = items.length;
@@ -36,13 +32,13 @@ export default function ProfilePage() {
 
   const initials = useMemo(
     () =>
-      mockUser.name
+      user.name
         .split(' ')
         .filter(Boolean)
         .map((part) => part[0]?.toUpperCase())
         .slice(0, 2)
         .join(''),
-    []
+    [user.name]
   );
 
   const handleEditProfile = () => {
@@ -53,8 +49,9 @@ export default function ProfilePage() {
     toast.info('Avatar customization coming soon!');
   };
 
-  const handleSignOut = () => {
-    toast.info('Sign out flow coming soon!');
+  const handleSignOut = async () => {
+    await logout();
+    navigate('/login');
   };
 
   return (
@@ -85,9 +82,9 @@ export default function ProfilePage() {
                 {initials}
               </div>
               <div className="space-y-1">
-                <p className="text-base font-medium leading-tight">{mockUser.name}</p>
-                <p className="text-sm text-muted-foreground">{mockUser.email}</p>
-                <p className="text-xs text-muted-foreground">Joined {mockUser.joinedAt}</p>
+                <p className="text-base font-medium leading-tight">{user.name}</p>
+                <p className="text-sm text-muted-foreground">{user.email}</p>
+                <p className="text-xs text-muted-foreground capitalize">via {user.provider}</p>
               </div>
             </div>
             <div className="md:ml-auto">
@@ -110,11 +107,11 @@ export default function ProfilePage() {
             <div className="grid gap-4 md:grid-cols-2">
               <div className="space-y-2">
                 <Label htmlFor="name">Full name</Label>
-                <Input id="name" value={mockUser.name} readOnly />
+                <Input id="name" value={user.name} readOnly />
               </div>
               <div className="space-y-2">
                 <Label htmlFor="email">Email address</Label>
-                <Input id="email" type="email" value={mockUser.email} readOnly />
+                <Input id="email" type="email" value={user.email} readOnly />
               </div>
             </div>
           </CardContent>

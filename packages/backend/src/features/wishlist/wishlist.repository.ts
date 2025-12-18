@@ -4,22 +4,23 @@ import { TYPES } from '../../types.js';
 import type { ILogger } from '../../lib/logger.js';
 
 export interface IWishlistItemRepository {
-  findAll(): Promise<WishlistItem[]>;
-  findById(id: string): Promise<WishlistItem | null>;
+  findAll(userId: string): Promise<WishlistItem[]>;
+  findById(id: string, userId: string): Promise<WishlistItem | null>;
   create(data: {
     title: string;
     description?: string;
     url?: string;
     priority: Priority;
+    userId: string;
   }): Promise<WishlistItem>;
-  update(id: string, data: {
+  update(id: string, userId: string, data: {
     title?: string;
     description?: string | null;
     url?: string | null;
     priority?: Priority;
   }): Promise<WishlistItem>;
-  delete(id: string): Promise<void>;
-  count(): Promise<number>;
+  delete(id: string, userId: string): Promise<void>;
+  count(userId: string): Promise<number>;
 }
 
 @injectable()
@@ -29,17 +30,18 @@ export class WishlistItemRepository implements IWishlistItemRepository {
     @inject(TYPES.Logger) private logger: ILogger
   ) {}
 
-  async findAll(): Promise<WishlistItem[]> {
-    this.logger.debug('Fetching all wishlist items');
+  async findAll(userId: string): Promise<WishlistItem[]> {
+    this.logger.debug(`Fetching all wishlist items for user: ${userId}`);
     return this.prisma.wishlistItem.findMany({
+      where: { userId },
       orderBy: { createdAt: 'desc' },
     });
   }
 
-  async findById(id: string): Promise<WishlistItem | null> {
-    this.logger.debug(`Fetching wishlist item with id: ${id}`);
+  async findById(id: string, userId: string): Promise<WishlistItem | null> {
+    this.logger.debug(`Fetching wishlist item with id: ${id} for user: ${userId}`);
     return this.prisma.wishlistItem.findUnique({
-      where: { id },
+      where: { id, userId },
     });
   }
 
@@ -48,34 +50,37 @@ export class WishlistItemRepository implements IWishlistItemRepository {
     description?: string;
     url?: string;
     priority: Priority;
+    userId: string;
   }): Promise<WishlistItem> {
-    this.logger.info(`Creating wishlist item: ${data.title}`);
+    this.logger.info(`Creating wishlist item: ${data.title} for user: ${data.userId}`);
     return this.prisma.wishlistItem.create({
       data,
     });
   }
 
-  async update(id: string, data: {
+  async update(id: string, userId: string, data: {
     title?: string;
     description?: string | null;
     url?: string | null;
     priority?: Priority;
   }): Promise<WishlistItem> {
-    this.logger.info(`Updating wishlist item: ${id}`);
+    this.logger.info(`Updating wishlist item: ${id} for user: ${userId}`);
     return this.prisma.wishlistItem.update({
-      where: { id },
+      where: { id, userId },
       data,
     });
   }
 
-  async delete(id: string): Promise<void> {
-    this.logger.info(`Deleting wishlist item: ${id}`);
+  async delete(id: string, userId: string): Promise<void> {
+    this.logger.info(`Deleting wishlist item: ${id} for user: ${userId}`);
     await this.prisma.wishlistItem.delete({
-      where: { id },
+      where: { id, userId },
     });
   }
 
-  async count(): Promise<number> {
-    return this.prisma.wishlistItem.count();
+  async count(userId: string): Promise<number> {
+    return this.prisma.wishlistItem.count({
+      where: { userId },
+    });
   }
 }

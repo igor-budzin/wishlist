@@ -1,16 +1,48 @@
 import express from 'express';
 import cors from 'cors';
+import helmet from 'helmet';
+import passport from 'passport';
 import routes from './routes/index.js';
+import authRoutes from './routes/auth.routes.js';
 import { errorHandler } from './middleware/errorHandler.js';
+import { createSessionConfig } from './features/auth/session.config.js';
+import { configurePassport } from './features/auth/passport.config.js';
+import { container } from './container.js';
+import { TYPES } from './types.js';
+import type { IAuthService } from './features/auth/auth.service.js';
+import type { ILogger } from './lib/logger.js';
 
 const app = express();
 
-// Middleware
-app.use(cors());
+// Get dependencies from container
+const authService = container.get<IAuthService>(TYPES.AuthService);
+const logger = container.get<ILogger>(TYPES.Logger);
+
+// Security middleware
+app.use(helmet());
+
+// CORS with credentials
+app.use(
+  cors({
+    origin: process.env.FRONTEND_URL || 'http://localhost:3000',
+    credentials: true,
+  })
+);
+
+// Body parsing
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 
+// Session middleware
+app.use(createSessionConfig());
+
+// Passport initialization
+configurePassport(authService, logger);
+app.use(passport.initialize());
+app.use(passport.session());
+
 // Routes
+app.use('/api/auth', authRoutes);
 app.use('/api', routes);
 
 // Health check

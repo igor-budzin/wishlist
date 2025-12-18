@@ -31,7 +31,15 @@ export function WishlistProvider({ children }: WishlistProviderProps) {
 
   const fetchItems = async () => {
     try {
-      const response = await fetch('/api/items');
+      const response = await fetch('/api/items', {
+        credentials: 'include',
+      });
+
+      if (response.status === 401) {
+        window.location.href = '/login';
+        return;
+      }
+
       const data: ApiResponse<WishlistItem[]> = await response.json();
 
       if (data.success && data.data) {
@@ -51,8 +59,15 @@ export function WishlistProvider({ children }: WishlistProviderProps) {
       const response = await fetch('/api/items', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
+        credentials: 'include',
         body: JSON.stringify(data),
       });
+
+      if (response.status === 401) {
+        window.location.href = '/login';
+        return false;
+      }
+
       const result: ApiResponse<WishlistItem> = await response.json();
 
       if (result.success && result.data) {
@@ -74,8 +89,15 @@ export function WishlistProvider({ children }: WishlistProviderProps) {
       const response = await fetch(`/api/items/${id}`, {
         method: 'PUT',
         headers: { 'Content-Type': 'application/json' },
+        credentials: 'include',
         body: JSON.stringify(data),
       });
+
+      if (response.status === 401) {
+        window.location.href = '/login';
+        return false;
+      }
+
       const result: ApiResponse<WishlistItem> = await response.json();
 
       if (result.success && result.data) {
@@ -94,7 +116,16 @@ export function WishlistProvider({ children }: WishlistProviderProps) {
 
   const deleteItem = async (id: string) => {
     try {
-      const response = await fetch(`/api/items/${id}`, { method: 'DELETE' });
+      const response = await fetch(`/api/items/${id}`, {
+        method: 'DELETE',
+        credentials: 'include',
+      });
+
+      if (response.status === 401) {
+        window.location.href = '/login';
+        return;
+      }
+
       const result: ApiResponse<void> = await response.json();
 
       if (result.success) {

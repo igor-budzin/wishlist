@@ -5,8 +5,10 @@ A full-stack TypeScript monorepo with React frontend and Express backend.
 ## Tech Stack
 
 - **Frontend**: React 18, Tailwind CSS, Vite
-- **Backend**: Express, Prisma ORM
-- **Database**: PostgreSQL
+- **Backend**: Express, Prisma ORM, Passport.js
+- **Database**: PostgreSQL with session store
+- **Authentication**: OAuth 2.0 (Google, Facebook, GitHub, Apple)
+- **Session Management**: Express sessions with PostgreSQL store
 - **Shared**: TypeScript types and utilities
 - **Code Quality**: ESLint, Prettier
 - **Package Manager**: npm workspaces
@@ -41,21 +43,38 @@ Dependencies are already installed, but if needed:
 npm install
 ```
 
-### 2. Configure Database
+### 2. Configure Environment
 
-Copy the example environment file and update with your database credentials:
+Copy the example environment file and configure your environment variables:
 
 ```bash
 cp packages/backend/.env.example packages/backend/.env
 ```
 
-Edit `packages/backend/.env`:
+Edit `packages/backend/.env` with your configuration:
 
+**Required Configuration:**
 ```env
+# Database
 DATABASE_URL="postgresql://username:password@localhost:5432/wishlist_db"
-PORT=3001
+
+# Server
+PORT=3002
 NODE_ENV=development
+
+# Session (IMPORTANT: Generate a secure secret!)
+SESSION_SECRET="generate-a-secure-random-string-min-32-chars"
+FRONTEND_URL="http://localhost:3000"
 ```
+
+**Generate a secure session secret:**
+```bash
+node -e "console.log(require('crypto').randomBytes(64).toString('hex'))"
+```
+
+**OAuth Configuration (Optional - Configure only the providers you want to use):**
+
+See the detailed OAuth setup guide in [Authentication Setup](#authentication-setup) below.
 
 ### 3. Initialize Database
 
@@ -88,8 +107,10 @@ npm run dev
 This will start:
 
 - **Frontend**: http://localhost:3000
-- **Backend**: http://localhost:3001
-- **API**: http://localhost:3001/api
+- **Backend**: http://localhost:3002
+- **API**: http://localhost:3002/api
+
+**Note**: You must configure OAuth providers before you can login. See [Authentication Setup](#authentication-setup).
 
 ## Available Scripts
 
@@ -113,12 +134,128 @@ This will start:
 - `npm run db:studio --workspace=@wishlist/backend` - Open Prisma Studio (GUI)
 - `npm run db:generate --workspace=@wishlist/backend` - Generate Prisma Client
 
+## Authentication Setup
+
+The application uses OAuth 2.0 authentication with session-based authentication. Users can login with Google, Facebook, GitHub, or Apple.
+
+### Quick Start (Google OAuth)
+
+1. **Go to [Google Cloud Console](https://console.cloud.google.com/apis/credentials)**
+
+2. **Create a new project or select existing**
+
+3. **Enable Google+ API**
+   - Go to "APIs & Services" → "Library"
+   - Search for "Google+ API" and enable it
+
+4. **Create OAuth 2.0 Credentials**
+   - Go to "Credentials" → "Create Credentials" → "OAuth 2.0 Client ID"
+   - Choose "Web application"
+   - Add authorized redirect URI: `http://localhost:3002/api/auth/google/callback`
+   - Copy the Client ID and Client Secret
+
+5. **Update your `.env` file:**
+   ```env
+   GOOGLE_CLIENT_ID="your-client-id.apps.googleusercontent.com"
+   GOOGLE_CLIENT_SECRET="your-client-secret"
+   GOOGLE_CALLBACK_URL="http://localhost:3002/api/auth/google/callback"
+   ```
+
+6. **Restart the backend server**
+
+7. **Test the login flow** at http://localhost:3000/login
+
+### Additional OAuth Providers
+
+<details>
+<summary><b>Facebook OAuth Setup</b></summary>
+
+1. Go to [Facebook Developers](https://developers.facebook.com/apps/)
+2. Create a new app or select existing
+3. Add "Facebook Login" product
+4. Go to Settings → Basic for App ID and App Secret
+5. Go to Facebook Login → Settings
+6. Add Valid OAuth Redirect URI: `http://localhost:3002/api/auth/facebook/callback`
+7. Update `.env`:
+   ```env
+   FACEBOOK_APP_ID="your-facebook-app-id"
+   FACEBOOK_APP_SECRET="your-facebook-app-secret"
+   FACEBOOK_CALLBACK_URL="http://localhost:3002/api/auth/facebook/callback"
+   ```
+</details>
+
+<details>
+<summary><b>GitHub OAuth Setup</b></summary>
+
+1. Go to [GitHub Settings → Developer Settings](https://github.com/settings/developers)
+2. Click "OAuth Apps" → "New OAuth App"
+3. Fill in application details
+4. Set Authorization callback URL: `http://localhost:3002/api/auth/github/callback`
+5. Copy Client ID and generate Client Secret
+6. Update `.env`:
+   ```env
+   GITHUB_CLIENT_ID="your-github-client-id"
+   GITHUB_CLIENT_SECRET="your-github-client-secret"
+   GITHUB_CALLBACK_URL="http://localhost:3002/api/auth/github/callback"
+   ```
+</details>
+
+<details>
+<summary><b>Apple Sign In Setup</b></summary>
+
+1. Go to [Apple Developer Portal](https://developer.apple.com/account/resources/identifiers/list)
+2. Create an App ID
+3. Create a Services ID (this is your CLIENT_ID)
+4. Enable "Sign In with Apple" and configure domains and redirect URLs
+5. Create a Private Key for Sign In with Apple
+6. Download the .p8 file
+7. Get your Team ID from [Membership](https://developer.apple.com/account/#!/membership/)
+8. Get your Key ID from the key you created
+9. Update `.env`:
+   ```env
+   APPLE_CLIENT_ID="com.yourcompany.wishlist.signin"
+   APPLE_TEAM_ID="your-10-char-team-id"
+   APPLE_KEY_ID="your-10-char-key-id"
+   APPLE_PRIVATE_KEY="-----BEGIN PRIVATE KEY-----\nYour...\n-----END PRIVATE KEY-----"
+   APPLE_CALLBACK_URL="http://localhost:3002/api/auth/apple/callback"
+   ```
+   **Note**: Replace newlines in the private key with `\n`
+</details>
+
+### Session Management
+
+- Sessions are stored in PostgreSQL for persistence
+- Session cookies are HttpOnly and secure in production
+- Sessions expire after 30 days of inactivity
+- Logout destroys the session completely
+
+### Security Features
+
+- ✅ HttpOnly cookies (no JavaScript access)
+- ✅ Secure cookies in production (HTTPS only)
+- ✅ SameSite cookies (CSRF protection)
+- ✅ PostgreSQL session store (persistent sessions)
+- ✅ OAuth state parameter validation
+- ✅ Helmet middleware for security headers
+- ✅ User isolation (users only see their own data)
+
 ## API Endpoints
 
-### Wishlist Items
+**Note**: All wishlist endpoints require authentication. Include session cookie with requests.
 
-- `GET /api/items` - List all wishlist items
-- `GET /api/items/:id` - Get specific item
+### Authentication
+
+- `GET /api/auth/google` - Initiate Google OAuth flow
+- `GET /api/auth/facebook` - Initiate Facebook OAuth flow
+- `GET /api/auth/github` - Initiate GitHub OAuth flow
+- `GET /api/auth/apple` - Initiate Apple OAuth flow
+- `GET /api/auth/me` - Get current authenticated user (requires auth)
+- `POST /api/auth/logout` - Logout and destroy session
+
+### Wishlist Items (All require authentication)
+
+- `GET /api/items` - List current user's wishlist items
+- `GET /api/items/:id` - Get specific item (must belong to user)
 - `POST /api/items` - Create new item
   ```json
   {
@@ -128,12 +265,12 @@ This will start:
     "priority": "high"
   }
   ```
-- `PUT /api/items/:id` - Update item
-- `DELETE /api/items/:id` - Delete item
+- `PUT /api/items/:id` - Update item (must belong to user)
+- `DELETE /api/items/:id` - Delete item (must belong to user)
 
 ### Health Check
 
-- `GET /health` - Server health status
+- `GET /health` - Server health status (no auth required)
 
 ## Database Management
 
@@ -174,10 +311,13 @@ npm run db:migrate:dev --workspace=@wishlist/backend
 
 The `@wishlist/shared` package provides type-safe communication:
 
-- **Types**: `WishlistItem`, `ApiResponse`, `User`
+- **Types**:
+  - `WishlistItem` - Wishlist item with user relationship
+  - `User` - User with OAuth provider info
+  - `ApiResponse<T>` - Standardized API response wrapper
 - **Utils**: `formatDate`, `generateId`, `isValidUrl`
 
-Both frontend and backend import from `@wishlist/shared`.
+Both frontend and backend import from `@wishlist/shared` ensuring type safety across the stack.
 
 ## Troubleshooting
 
@@ -200,16 +340,39 @@ npm run build:shared
 Change ports in:
 
 - Frontend: `packages/frontend/vite.config.ts` (port: 3000)
-- Backend: `packages/backend/.env` (PORT=3001)
+- Backend: `packages/backend/.env` (PORT=3002)
+
+### Authentication Issues
+
+**"OAuth callback error"**
+1. Ensure callback URLs in `.env` match provider configuration exactly
+2. Check that SESSION_SECRET is set
+3. Verify OAuth provider credentials are correct
+4. Check backend logs for detailed error messages
+
+**"Session not persisting"**
+1. Ensure PostgreSQL is running (sessions are stored there)
+2. Check that session table exists in database
+3. Verify cookies are enabled in browser
+4. Check that FRONTEND_URL matches your actual frontend URL
+
+**"Cannot access wishlist items"**
+1. Ensure you're logged in (check `/api/auth/me`)
+2. Wishlist items are user-specific - each user only sees their own items
+3. Check that userId is set on items (should happen automatically)
 
 ## Next Steps
 
-- Add authentication and user management
+- ✅ Authentication and user management (OAuth with 4 providers)
+- ✅ User-specific wishlists with isolation
+- ✅ Session management with PostgreSQL
 - Add unit tests with Vitest
 - Add E2E tests with Playwright
 - Set up CI/CD pipeline
-- Add Docker configuration
-- Implement user-specific wishlists
+- Add Docker configuration for easy deployment
+- Add email notifications for shared wishlists
+- Add wishlist sharing and collaboration features
+- Add image uploads for wishlist items
 
 ## Project Dependencies
 
@@ -230,8 +393,16 @@ Change ports in:
 
 ### Backend
 
-- Express, CORS
+- Express, CORS, Helmet
 - Prisma, @prisma/client
+- Passport.js with OAuth strategies:
+  - passport-google-oauth20
+  - passport-facebook
+  - passport-github2
+  - passport-apple
+- express-session with connect-pg-simple (PostgreSQL store)
+- Winston (logging)
+- InversifyJS (dependency injection)
 - tsx (TypeScript executor)
 
 ## License
