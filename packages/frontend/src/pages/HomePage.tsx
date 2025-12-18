@@ -1,13 +1,12 @@
 import { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { ExternalLink, Calendar, AlertCircle, Loader2, Plus, Pencil, Trash2 } from '../components/icons';
+import { AlertCircle, Loader2, Plus } from '../components/icons';
 import type { WishlistItem } from '@wishlist/shared';
-import { formatDate } from '@wishlist/shared';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '../components/ui/card';
-import { Badge } from '../components/ui/badge';
 import { Button } from '../components/ui/button';
 import { AppHeader } from '../components/AppHeader';
 import { DeleteConfirmDialog } from '../components/wishlist/DeleteConfirmDialog';
+import { WishlistItemCard } from '../components/wishlist/WishlistItemCard';
 import { useWishlist } from '../contexts/WishlistContext';
 
 export default function HomePage() {
@@ -84,62 +83,12 @@ export default function HomePage() {
         {/* Responsive Grid */}
         <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4">
           {items.map((item) => (
-            <Card
+            <WishlistItemCard
               key={item.id}
-              className="flex flex-col transition-all hover:shadow-lg"
-            >
-              <CardHeader className="space-y-3">
-                <div className="flex items-start justify-between gap-2">
-                  <CardTitle className="text-lg leading-tight line-clamp-2">
-                    {item.title}
-                  </CardTitle>
-                  <Badge variant={getPriorityVariant(item.priority)}>
-                    {item.priority}
-                  </Badge>
-                </div>
-                {item.description && (
-                  <CardDescription className="line-clamp-3">
-                    {item.description}
-                  </CardDescription>
-                )}
-              </CardHeader>
-
-              <CardContent className="flex-1 flex flex-col justify-end space-y-3">
-                <div className="flex items-center text-xs text-muted-foreground">
-                  <Calendar className="mr-1.5 h-3.5 w-3.5" />
-                  {formatDate(new Date(item.createdAt))}
-                </div>
-
-                <div className="flex gap-2">
-                  {item.url && (
-                    <Button
-                      variant="outline"
-                      size="sm"
-                      className="flex-1"
-                      onClick={() => window.open(item.url, '_blank')}
-                    >
-                      <ExternalLink className="mr-2 h-4 w-4" />
-                      View Link
-                    </Button>
-                  )}
-                  {!item.url && <div className="flex-1" />}
-                  <Button
-                    variant="outline"
-                    size="sm"
-                    onClick={() => navigate(`/edit/${item.id}`)}
-                  >
-                    <Pencil className="h-4 w-4" />
-                  </Button>
-                  <Button
-                    variant="outline"
-                    size="sm"
-                    onClick={() => setDeletingItem(item)}
-                  >
-                    <Trash2 className="h-4 w-4" />
-                  </Button>
-                </div>
-              </CardContent>
-            </Card>
+              item={item}
+              onEdit={() => navigate(`/edit/${item.id}`)}
+              onDelete={() => setDeletingItem(item)}
+            />
           ))}
         </div>
       </main>
