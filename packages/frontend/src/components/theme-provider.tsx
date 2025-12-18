@@ -16,45 +16,49 @@ const initialState: ThemeProviderState = {
   setTheme: () => null,
 };
 
+const STORAGE_KEY = 'wishlist-theme';
+
 const ThemeProviderContext = createContext<ThemeProviderState>(initialState);
 
-export function ThemeProvider({
-  children,
-  ...props
-}: ThemeProviderProps) {
-  const defaultTheme = window.matchMedia('(prefers-color-scheme: dark)').matches
-  ? 'dark'
-  : 'light'
-  const [theme, setTheme] = useState<Theme>(defaultTheme);
-  const [mounted, setMounted] = useState(false);
+function getInitialTheme(): Theme {
+  if (typeof window === 'undefined') {
+    // During SSR/tests: fall back to light
+    return 'light';
+  }
 
-  // Ensure component is mounted before applying theme
-  useEffect(() => {
-    setMounted(true);
-  }, []);
+  try {
+    const storedTheme = window.localStorage.getItem(STORAGE_KEY);
+    if (storedTheme === 'light' || storedTheme === 'dark') {
+      return storedTheme;
+    }
+  } catch {
+    // Ignore localStorage errors and fall through to system preference
+  }
+
+  if (typeof window.matchMedia === 'function') {
+    const prefersDark = window.matchMedia('(prefers-color-scheme: dark)').matches;
+    return prefersDark ? 'dark' : 'light';
+  }
+
+  // If system preference is not supported, default to light
+  return 'light';
+}
+
+export function ThemeProvider({ children, ...props }: ThemeProviderProps) {
+  const [theme, setTheme] = useState<Theme>(() => getInitialTheme());
 
   useEffect(() => {
-    if (!mounted) return;
+    if (typeof window === 'undefined') return;
 
     const root = window.document.documentElement;
     root.classList.remove('light', 'dark');
-
     root.classList.add(theme);
-  }, [theme, mounted]);
 
-  // Listen for system theme changes when in system mode
-  useEffect(() => {
-    const mediaQuery = window.matchMedia('(prefers-color-scheme: dark)');
-
-    const handleChange = () => {
-      const root = window.document.documentElement;
-      root.classList.remove('light', 'dark');
-      const systemTheme = mediaQuery.matches ? 'dark' : 'light';
-      root.classList.add(systemTheme);
-    };
-
-    mediaQuery.addEventListener('change', handleChange);
-    return () => mediaQuery.removeEventListener('change', handleChange);
+    try {
+      window.localStorage.setItem(STORAGE_KEY, theme);
+    } catch {
+      // Ignore persistence errors (e.g., private mode)
+    }
   }, [theme]);
 
   const value = {
