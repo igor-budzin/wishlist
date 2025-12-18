@@ -1,4 +1,5 @@
 import { createContext, useContext, useState, useEffect, ReactNode } from 'react';
+import { useNavigate } from 'react-router-dom';
 import { toast } from 'sonner';
 import type { WishlistItem, ApiResponse } from '@wishlist/shared';
 import type { WishlistItemFormData } from '../lib/validations';
@@ -21,6 +22,7 @@ interface WishlistProviderProps {
 }
 
 export function WishlistProvider({ children }: WishlistProviderProps) {
+  const navigate = useNavigate();
   const [items, setItems] = useState<WishlistItem[]>([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
@@ -36,7 +38,7 @@ export function WishlistProvider({ children }: WishlistProviderProps) {
       });
 
       if (response.status === 401) {
-        window.location.href = '/login';
+        navigate('/login', { replace: true });
         return;
       }
 
@@ -122,7 +124,7 @@ export function WishlistProvider({ children }: WishlistProviderProps) {
       });
 
       if (response.status === 401) {
-        window.location.href = '/login';
+        navigate('/login', { replace: true });
         return;
       }
 

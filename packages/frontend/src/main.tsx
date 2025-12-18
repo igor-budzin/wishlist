@@ -4,8 +4,7 @@ import { createBrowserRouter, RouterProvider } from 'react-router-dom';
 import App from './components/App';
 import { ThemeProvider } from './components/theme-provider';
 import { AuthProvider } from './contexts/AuthContext';
-import { WishlistProvider } from './contexts/WishlistContext';
-import { ProtectedRoute } from './components/ProtectedRoute';
+import { ProtectedLayout } from './components/ProtectedLayout';
 import HomePage from './pages/HomePage';
 import AddItemPage from './pages/AddItemPage';
 import EditItemPage from './pages/EditItemPage';
@@ -22,42 +21,42 @@ const router = createBrowserRouter([
       {
         index: true,
         element: (
-          <ProtectedRoute>
+          <ProtectedLayout>
             <HomePage />
-          </ProtectedRoute>
+          </ProtectedLayout>
         ),
       },
       {
         path: 'add',
         element: (
-          <ProtectedRoute>
+          <ProtectedLayout>
             <AddItemPage />
-          </ProtectedRoute>
+          </ProtectedLayout>
         ),
       },
       {
         path: 'edit/:id',
         element: (
-          <ProtectedRoute>
+          <ProtectedLayout>
             <EditItemPage />
-          </ProtectedRoute>
+          </ProtectedLayout>
         ),
       },
       { path: 'login', element: <LoginPage /> },
       {
         path: 'profile',
         element: (
-          <ProtectedRoute>
+          <ProtectedLayout>
             <ProfilePage />
-          </ProtectedRoute>
+          </ProtectedLayout>
         ),
       },
       {
         path: 'subscriptions',
         element: (
-          <ProtectedRoute>
+          <ProtectedLayout>
             <SubscriptionsPage />
-          </ProtectedRoute>
+          </ProtectedLayout>
         ),
       },
     ],
@@ -68,9 +67,7 @@ ReactDOM.createRoot(document.getElementById('root')!).render(
   <React.StrictMode>
     <ThemeProvider>
       <AuthProvider>
-        <WishlistProvider>
-          <RouterProvider router={router} />
-        </WishlistProvider>
+        <RouterProvider router={router} />
       </AuthProvider>
     </ThemeProvider>
   </React.StrictMode>

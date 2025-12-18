@@ -1,7 +1,7 @@
 import { useEffect } from 'react';
 import { useNavigate, useSearchParams } from 'react-router-dom';
 import { toast } from 'sonner';
-import { Google, Apple, Facebook, GitHub } from '../components/icons';
+import { Google, Facebook, GitHub } from '../components/icons';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '../components/ui/card';
 import { Button } from '../components/ui/button';
 import { AppHeader } from '../components/AppHeader';
