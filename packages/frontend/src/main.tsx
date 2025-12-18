@@ -8,6 +8,7 @@ import HomePage from './pages/HomePage';
 import AddItemPage from './pages/AddItemPage';
 import EditItemPage from './pages/EditItemPage';
 import LoginPage from './pages/LoginPage';
+import ProfilePage from './pages/ProfilePage';
 import './styles/index.css';
 
 const router = createBrowserRouter([
@@ -19,6 +20,7 @@ const router = createBrowserRouter([
       { path: 'add', element: <AddItemPage /> },
       { path: 'edit/:id', element: <EditItemPage /> },
       { path: 'login', element: <LoginPage /> },
+      { path: 'profile', element: <ProfilePage /> },
     ],
   },
 ]);

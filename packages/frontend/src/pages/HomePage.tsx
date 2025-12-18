@@ -43,6 +43,13 @@ export default function HomePage() {
                 <Plus className="h-4 w-4 mr-2" />
                 Add Item
               </Button>
+              <Button
+                variant="outline"
+                size="sm"
+                onClick={() => navigate('/profile')}
+              >
+                Profile
+              </Button>
               <ThemeToggle />
             </div>
           </div>
