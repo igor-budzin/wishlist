@@ -26,6 +26,20 @@ export interface IAuthService {
   getUserById(id: string): Promise<UserResponse | null>;
 }
 
+export class ProviderConflictError extends Error {
+  existingProvider: string;
+  attemptedProvider: string;
+
+  constructor(existingProvider: string, attemptedProvider: string) {
+    super(
+      `This email is already registered with ${existingProvider}. Please use ${existingProvider} to log in.`
+    );
+    this.name = 'ProviderConflictError';
+    this.existingProvider = existingProvider;
+    this.attemptedProvider = attemptedProvider;
+  }
+}
+
 @injectable()
 export class AuthService implements IAuthService {
   constructor(
@@ -51,9 +65,7 @@ export class AuthService implements IAuthService {
       this.logger.warn(
         `Email ${email} already exists with provider ${existingUser.provider}. Cannot create account with ${provider}.`
       );
-      throw new Error(
-        `This email is already registered with ${existingUser.provider}. Please use ${existingUser.provider} to log in.`
-      );
+      throw new ProviderConflictError(existingUser.provider, provider);
     }
 
     // Create new user
