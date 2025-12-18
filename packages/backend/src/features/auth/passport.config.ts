@@ -133,6 +133,8 @@ export function configurePassport(authService: IAuthService, logger: ILogger) {
     logger.warn('GitHub OAuth not configured - missing credentials');
   }
 
+  /*
+  // APPLE OAUTH DISABLED - Uncomment this entire block to re-enable
   // Apple OAuth Strategy
   if (
     process.env.APPLE_CLIENT_ID &&
@@ -175,6 +177,7 @@ export function configurePassport(authService: IAuthService, logger: ILogger) {
   } else {
     logger.warn('Apple OAuth not configured - missing credentials');
   }
+  */
 
   return passport;
 }

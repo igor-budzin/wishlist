@@ -65,6 +65,7 @@ export default function LoginPage() {
               <Google className="mr-2 h-5 w-5" />
               Continue with Google
             </Button>
+            {/* APPLE AUTH DISABLED - Uncomment to re-enable
             <Button
               variant="outline"
               className="w-full h-[40px]"
@@ -73,6 +74,7 @@ export default function LoginPage() {
               <Apple className="mr-2 h-5 w-5" />
               Continue with Apple
             </Button>
+            */}
             <Button
               variant="outline"
               className="w-full h-[40px]"

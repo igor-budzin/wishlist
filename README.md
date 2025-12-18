@@ -7,7 +7,7 @@ A full-stack TypeScript monorepo with React frontend and Express backend.
 - **Frontend**: React 18, Tailwind CSS, Vite
 - **Backend**: Express, Prisma ORM, Passport.js
 - **Database**: PostgreSQL with session store
-- **Authentication**: OAuth 2.0 (Google, Facebook, GitHub, Apple)
+- **Authentication**: OAuth 2.0 (Google, Facebook, GitHub) <!-- Apple temporarily disabled -->
 - **Session Management**: Express sessions with PostgreSQL store
 - **Shared**: TypeScript types and utilities
 - **Code Quality**: ESLint, Prettier
@@ -136,7 +136,8 @@ This will start:
 
 ## Authentication Setup
 
-The application uses OAuth 2.0 authentication with session-based authentication. Users can login with Google, Facebook, GitHub, or Apple.
+The application uses OAuth 2.0 authentication with session-based authentication. Users can login with Google, Facebook, or GitHub.
+<!-- Apple Sign In is currently disabled but can be re-enabled - see setup guide below -->
 
 ### Quick Start (Google OAuth)
 
@@ -201,7 +202,12 @@ The application uses OAuth 2.0 authentication with session-based authentication.
 </details>
 
 <details>
-<summary><b>Apple Sign In Setup</b></summary>
+<summary><b>Apple Sign In Setup (CURRENTLY DISABLED)</b></summary>
+
+**Note**: Apple authentication is currently disabled in the codebase but can be easily re-enabled by uncommenting code in the following files:
+- `packages/frontend/src/pages/LoginPage.tsx` (lines 68-77)
+- `packages/backend/src/features/auth/passport.config.ts` (lines 136-180)
+- `packages/backend/src/routes/auth.routes.ts` (lines 48-59)
 
 1. Go to [Apple Developer Portal](https://developer.apple.com/account/resources/identifiers/list)
 2. Create an App ID

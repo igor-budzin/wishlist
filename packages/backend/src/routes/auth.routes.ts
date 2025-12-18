@@ -45,6 +45,8 @@ router.get(
   }
 );
 
+/*
+// APPLE OAUTH ROUTES DISABLED - Uncomment to re-enable
 // Apple OAuth
 router.get('/apple', passport.authenticate('apple'));
 router.post(
@@ -54,5 +56,6 @@ router.post(
     res.redirect(process.env.FRONTEND_URL || 'http://localhost:3000');
   }
 );
+*/
 
 export default router;
