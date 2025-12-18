@@ -1,9 +1,10 @@
 import { useState } from 'react';
 import { useNavigate, useParams, Link } from 'react-router-dom';
-import { ArrowLeft, Sparkles, AlertCircle } from '../components/icons';
+import { ArrowLeft, AlertCircle } from '../components/icons';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '../components/ui/card';
 import { Button } from '../components/ui/button';
-import { ThemeToggle } from '../components/theme-toggle';
+import { AppHeader } from '../components/AppHeader';
+import { BackButton } from '../components/BackButton';
 import { ItemForm } from '../components/wishlist/ItemForm';
 import { Skeleton } from '../components/ui/skeleton';
 import { useWishlist } from '../contexts/WishlistContext';
@@ -33,31 +34,11 @@ export default function EditItemPage() {
   return (
     <div className="min-h-screen bg-background">
       {/* Header */}
-      <header className="sticky top-0 z-50 w-full border-b bg-background/95 backdrop-blur supports-[backdrop-filter]:bg-background/60">
-        <div className="container flex h-14 max-w-screen-2xl items-center">
-          <div className="flex flex-1 items-center justify-between space-x-2 md:justify-between">
-            <div className="flex items-center space-x-2">
-              <Sparkles className="h-6 w-6 text-primary" />
-              <h1 className="text-xl font-bold md:text-2xl">My Wishlist</h1>
-            </div>
-            <div className="flex items-center gap-2">
-              <ThemeToggle />
-            </div>
-          </div>
-        </div>
-      </header>
+      <AppHeader />
 
       {/* Main Content */}
       <main className="container max-w-2xl py-6 md:py-8">
-        <Button
-          variant="ghost"
-          size="sm"
-          onClick={() => navigate('/')}
-          className="mb-4"
-        >
-          <ArrowLeft className="mr-2 h-4 w-4" />
-          Back to Wishlist
-        </Button>
+        <BackButton />
 
         {loading && (
           <Card>

@@ -1,8 +1,8 @@
 import { toast } from 'sonner';
-import { Sparkles, Google, Apple, Facebook, GitHub } from '../components/icons';
+import { Google, Apple, Facebook, GitHub } from '../components/icons';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '../components/ui/card';
 import { Button } from '../components/ui/button';
-import { ThemeToggle } from '../components/theme-toggle';
+import { AppHeader } from '../components/AppHeader';
 
 export default function LoginPage() {
   const handleSocialLogin = (provider: string) => {
@@ -14,17 +14,7 @@ export default function LoginPage() {
   return (
     <div className="min-h-screen bg-background">
       {/* Header */}
-      <header className="sticky top-0 z-50 w-full border-b bg-background/95 backdrop-blur supports-[backdrop-filter]:bg-background/60">
-        <div className="container flex h-14 max-w-screen-2xl items-center">
-          <div className="flex flex-1 items-center justify-between space-x-2 md:justify-between">
-            <div className="flex items-center space-x-2">
-              <Sparkles className="h-6 w-6 text-primary" />
-              <h1 className="text-xl font-bold md:text-2xl">My Wishlist</h1>
-            </div>
-            <ThemeToggle />
-          </div>
-        </div>
-      </header>
+      <AppHeader />
 
       {/* Main Content */}
       <main className="container max-w-screen-2xl flex items-center justify-center py-12 md:py-16">
