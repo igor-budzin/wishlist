@@ -1,4 +1,5 @@
 import { useMemo } from 'react';
+import { useNavigate } from 'react-router-dom';
 import { toast } from 'sonner';
 import type { User } from '@wishlist/shared';
 
@@ -21,6 +22,7 @@ const mockUser: User & { bio: string; joinedAt: string } = {
 };
 
 export default function ProfilePage() {
+  const navigate = useNavigate();
   const { items, loading } = useWishlist();
 
   const stats = useMemo(() => {
@@ -169,17 +171,37 @@ export default function ProfilePage() {
           <CardHeader>
             <CardTitle>Account actions</CardTitle>
           </CardHeader>
-          <CardContent className="flex flex-col gap-3 md:flex-row md:items-center md:justify-between">
-            <div className="space-y-1">
-              <p className="text-sm font-medium">Sign out</p>
-              <p className="text-xs text-muted-foreground">
-                You&apos;ll be able to securely sign out of your account from here.
-              </p>
+          <CardContent className="space-y-4">
+            <div className="flex flex-col gap-3 md:flex-row md:items-center md:justify-between">
+              <div className="space-y-1">
+                <p className="text-sm font-medium">Subscriptions</p>
+                <p className="text-xs text-muted-foreground">
+                  Manage who you follow to get updates about their new wishes.
+                </p>
+              </div>
+              <div className="flex gap-2">
+                <Button
+                  variant="outline"
+                  size="sm"
+                  onClick={() => navigate('/subscriptions')}
+                >
+                  Manage subscriptions
+                </Button>
+              </div>
             </div>
-            <div className="flex gap-2">
-              <Button variant="outline" size="sm" onClick={handleSignOut}>
-                Sign out
-              </Button>
+
+            <div className="flex flex-col gap-3 md:flex-row md:items-center md:justify-between">
+              <div className="space-y-1">
+                <p className="text-sm font-medium">Sign out</p>
+                <p className="text-xs text-muted-foreground">
+                  You&apos;ll be able to securely sign out of your account from here.
+                </p>
+              </div>
+              <div className="flex gap-2">
+                <Button variant="outline" size="sm" onClick={handleSignOut}>
+                  Sign out
+                </Button>
+              </div>
             </div>
           </CardContent>
         </Card>
