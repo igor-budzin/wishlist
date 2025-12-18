@@ -137,16 +137,6 @@ export default function ProfilePage() {
                 <Input id="email" type="email" value={mockUser.email} readOnly />
               </div>
             </div>
-            <div className="space-y-2">
-              <Label htmlFor="bio">Bio</Label>
-              <Textarea
-                id="bio"
-                value={mockUser.bio}
-                readOnly
-                rows={4}
-                className="resize-none"
-              />
-            </div>
           </CardContent>
         </Card>
 
@@ -200,9 +190,6 @@ export default function ProfilePage() {
         <Card>
           <CardHeader>
             <CardTitle>Account actions</CardTitle>
-            <CardDescription>
-              Sign out or manage advanced actions. These actions are UI-only for now.
-            </CardDescription>
           </CardHeader>
           <CardContent className="flex flex-col gap-3 md:flex-row md:items-center md:justify-between">
             <div className="space-y-1">
