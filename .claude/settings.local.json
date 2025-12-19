@@ -46,7 +46,11 @@
       "Bash(npm run build:backend:*)",
       "Bash(npm run build:frontend:*)",
       "Bash(npm run type-check:frontend:*)",
-      "Bash(npm ls:*)"
+      "Bash(npm ls:*)",
+      "WebFetch(domain:www.npmjs.com)",
+      "WebFetch(domain:www.radix-ui.com)",
+      "mcp__playwright__browser_wait_for",
+      "Bash(dir:*)"
     ],
     "defaultMode": "plan"
   }
