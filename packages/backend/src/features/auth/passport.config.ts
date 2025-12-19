@@ -2,6 +2,7 @@ import passport from 'passport';
 import { Strategy as GoogleStrategy } from 'passport-google-oauth20';
 import { Strategy as FacebookStrategy } from 'passport-facebook';
 import { Strategy as GitHubStrategy } from 'passport-github2';
+// @ts-ignore - Used conditionally based on environment variables
 import { Strategy as AppleStrategy } from 'passport-apple';
 import type { IAuthService, UserResponse } from './auth.service.js';
 import type { ILogger } from '../../lib/logger.js';

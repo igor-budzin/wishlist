@@ -1,0 +1,22 @@
+# Shared package Docker ignore
+
+# Build outputs
+dist
+*.tsbuildinfo
+
+# No development configs to exclude (tsconfig needed for build)
+
+# Documentation
+*.md
+
+# IDE files
+.vscode
+.idea
+
+# Logs
+*.log
+
+# Temp files
+temp
+tmp
+.cache

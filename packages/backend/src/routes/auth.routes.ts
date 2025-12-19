@@ -27,7 +27,7 @@ function getProviderMismatchRedirectUrl(existingProvider: string | undefined, at
 
 function createOAuthCallbackHandler(provider: 'google' | 'facebook' | 'github') {
   return (req: any, res: any, next: any) => {
-    passport.authenticate(provider, (err, user) => {
+    passport.authenticate(provider, (err: any, user: any) => {
       if (err) {
         if (err instanceof ProviderConflictError) {
           const conflictError = err as ProviderConflictError;

@@ -11,6 +11,9 @@ COPY packages/backend/package.json ./packages/backend/
 # Install all dependencies (including workspaces and dev dependencies)
 RUN npm ci
 
+# Copy root tsconfig (needed for shared package build)
+COPY tsconfig.json ./
+
 # Copy shared package source and build it first (dependency)
 COPY packages/shared ./packages/shared
 RUN npm run build:shared
@@ -37,6 +40,11 @@ COPY packages/backend/package.json ./packages/backend/
 # Install only production dependencies
 RUN npm ci --omit=dev
 
+# Remove unnecessary files from node_modules (tests, docs, source maps, etc.)
+RUN wget -qO- https://gobinaries.com/tj/node-prune | sh && \
+    node-prune /app/node_modules && \
+    rm /usr/local/bin/node-prune
+
 # Copy built shared package
 COPY --from=builder /app/packages/shared/dist ./packages/shared/dist
 COPY --from=builder /app/packages/shared/package.json ./packages/shared/
@@ -50,6 +58,12 @@ COPY --from=builder /app/packages/backend/prisma ./packages/backend/prisma
 # Copy generated Prisma client
 COPY --from=builder /app/node_modules/.prisma ./node_modules/.prisma
 COPY --from=builder /app/node_modules/@prisma ./node_modules/@prisma
+
+# Remove unnecessary Prisma query engine binaries (keep only linux-musl-openssl for Alpine)
+RUN find /app/node_modules/.prisma -name 'libquery_engine-*' ! -name '*linux-musl-openssl*' -delete && \
+    find /app/node_modules/@prisma -name 'libquery_engine-*' ! -name '*linux-musl-openssl*' -delete && \
+    find /app/node_modules/.prisma -name 'query-engine-*' ! -name '*linux-musl-openssl*' -delete && \
+    find /app/node_modules/@prisma -name 'query-engine-*' ! -name '*linux-musl-openssl*' -delete
 
 # Expose backend port
 EXPOSE 3002
