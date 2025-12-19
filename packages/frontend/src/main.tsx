@@ -1,19 +1,33 @@
-import React from 'react';
+import React, { lazy, Suspense } from 'react';
 import ReactDOM from 'react-dom/client';
 import { createBrowserRouter, RouterProvider } from 'react-router-dom';
 import App from './components/App';
 import { ThemeProvider } from './components/theme-provider';
 import { AuthProvider } from './contexts/AuthContext';
 import { ProtectedLayout } from './components/ProtectedLayout';
-import HomePage from './pages/HomePage';
-import AddItemPage from './pages/AddItemPage';
-import EditItemPage from './pages/EditItemPage';
-import LoginPage from './pages/LoginPage';
-import ProfilePage from './pages/ProfilePage';
-import PublicProfilePage from './pages/PublicProfilePage';
-import SubscriptionsPage from './pages/SubscriptionsPage';
-import ProviderMismatchPage from './pages/ProviderMismatchPage';
 import './styles/index.css';
+
+// Lazy load page components for code splitting
+const HomePage = lazy(() => import('./pages/HomePage'));
+const AddItemPage = lazy(() => import('./pages/AddItemPage'));
+const EditItemPage = lazy(() => import('./pages/EditItemPage'));
+const LoginPage = lazy(() => import('./pages/LoginPage'));
+const ProfilePage = lazy(() => import('./pages/ProfilePage'));
+const PublicProfilePage = lazy(() => import('./pages/PublicProfilePage'));
+const SubscriptionsPage = lazy(() => import('./pages/SubscriptionsPage'));
+const ProviderMismatchPage = lazy(() => import('./pages/ProviderMismatchPage'));
+
+// Loading fallback component
+const LoadingFallback = () => (
+  <div className="flex items-center justify-center min-h-screen">
+    <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-gray-900 dark:border-gray-100"></div>
+  </div>
+);
+
+// Wrapper component for lazy loaded routes
+const LazyRoute = ({ children }: { children: React.ReactNode }) => (
+  <Suspense fallback={<LoadingFallback />}>{children}</Suspense>
+);
 
 const router = createBrowserRouter([
   {
@@ -23,44 +37,75 @@ const router = createBrowserRouter([
       {
         index: true,
         element: (
-          <ProtectedLayout>
-            <HomePage />
-          </ProtectedLayout>
+          <LazyRoute>
+            <ProtectedLayout>
+              <HomePage />
+            </ProtectedLayout>
+          </LazyRoute>
         ),
       },
       {
         path: 'add',
         element: (
-          <ProtectedLayout>
-            <AddItemPage />
-          </ProtectedLayout>
+          <LazyRoute>
+            <ProtectedLayout>
+              <AddItemPage />
+            </ProtectedLayout>
+          </LazyRoute>
         ),
       },
       {
         path: 'edit/:id',
         element: (
-          <ProtectedLayout>
-            <EditItemPage />
-          </ProtectedLayout>
+          <LazyRoute>
+            <ProtectedLayout>
+              <EditItemPage />
+            </ProtectedLayout>
+          </LazyRoute>
         ),
       },
-      { path: 'login', element: <LoginPage /> },
-      { path: 'auth/provider-mismatch', element: <ProviderMismatchPage /> },
-      { path: 'user/:userId', element: <PublicProfilePage /> },
+      {
+        path: 'login',
+        element: (
+          <LazyRoute>
+            <LoginPage />
+          </LazyRoute>
+        ),
+      },
+      {
+        path: 'auth/provider-mismatch',
+        element: (
+          <LazyRoute>
+            <ProviderMismatchPage />
+          </LazyRoute>
+        ),
+      },
+      {
+        path: 'user/:userId',
+        element: (
+          <LazyRoute>
+            <PublicProfilePage />
+          </LazyRoute>
+        ),
+      },
       {
         path: 'profile',
         element: (
-          <ProtectedLayout>
-            <ProfilePage />
-          </ProtectedLayout>
+          <LazyRoute>
+            <ProtectedLayout>
+              <ProfilePage />
+            </ProtectedLayout>
+          </LazyRoute>
         ),
       },
       {
         path: 'subscriptions',
         element: (
-          <ProtectedLayout>
-            <SubscriptionsPage />
-          </ProtectedLayout>
+          <LazyRoute>
+            <ProtectedLayout>
+              <SubscriptionsPage />
+            </ProtectedLayout>
+          </LazyRoute>
         ),
       },
     ],

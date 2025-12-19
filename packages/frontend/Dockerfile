@@ -11,6 +11,9 @@ COPY packages/frontend/package.json ./packages/frontend/
 # Install all dependencies (including workspaces)
 RUN npm ci
 
+# Copy root tsconfig (needed for builds)
+COPY tsconfig.json ./
+
 # Copy shared package source and build it first (dependency)
 COPY packages/shared ./packages/shared
 RUN npm run build:shared
@@ -21,8 +24,8 @@ COPY packages/frontend ./packages/frontend
 # Build frontend with Vite
 RUN npm run build:frontend
 
-# Stage 2: Serve with nginx
-FROM nginx:alpine
+# Stage 2: Serve with nginx + Brotli support
+FROM fholzer/nginx-brotli:latest
 
 # Copy custom nginx configuration
 COPY packages/frontend/nginx.conf /etc/nginx/conf.d/default.conf

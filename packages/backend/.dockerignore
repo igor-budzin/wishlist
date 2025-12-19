@@ -1,0 +1,36 @@
+# Backend-specific Docker ignore
+
+# Build outputs (excluded from production)
+dist
+*.tsbuildinfo
+
+# Test files
+*.test.ts
+*.spec.ts
+coverage
+.vitest
+
+# Development configs (not needed in Docker)
+vitest.config.ts
+
+# Documentation
+*.md
+docs
+
+# IDE files
+.vscode
+.idea
+
+# Environment files (use Docker env vars instead)
+.env
+.env.*
+!.env.example
+
+# Logs
+*.log
+logs
+
+# Temp files
+temp
+tmp
+.cache

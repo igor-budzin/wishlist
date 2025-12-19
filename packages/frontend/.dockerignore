@@ -1,0 +1,45 @@
+# Frontend-specific Docker ignore
+
+# Build outputs (excluded from production)
+dist
+*.tsbuildinfo
+
+# Test files
+*.test.ts
+*.test.tsx
+*.spec.ts
+*.spec.tsx
+coverage
+.vitest
+
+# Development configs (not needed in Docker)
+vitest.config.ts
+BUILD_OPTIMIZATION.md
+
+# Note: vite.config.ts and tsconfig.json are needed for build, so not excluded
+
+# Documentation
+*.md
+docs
+
+# IDE files
+.vscode
+.idea
+
+# Environment files (use Docker env vars instead)
+.env
+.env.*
+!.env.example
+
+# Logs
+*.log
+logs
+
+# Temp files
+temp
+tmp
+.cache
+
+# Public source files (only need built dist)
+public
+index.html
