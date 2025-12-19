@@ -4,6 +4,7 @@ import helmet from 'helmet';
 import passport from 'passport';
 import routes from './routes/index.js';
 import authRoutes from './routes/auth.routes.js';
+import userRoutes from './routes/users.routes.js';
 import { errorHandler } from './middleware/errorHandler.js';
 import { createSessionConfig } from './features/auth/session.config.js';
 import { configurePassport } from './features/auth/passport.config.js';
@@ -43,6 +44,7 @@ app.use(passport.session());
 
 // Routes
 app.use('/api/auth', authRoutes);
+app.use('/api/users', userRoutes);
 app.use('/api', routes);
 
 // Health check

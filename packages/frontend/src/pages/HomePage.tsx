@@ -8,10 +8,13 @@ import { AppHeader } from '../components/AppHeader';
 import { DeleteConfirmDialog } from '../components/wishlist/DeleteConfirmDialog';
 import { WishlistItemCard } from '../components/wishlist/WishlistItemCard';
 import { UserProfile } from '../components/UserProfile';
+import { ShareProfileButton } from '../components/ShareProfileButton';
 import { useWishlist } from '../contexts/WishlistContext';
+import { useAuth } from '../contexts/AuthContext';
 
 export default function HomePage() {
   const { items, loading, error, deleteItem } = useWishlist();
+  const { user } = useAuth();
   const navigate = useNavigate();
   const [deletingItem, setDeletingItem] = useState<WishlistItem | null>(null);
 
@@ -21,10 +24,11 @@ export default function HomePage() {
       <AppHeader
         actions={
           <>
-            <Button onClick={() => navigate('/add')} size="sm">
-              <Plus className="h-4 w-4 mr-2" />
-              Add Item
+            <Button onClick={() => navigate('/add')} size="sm" className="md:px-3">
+              <Plus className="h-4 w-4 md:mr-2" />
+              <span className="hidden md:inline">Add Item</span>
             </Button>
+            {user && <ShareProfileButton userId={user.id} />}
             <UserProfile />
           </>
         }

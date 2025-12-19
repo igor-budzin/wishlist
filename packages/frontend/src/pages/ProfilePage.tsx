@@ -4,6 +4,7 @@ import { toast } from 'sonner';
 
 import { AppHeader } from '../components/AppHeader';
 import { BackButton } from '../components/BackButton';
+import { ShareProfileButton } from '../components/ShareProfileButton';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '../components/ui/card';
 import { Badge } from '../components/ui/badge';
 import { Button } from '../components/ui/button';
@@ -57,7 +58,7 @@ export default function ProfilePage() {
   return (
     <div className="min-h-screen bg-background">
       {/* Header */}
-      <AppHeader />
+      <AppHeader actions={<ShareProfileButton userId={user.id} />} />
 
       {/* Main Content */}
       <main className="container max-w-3xl py-6 md:py-8 space-y-6">

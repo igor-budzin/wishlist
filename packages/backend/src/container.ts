@@ -10,6 +10,9 @@ import { WishlistItemController } from './features/wishlist/wishlist.controller.
 import { AuthRepository } from './features/auth/auth.repository.js';
 import { AuthService } from './features/auth/auth.service.js';
 import { AuthController } from './features/auth/auth.controller.js';
+import { UserRepository } from './features/users/user.repository.js';
+import { UserService } from './features/users/user.service.js';
+import { UserController } from './features/users/user.controller.js';
 import { prisma } from './lib/prisma.js';
 
 const container = new Container();
@@ -26,6 +29,9 @@ container.bind<WishlistItemRepository>(TYPES.WishlistItemRepository)
 container.bind<AuthRepository>(TYPES.AuthRepository)
   .to(AuthRepository)
   .inSingletonScope();
+container.bind<UserRepository>(TYPES.UserRepository)
+  .to(UserRepository)
+  .inSingletonScope();
 
 // Services
 container.bind<WishlistItemService>(TYPES.WishlistItemService)
@@ -34,6 +40,9 @@ container.bind<WishlistItemService>(TYPES.WishlistItemService)
 container.bind<AuthService>(TYPES.AuthService)
   .to(AuthService)
   .inSingletonScope();
+container.bind<UserService>(TYPES.UserService)
+  .to(UserService)
+  .inSingletonScope();
 
 // Controllers
 container.bind<WishlistItemController>(TYPES.WishlistItemController)
@@ -41,6 +50,9 @@ container.bind<WishlistItemController>(TYPES.WishlistItemController)
   .inTransientScope();
 container.bind<AuthController>(TYPES.AuthController)
   .to(AuthController)
+  .inTransientScope();
+container.bind<UserController>(TYPES.UserController)
+  .to(UserController)
   .inTransientScope();
 
 export { container };

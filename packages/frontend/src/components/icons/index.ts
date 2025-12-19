@@ -14,6 +14,7 @@ export { Monitor } from './Monitor';
 export { Moon } from './Moon';
 export { Pencil } from './Pencil';
 export { Plus } from './Plus';
+export { Share2 } from './Share2';
 export { Sparkles } from './Sparkles';
 export { Sun } from './Sun';
 export { Trash2 } from './Trash2';

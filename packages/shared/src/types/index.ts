@@ -23,3 +23,16 @@ export interface User {
   avatar: string | null;
   createdAt: Date;
 }
+
+export interface PublicUserProfile {
+  id: string;
+  name: string;
+  avatar: string | null;
+  createdAt: Date;
+  stats: {
+    totalItems: number;
+    highPriority: number;
+    mediumPriority: number;
+    lowPriority: number;
+  };
+}

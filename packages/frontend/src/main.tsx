@@ -10,6 +10,7 @@ import AddItemPage from './pages/AddItemPage';
 import EditItemPage from './pages/EditItemPage';
 import LoginPage from './pages/LoginPage';
 import ProfilePage from './pages/ProfilePage';
+import PublicProfilePage from './pages/PublicProfilePage';
 import SubscriptionsPage from './pages/SubscriptionsPage';
 import ProviderMismatchPage from './pages/ProviderMismatchPage';
 import './styles/index.css';
@@ -45,6 +46,7 @@ const router = createBrowserRouter([
       },
       { path: 'login', element: <LoginPage /> },
       { path: 'auth/provider-mismatch', element: <ProviderMismatchPage /> },
+      { path: 'user/:userId', element: <PublicProfilePage /> },
       {
         path: 'profile',
         element: (
