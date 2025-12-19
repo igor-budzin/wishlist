@@ -1,0 +1,282 @@
+name: CI/CD Pipeline
+
+on:
+  pull_request:
+    branches: [main]
+    types: [opened, synchronize, reopened]
+
+concurrency:
+  group: ${{ github.workflow }}-${{ github.ref }}
+  cancel-in-progress: true
+
+permissions:
+  contents: read
+  packages: write
+  pull-requests: write
+
+jobs:
+  quality-checks:
+    name: Quality Checks
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: '20'
+          cache: 'npm'
+
+      - name: Install dependencies
+        run: npm ci
+
+      - name: Build shared package
+        run: npm run build:shared
+
+      - name: Run lint
+        run: npm run lint
+
+      - name: Run format check
+        run: npm run format:check
+
+      - name: Run type-check
+        run: npm run type-check
+
+  test:
+    name: Test Suite
+    runs-on: ubuntu-latest
+    needs: quality-checks
+    timeout-minutes: 15
+
+    services:
+      postgres:
+        image: postgres:16-alpine
+        env:
+          POSTGRES_DB: wishlist_test
+          POSTGRES_USER: test_user
+          POSTGRES_PASSWORD: test_password
+        ports:
+          - 5432:5432
+        options: >-
+          --health-cmd "pg_isready -U test_user"
+          --health-interval 10s
+          --health-timeout 5s
+          --health-retries 5
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: '20'
+          cache: 'npm'
+
+      - name: Install dependencies
+        run: npm ci
+
+      - name: Build shared package
+        run: npm run build:shared
+
+      - name: Run Prisma migrations
+        env:
+          DATABASE_URL: postgresql://test_user:test_password@localhost:5432/wishlist_test
+        run: npm run db:migrate:dev --workspace=@wishlist/backend
+
+      - name: Run tests with coverage
+        env:
+          DATABASE_URL: postgresql://test_user:test_password@localhost:5432/wishlist_test
+          NODE_ENV: test
+          CI: true
+        run: npm run test -- --coverage
+
+      - name: Generate test summary
+        if: always()
+        run: |
+          echo "# Test Results" >> $GITHUB_STEP_SUMMARY
+          echo "" >> $GITHUB_STEP_SUMMARY
+
+          # Check if coverage files exist
+          if [ -d "packages/backend/coverage" ]; then
+            echo "## Backend Coverage" >> $GITHUB_STEP_SUMMARY
+            if [ -f "packages/backend/coverage/coverage-summary.json" ]; then
+              node -e "
+                const fs = require('fs');
+                const coverage = JSON.parse(fs.readFileSync('packages/backend/coverage/coverage-summary.json', 'utf8'));
+                const total = coverage.total;
+                console.log('| Metric | Coverage |');
+                console.log('|--------|----------|');
+                console.log('| Lines | ' + total.lines.pct + '% |');
+                console.log('| Branches | ' + total.branches.pct + '% |');
+                console.log('| Functions | ' + total.functions.pct + '% |');
+                console.log('| Statements | ' + total.statements.pct + '% |');
+              " >> $GITHUB_STEP_SUMMARY
+            fi
+            echo "" >> $GITHUB_STEP_SUMMARY
+          fi
+
+          if [ -d "packages/frontend/coverage" ]; then
+            echo "## Frontend Coverage" >> $GITHUB_STEP_SUMMARY
+            if [ -f "packages/frontend/coverage/coverage-summary.json" ]; then
+              node -e "
+                const fs = require('fs');
+                const coverage = JSON.parse(fs.readFileSync('packages/frontend/coverage/coverage-summary.json', 'utf8'));
+                const total = coverage.total;
+                console.log('| Metric | Coverage |');
+                console.log('|--------|----------|');
+                console.log('| Lines | ' + total.lines.pct + '% |');
+                console.log('| Branches | ' + total.branches.pct + '% |');
+                console.log('| Functions | ' + total.functions.pct + '% |');
+                console.log('| Statements | ' + total.statements.pct + '% |');
+              " >> $GITHUB_STEP_SUMMARY
+            fi
+          fi
+
+      - name: Upload backend coverage
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: coverage-backend
+          path: packages/backend/coverage/
+          retention-days: 30
+        continue-on-error: true
+
+      - name: Upload frontend coverage
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: coverage-frontend
+          path: packages/frontend/coverage/
+          retention-days: 30
+        continue-on-error: true
+
+      - name: Create PR comment with test results
+        if: always()
+        uses: marocchino/sticky-pull-request-comment@v2
+        with:
+          header: test-results
+          message: |
+            ## 🚀 CI/CD Pipeline Results
+
+            ### ✅ Quality Checks
+            - Lint: ✓ Pass
+            - Format: ✓ Pass
+            - Type Check: ✓ Pass
+
+            ### 🧪 Test Results
+            Tests completed. Download coverage artifacts for detailed reports.
+
+            **Coverage Reports Available:**
+            - Backend coverage report
+            - Frontend coverage report
+
+            _Check the Actions summary for detailed coverage metrics._
+
+  build:
+    name: Build Packages
+    runs-on: ubuntu-latest
+    needs: test
+    timeout-minutes: 10
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: '20'
+          cache: 'npm'
+
+      - name: Install dependencies
+        run: npm ci
+
+      - name: Build all packages
+        run: npm run build
+
+      - name: Verify build outputs
+        run: |
+          test -d packages/shared/dist || (echo "Shared build failed" && exit 1)
+          test -d packages/frontend/dist || (echo "Frontend build failed" && exit 1)
+          test -d packages/backend/dist || (echo "Backend build failed" && exit 1)
+
+  docker-build:
+    name: Build & Push Docker Images
+    runs-on: ubuntu-latest
+    needs: build
+    timeout-minutes: 20
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Set up Docker Buildx
+        uses: docker/setup-buildx-action@v3
+
+      - name: Login to GitHub Container Registry
+        uses: docker/login-action@v3
+        with:
+          registry: ghcr.io
+          username: ${{ github.actor }}
+          password: ${{ secrets.GITHUB_TOKEN }}
+
+      - name: Extract frontend metadata
+        id: frontend-meta
+        uses: docker/metadata-action@v5
+        with:
+          images: ghcr.io/${{ github.repository_owner }}/wishlist-frontend
+          tags: |
+            type=ref,event=pr,prefix=pr-
+            type=sha,prefix=pr-${{ github.event.pull_request.number }}-
+
+      - name: Build and push frontend image
+        uses: docker/build-push-action@v5
+        with:
+          context: .
+          file: ./packages/frontend/Dockerfile
+          push: true
+          tags: ${{ steps.frontend-meta.outputs.tags }}
+          labels: ${{ steps.frontend-meta.outputs.labels }}
+          cache-from: type=gha
+          cache-to: type=gha,mode=max
+
+      - name: Extract backend metadata
+        id: backend-meta
+        uses: docker/metadata-action@v5
+        with:
+          images: ghcr.io/${{ github.repository_owner }}/wishlist-backend
+          tags: |
+            type=ref,event=pr,prefix=pr-
+            type=sha,prefix=pr-${{ github.event.pull_request.number }}-
+
+      - name: Build and push backend image
+        uses: docker/build-push-action@v5
+        with:
+          context: .
+          file: ./packages/backend/Dockerfile
+          push: true
+          tags: ${{ steps.backend-meta.outputs.tags }}
+          labels: ${{ steps.backend-meta.outputs.labels }}
+          cache-from: type=gha
+          cache-to: type=gha,mode=max
+
+      - name: Update PR comment with Docker images
+        uses: marocchino/sticky-pull-request-comment@v2
+        with:
+          header: test-results
+          append: true
+          message: |
+
+            ### 🐳 Docker Images
+            - Frontend: `ghcr.io/${{ github.repository_owner }}/wishlist-frontend:pr-${{ github.event.pull_request.number }}`
+            - Backend: `ghcr.io/${{ github.repository_owner }}/wishlist-backend:pr-${{ github.event.pull_request.number }}`
+
+            **Pull images:**
+            ```bash
+            docker pull ghcr.io/${{ github.repository_owner }}/wishlist-frontend:pr-${{ github.event.pull_request.number }}
+            docker pull ghcr.io/${{ github.repository_owner }}/wishlist-backend:pr-${{ github.event.pull_request.number }}
+            ```

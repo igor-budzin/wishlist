@@ -50,7 +50,10 @@
       "WebFetch(domain:www.npmjs.com)",
       "WebFetch(domain:www.radix-ui.com)",
       "mcp__playwright__browser_wait_for",
-      "Bash(dir:*)"
+      "Bash(dir:*)",
+      "Bash(find:*)",
+      "Bash(tree:*)",
+      "Bash(npm run test:*)"
     ],
     "defaultMode": "plan"
   }
