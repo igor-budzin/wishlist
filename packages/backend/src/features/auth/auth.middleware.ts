@@ -4,6 +4,7 @@ import type { ApiResponse } from '@wishlist/shared';
 
 // Extend Express Request type to include user
 declare global {
+  // eslint-disable-next-line @typescript-eslint/no-namespace
   namespace Express {
     interface User extends UserResponse {}
   }

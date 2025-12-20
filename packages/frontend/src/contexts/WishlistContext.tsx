@@ -1,4 +1,4 @@
-import { createContext, useContext, useState, useEffect, ReactNode } from 'react';
+import { createContext, useContext, useState, useEffect, useCallback, ReactNode } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { toast } from 'sonner';
 import type { WishlistItem, ApiResponse } from '@wishlist/shared';
@@ -27,11 +27,7 @@ export function WishlistProvider({ children }: WishlistProviderProps) {
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
 
-  useEffect(() => {
-    fetchItems();
-  }, []);
-
-  const fetchItems = async () => {
+  const fetchItems = useCallback(async () => {
     try {
       const response = await fetch('/api/items', {
         credentials: 'include',
@@ -54,7 +50,11 @@ export function WishlistProvider({ children }: WishlistProviderProps) {
     } finally {
       setLoading(false);
     }
-  };
+  }, [navigate]);
+
+  useEffect(() => {
+    fetchItems();
+  }, [fetchItems]);
 
   const createItem = async (data: WishlistItemFormData) => {
     try {

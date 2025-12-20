@@ -108,7 +108,7 @@ export default function PublicProfilePage() {
         {/* Profile Overview */}
         <Card>
           <CardHeader>
-            <CardTitle>{profile.name}'s Wishlist</CardTitle>
+            <CardTitle>{profile.name}&apos;s Wishlist</CardTitle>
             <CardDescription>Public profile</CardDescription>
           </CardHeader>
           <CardContent className="flex items-center gap-4">
@@ -128,7 +128,7 @@ export default function PublicProfilePage() {
         <Card>
           <CardHeader>
             <CardTitle>Wishlist Stats</CardTitle>
-            <CardDescription>Overview of {profile.name}'s wishlist</CardDescription>
+            <CardDescription>Overview of {profile.name}&apos;s wishlist</CardDescription>
           </CardHeader>
           <CardContent>
             <div className="grid gap-4 md:grid-cols-4">

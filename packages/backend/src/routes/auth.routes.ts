@@ -1,4 +1,4 @@
-import { Router } from 'express';
+import { Router, type Request, type Response, type NextFunction } from 'express';
 import passport from 'passport';
 import { container } from '../container.js';
 import { TYPES } from '../types.js';
@@ -26,8 +26,8 @@ function getProviderMismatchRedirectUrl(existingProvider: string | undefined, at
 }
 
 function createOAuthCallbackHandler(provider: 'google' | 'facebook' | 'github') {
-  return (req: any, res: any, next: any) => {
-    passport.authenticate(provider, (err: any, user: any) => {
+  return (req: Request, res: Response, next: NextFunction) => {
+    passport.authenticate(provider, (err: unknown, user: unknown) => {
       if (err) {
         if (err instanceof ProviderConflictError) {
           const conflictError = err as ProviderConflictError;

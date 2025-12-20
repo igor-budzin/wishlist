@@ -6,13 +6,15 @@ import App from './App';
 // Mock fetch
 global.fetch = vi.fn();
 
+type MockFetch = ReturnType<typeof vi.fn>;
+
 describe('App Smoke Tests', () => {
   beforeEach(() => {
     vi.clearAllMocks();
   });
 
   it('should render the app title', () => {
-    (global.fetch as any).mockResolvedValueOnce({
+    (global.fetch as unknown as MockFetch).mockResolvedValueOnce({
       json: async () => ({ success: true, data: [] }),
     });
 
@@ -21,7 +23,7 @@ describe('App Smoke Tests', () => {
   });
 
   it('should show loading state initially', () => {
-    (global.fetch as any).mockImplementationOnce(
+    (global.fetch as unknown as MockFetch).mockImplementationOnce(
       () => new Promise(() => {}) // Never resolves
     );
 
@@ -30,7 +32,7 @@ describe('App Smoke Tests', () => {
   });
 
   it('should display empty state when no items exist', async () => {
-    (global.fetch as any).mockResolvedValueOnce({
+    (global.fetch as unknown as MockFetch).mockResolvedValueOnce({
       json: async () => ({ success: true, data: [] }),
     });
 
@@ -61,7 +63,7 @@ describe('App Smoke Tests', () => {
       },
     ];
 
-    (global.fetch as any).mockResolvedValueOnce({
+    (global.fetch as unknown as MockFetch).mockResolvedValueOnce({
       json: async () => ({ success: true, data: mockItems }),
     });
 
@@ -75,7 +77,7 @@ describe('App Smoke Tests', () => {
   });
 
   it('should display error message when API fails', async () => {
-    (global.fetch as any).mockResolvedValueOnce({
+    (global.fetch as unknown as MockFetch).mockResolvedValueOnce({
       json: async () => ({ success: false, error: 'Failed to fetch items' }),
     });
 
@@ -87,7 +89,7 @@ describe('App Smoke Tests', () => {
   });
 
   it('should display error when network request fails', async () => {
-    (global.fetch as any).mockRejectedValueOnce(new Error('Network error'));
+    (global.fetch as unknown as MockFetch).mockRejectedValueOnce(new Error('Network error'));
 
     render(<App />);
 
@@ -97,7 +99,7 @@ describe('App Smoke Tests', () => {
   });
 
   it('should call /api/items endpoint on mount', async () => {
-    (global.fetch as any).mockResolvedValueOnce({
+    (global.fetch as unknown as MockFetch).mockResolvedValueOnce({
       json: async () => ({ success: true, data: [] }),
     });
 

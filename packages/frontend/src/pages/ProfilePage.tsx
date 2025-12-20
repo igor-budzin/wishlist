@@ -18,29 +18,32 @@ export default function ProfilePage() {
   const { items, loading } = useWishlist();
   const { user, logout } = useAuth();
 
-  if (!user) {
-    return null;
-  }
-
   const stats = useMemo(() => {
+    if (!user) return { total: 0, high: 0, medium: 0, low: 0 };
     const total = items.length;
     const high = items.filter((item) => item.priority === 'high').length;
     const medium = items.filter((item) => item.priority === 'medium').length;
     const low = items.filter((item) => item.priority === 'low').length;
 
     return { total, high, medium, low };
-  }, [items]);
+  }, [items, user]);
 
   const initials = useMemo(
-    () =>
-      user.name
+    () => {
+      if (!user) return '';
+      return user.name
         .split(' ')
         .filter(Boolean)
         .map((part) => part[0]?.toUpperCase())
         .slice(0, 2)
-        .join(''),
-    [user.name]
+        .join('');
+    },
+    [user]
   );
+
+  if (!user) {
+    return null;
+  }
 
   const handleEditProfile = () => {
     toast.info('Profile editing coming soon!');
