@@ -56,7 +56,11 @@
       "Bash(npm run test:*)",
       "Bash(npm run format:check:*)",
       "Bash(git add:*)",
-      "Bash(git commit:*)"
+      "Bash(git commit:*)",
+      "mcp__github__list_pull_requests",
+      "Bash(gh repo view:*)",
+      "Bash(npm run test:smoke:backend:*)",
+      "Bash(npm run test:smoke:frontend:*)"
     ],
     "defaultMode": "plan"
   }

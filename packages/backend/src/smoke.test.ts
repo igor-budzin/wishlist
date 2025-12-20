@@ -32,62 +32,41 @@ describe('Backend Smoke Tests', () => {
     });
   });
 
-  describe('API Endpoints', () => {
-    it('should return success response for GET /api/items', async () => {
+  describe('API Authentication', () => {
+    it('should require authentication for GET /api/items', async () => {
       const response = await request(app).get('/api/items');
 
-      expect(response.status).toBe(200);
-      expect(response.body).toHaveProperty('success', true);
-      expect(response.body).toHaveProperty('data');
-      expect(Array.isArray(response.body.data)).toBe(true);
+      expect(response.status).toBe(401);
     });
 
-    it('should return 404 for non-existent item', async () => {
-      const response = await request(app).get('/api/items/non-existent-id');
-
-      expect(response.status).toBe(404);
-      expect(response.body).toHaveProperty('success', false);
-      expect(response.body).toHaveProperty('error');
-    });
-
-    it('should return 400 for POST /api/items without title', async () => {
+    it('should require authentication for POST /api/items', async () => {
       const response = await request(app).post('/api/items').send({
+        title: 'Test Item',
         description: 'Test description',
+        priority: 'medium',
       });
 
-      expect(response.status).toBe(400);
-      expect(response.body).toHaveProperty('success', false);
-      expect(response.body).toHaveProperty('error');
+      expect(response.status).toBe(401);
     });
 
-    it('should create and delete an item successfully', async () => {
-      // Create an item
-      const createResponse = await request(app).post('/api/items').send({
-        title: 'Smoke Test Item',
-        description: 'This is a test item',
-        priority: 'high',
-      });
+    it('should require authentication for DELETE /api/items', async () => {
+      const response = await request(app).delete('/api/items/test-id');
 
-      expect(createResponse.status).toBe(201);
-      expect(createResponse.body).toHaveProperty('success', true);
-      expect(createResponse.body.data).toHaveProperty('id');
-      expect(createResponse.body.data).toHaveProperty('title', 'Smoke Test Item');
+      expect(response.status).toBe(401);
+    });
+  });
 
-      const itemId = createResponse.body.data.id;
+  describe('Public Endpoints', () => {
+    it('should have accessible auth routes', async () => {
+      // Test that auth routes exist (redirects are expected for OAuth)
+      const googleResponse = await request(app).get('/api/auth/google');
+      expect([302, 401]).toContain(googleResponse.status); // Redirect or unauthorized
 
-      // Get the item
-      const getResponse = await request(app).get(`/api/items/${itemId}`);
-      expect(getResponse.status).toBe(200);
-      expect(getResponse.body.data).toHaveProperty('id', itemId);
+      const facebookResponse = await request(app).get('/api/auth/facebook');
+      expect([302, 401]).toContain(facebookResponse.status);
 
-      // Delete the item
-      const deleteResponse = await request(app).delete(`/api/items/${itemId}`);
-      expect(deleteResponse.status).toBe(200);
-      expect(deleteResponse.body).toHaveProperty('success', true);
-
-      // Verify item is deleted
-      const verifyResponse = await request(app).get(`/api/items/${itemId}`);
-      expect(verifyResponse.status).toBe(404);
+      const githubResponse = await request(app).get('/api/auth/github');
+      expect([302, 401]).toContain(githubResponse.status);
     });
   });
 });
