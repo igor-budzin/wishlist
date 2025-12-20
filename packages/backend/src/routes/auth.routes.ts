@@ -52,7 +52,7 @@ function createOAuthCallbackHandler(provider: 'google' | 'facebook' | 'github') 
         return;
       }
 
-      req.logIn(user, (loginError: Error | null) => {
+      req.logIn(user as Express.User, (loginError: Error | null) => {
         if (loginError) {
           return next(loginError);
         }

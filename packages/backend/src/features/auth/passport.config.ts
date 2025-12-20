@@ -2,7 +2,6 @@ import passport from 'passport';
 import { Strategy as GoogleStrategy } from 'passport-google-oauth20';
 import { Strategy as FacebookStrategy } from 'passport-facebook';
 import { Strategy as GitHubStrategy } from 'passport-github2';
-// @ts-expect-error - passport-apple may not be installed, used conditionally based on environment variables
 import type { IAuthService, UserResponse } from './auth.service.js';
 import type { ILogger } from '../../lib/logger.js';
 
@@ -115,14 +114,16 @@ export function configurePassport(authService: IAuthService, logger: ILogger) {
           done: (err: Error | null, user?: unknown) => void
         ) => {
           try {
-            logger.info(`GitHub OAuth callback for user: ${profile.emails?.[0]?.value}`);
+            // eslint-disable-next-line @typescript-eslint/no-explicit-any
+            const typedProfile = profile as any;
+            logger.info(`GitHub OAuth callback for user: ${typedProfile.emails?.[0]?.value}`);
 
             const user = await authService.findOrCreateUser({
               provider: 'github',
-              providerId: profile.id,
-              name: profile.displayName || profile.username,
-              email: profile.emails?.[0]?.value || '',
-              avatar: profile.photos?.[0]?.value,
+              providerId: typedProfile.id,
+              name: typedProfile.displayName || typedProfile.username,
+              email: typedProfile.emails?.[0]?.value || '',
+              avatar: typedProfile.photos?.[0]?.value,
             });
 
             logger.info(`GitHub OAuth successful for: ${user.email}`);
