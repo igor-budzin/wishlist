@@ -75,7 +75,7 @@ export default function EditItemPage() {
                 <CardTitle className="text-destructive">Item Not Found</CardTitle>
               </div>
               <CardDescription>
-                The item you're trying to edit doesn't exist or may have been deleted.
+                The item you&apos;re trying to edit doesn&apos;t exist or may have been deleted.
               </CardDescription>
             </CardHeader>
             <CardContent>

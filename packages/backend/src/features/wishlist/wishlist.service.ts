@@ -70,7 +70,7 @@ export class WishlistItemService implements IWishlistItemService {
 
     this.logger.info(`Updating wishlist item: ${id} for user: ${userId}`);
 
-    const updateData: any = {};
+    const updateData: Record<string, unknown> = {};
     if (data.title !== undefined) updateData.title = data.title;
     if (data.description !== undefined) updateData.description = data.description;
     if (data.url !== undefined) updateData.url = data.url || null;

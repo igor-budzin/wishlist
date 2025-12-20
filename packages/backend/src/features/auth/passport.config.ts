@@ -2,8 +2,7 @@ import passport from 'passport';
 import { Strategy as GoogleStrategy } from 'passport-google-oauth20';
 import { Strategy as FacebookStrategy } from 'passport-facebook';
 import { Strategy as GitHubStrategy } from 'passport-github2';
-// @ts-ignore - Used conditionally based on environment variables
-import { Strategy as AppleStrategy } from 'passport-apple';
+// @ts-expect-error - passport-apple may not be installed, used conditionally based on environment variables
 import type { IAuthService, UserResponse } from './auth.service.js';
 import type { ILogger } from '../../lib/logger.js';
 
@@ -109,7 +108,7 @@ export function configurePassport(authService: IAuthService, logger: ILogger) {
           callbackURL: process.env.GITHUB_CALLBACK_URL || '/api/auth/github/callback',
           scope: ['user:email'],
         },
-        async (_accessToken: string, _refreshToken: string, profile: any, done: any) => {
+        async (_accessToken: string, _refreshToken: string, profile: unknown, done: (err: Error | null, user?: unknown) => void) => {
           try {
             logger.info(`GitHub OAuth callback for user: ${profile.emails?.[0]?.value}`);
 

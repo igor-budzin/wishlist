@@ -2,10 +2,10 @@ import { injectable } from 'inversify';
 import winston from 'winston';
 
 export interface ILogger {
-  info(message: string, meta?: any): void;
-  error(message: string, error?: Error | any): void;
-  warn(message: string, meta?: any): void;
-  debug(message: string, meta?: any): void;
+  info(message: string, meta?: unknown): void;
+  error(message: string, error?: Error | unknown): void;
+  warn(message: string, meta?: unknown): void;
+  debug(message: string, meta?: unknown): void;
 }
 
 @injectable()
@@ -31,19 +31,19 @@ export class Logger implements ILogger {
     });
   }
 
-  info(message: string, meta?: any): void {
+  info(message: string, meta?: unknown): void {
     this.logger.info(message, meta);
   }
 
-  error(message: string, error?: Error | any): void {
+  error(message: string, error?: Error | unknown): void {
     this.logger.error(message, { error });
   }
 
-  warn(message: string, meta?: any): void {
+  warn(message: string, meta?: unknown): void {
     this.logger.warn(message, meta);
   }
 
-  debug(message: string, meta?: any): void {
+  debug(message: string, meta?: unknown): void {
     this.logger.debug(message, meta);
   }
 }
