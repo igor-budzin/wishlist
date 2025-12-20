@@ -93,9 +93,7 @@ export default function EditItemPage() {
           <Card>
             <CardHeader>
               <CardTitle>Edit Item</CardTitle>
-              <CardDescription>
-                Update the details of your wishlist item.
-              </CardDescription>
+              <CardDescription>Update the details of your wishlist item.</CardDescription>
             </CardHeader>
             <CardContent>
               <ItemForm

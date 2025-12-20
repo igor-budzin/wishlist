@@ -30,17 +30,11 @@ export function WishlistItemCard({ item, onEdit, onDelete }: WishlistItemCardPro
     <Card className="flex flex-col transition-all hover:shadow-lg">
       <CardHeader className="space-y-3">
         <div className="flex items-start justify-between gap-2">
-          <CardTitle className="text-lg leading-tight line-clamp-2">
-            {item.title}
-          </CardTitle>
-          <Badge variant={getPriorityVariant(item.priority)}>
-            {item.priority}
-          </Badge>
+          <CardTitle className="text-lg leading-tight line-clamp-2">{item.title}</CardTitle>
+          <Badge variant={getPriorityVariant(item.priority)}>{item.priority}</Badge>
         </div>
         {item.description && (
-          <CardDescription className="line-clamp-3">
-            {item.description}
-          </CardDescription>
+          <CardDescription className="line-clamp-3">{item.description}</CardDescription>
         )}
       </CardHeader>
 
@@ -65,21 +59,13 @@ export function WishlistItemCard({ item, onEdit, onDelete }: WishlistItemCardPro
           {!item.url && <div className="flex-1" />}
 
           {onEdit && (
-            <Button
-              variant="outline"
-              size="sm"
-              onClick={onEdit}
-            >
+            <Button variant="outline" size="sm" onClick={onEdit}>
               <Pencil className="h-4 w-4" />
             </Button>
           )}
 
           {onDelete && (
-            <Button
-              variant="outline"
-              size="sm"
-              onClick={onDelete}
-            >
+            <Button variant="outline" size="sm" onClick={onDelete}>
               <Trash2 className="h-4 w-4" />
             </Button>
           )}
@@ -88,4 +74,3 @@ export function WishlistItemCard({ item, onEdit, onDelete }: WishlistItemCardPro
     </Card>
   );
 }
-

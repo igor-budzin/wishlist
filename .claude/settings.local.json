@@ -53,7 +53,10 @@
       "Bash(dir:*)",
       "Bash(find:*)",
       "Bash(tree:*)",
-      "Bash(npm run test:*)"
+      "Bash(npm run test:*)",
+      "Bash(npm run format:check:*)",
+      "Bash(git add:*)",
+      "Bash(git commit:*)"
     ],
     "defaultMode": "plan"
   }

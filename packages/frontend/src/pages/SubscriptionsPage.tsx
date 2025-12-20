@@ -100,7 +100,10 @@ export default function SubscriptionsPage() {
         ) : (
           <div className="space-y-4">
             {subscriptions.map((sub) => (
-              <Card key={sub.id} className="flex flex-col md:flex-row md:items-center md:justify-between gap-4">
+              <Card
+                key={sub.id}
+                className="flex flex-col md:flex-row md:items-center md:justify-between gap-4"
+              >
                 <CardHeader className="flex flex-row items-start gap-4 p-4 pb-2 md:pb-4">
                   <div className="relative">
                     <div
@@ -117,17 +120,12 @@ export default function SubscriptionsPage() {
                   <div className="space-y-1">
                     <div className="flex flex-wrap items-center gap-2">
                       <CardTitle className="text-base">
-                        <Link
-                          to="/"
-                          className="hover:underline"
-                        >
+                        <Link to="/" className="hover:underline">
                           {sub.name}
                         </Link>
                       </CardTitle>
                     </div>
-                    <CardDescription className="text-xs md:text-sm">
-                      {sub.bio}
-                    </CardDescription>
+                    <CardDescription className="text-xs md:text-sm">{sub.bio}</CardDescription>
                     <div className="flex flex-wrap items-center gap-2 text-xs text-muted-foreground">
                       <span>{sub.itemsCount} wishes</span>
                     </div>
@@ -176,4 +174,3 @@ export default function SubscriptionsPage() {
     </div>
   );
 }
-

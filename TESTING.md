@@ -108,11 +108,13 @@ Tests the following:
 Before running tests, ensure:
 
 1. **Docker Infrastructure is Running**
+
    ```bash
    docker-compose up -d
    ```
 
 2. **Database is Set Up**
+
    ```bash
    cd packages/backend
    npm run db:push
@@ -126,6 +128,7 @@ Before running tests, ensure:
 ### Running Tests Without Servers
 
 The smoke tests don't require the dev servers to be running:
+
 - Backend tests start their own test instance of the Express app
 - Frontend tests mock the fetch API and don't make real network requests
 
@@ -225,6 +228,7 @@ If backend tests fail with database connection errors:
 ### Port Conflicts
 
 If you see "address already in use" errors:
+
 - Stop dev servers before running backend tests
 - Or run tests on a different port by modifying test setup
 

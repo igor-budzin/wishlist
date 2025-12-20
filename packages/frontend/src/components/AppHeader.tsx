@@ -26,4 +26,3 @@ export function AppHeader({ actions }: AppHeaderProps) {
     </header>
   );
 }
-

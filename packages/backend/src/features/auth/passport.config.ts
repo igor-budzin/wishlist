@@ -108,7 +108,12 @@ export function configurePassport(authService: IAuthService, logger: ILogger) {
           callbackURL: process.env.GITHUB_CALLBACK_URL || '/api/auth/github/callback',
           scope: ['user:email'],
         },
-        async (_accessToken: string, _refreshToken: string, profile: unknown, done: (err: Error | null, user?: unknown) => void) => {
+        async (
+          _accessToken: string,
+          _refreshToken: string,
+          profile: unknown,
+          done: (err: Error | null, user?: unknown) => void
+        ) => {
           try {
             logger.info(`GitHub OAuth callback for user: ${profile.emails?.[0]?.value}`);
 

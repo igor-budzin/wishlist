@@ -28,18 +28,15 @@ export default function ProfilePage() {
     return { total, high, medium, low };
   }, [items, user]);
 
-  const initials = useMemo(
-    () => {
-      if (!user) return '';
-      return user.name
-        .split(' ')
-        .filter(Boolean)
-        .map((part) => part[0]?.toUpperCase())
-        .slice(0, 2)
-        .join('');
-    },
-    [user]
-  );
+  const initials = useMemo(() => {
+    if (!user) return '';
+    return user.name
+      .split(' ')
+      .filter(Boolean)
+      .map((part) => part[0]?.toUpperCase())
+      .slice(0, 2)
+      .join('');
+  }, [user]);
 
   if (!user) {
     return null;
@@ -125,9 +122,7 @@ export default function ProfilePage() {
         <Card>
           <CardHeader>
             <CardTitle>Wishlist stats</CardTitle>
-            <CardDescription>
-              A quick overview of how you are using your wishlist.
-            </CardDescription>
+            <CardDescription>A quick overview of how you are using your wishlist.</CardDescription>
           </CardHeader>
           <CardContent>
             {loading ? (
@@ -181,11 +176,7 @@ export default function ProfilePage() {
                 </p>
               </div>
               <div className="flex gap-2">
-                <Button
-                  variant="outline"
-                  size="sm"
-                  onClick={() => navigate('/subscriptions')}
-                >
+                <Button variant="outline" size="sm" onClick={() => navigate('/subscriptions')}>
                   Manage subscriptions
                 </Button>
               </div>

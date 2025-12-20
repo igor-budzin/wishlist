@@ -52,9 +52,7 @@ export default function LoginPage() {
         <Card className="w-full max-w-md">
           <CardHeader className="space-y-2 text-center">
             <CardTitle className="text-2xl">Welcome back</CardTitle>
-            <CardDescription>
-              Sign in to your account to continue
-            </CardDescription>
+            <CardDescription>Sign in to your account to continue</CardDescription>
           </CardHeader>
           <CardContent className="space-y-3">
             <Button

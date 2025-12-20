@@ -156,11 +156,7 @@ export function WishlistProvider({ children }: WishlistProviderProps) {
     getItemById,
   };
 
-  return (
-    <WishlistContext.Provider value={value}>
-      {children}
-    </WishlistContext.Provider>
-  );
+  return <WishlistContext.Provider value={value}>{children}</WishlistContext.Provider>;
 }
 
 export function useWishlist() {

@@ -42,11 +42,7 @@ export default function AddItemPage() {
             </CardDescription>
           </CardHeader>
           <CardContent>
-            <ItemForm
-              onSubmit={handleSubmit}
-              submitLabel="Add Item"
-              isSubmitting={isSubmitting}
-            />
+            <ItemForm onSubmit={handleSubmit} submitLabel="Add Item" isSubmitting={isSubmitting} />
           </CardContent>
         </Card>
       </main>

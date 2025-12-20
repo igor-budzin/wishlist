@@ -35,8 +35,9 @@ export function DeleteConfirmDialog({
         <AlertDialogHeader>
           <AlertDialogTitle>Are you sure?</AlertDialogTitle>
           <AlertDialogDescription>
-            This will permanently delete <span className="font-semibold">&quot;{itemTitle}&quot;</span> from
-            your wishlist. This action cannot be undone.
+            This will permanently delete{' '}
+            <span className="font-semibold">&quot;{itemTitle}&quot;</span> from your wishlist. This
+            action cannot be undone.
           </AlertDialogDescription>
         </AlertDialogHeader>
         <AlertDialogFooter>

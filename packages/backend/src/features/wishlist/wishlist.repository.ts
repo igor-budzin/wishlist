@@ -13,12 +13,16 @@ export interface IWishlistItemRepository {
     priority: Priority;
     userId: string;
   }): Promise<WishlistItem>;
-  update(id: string, userId: string, data: {
-    title?: string;
-    description?: string | null;
-    url?: string | null;
-    priority?: Priority;
-  }): Promise<WishlistItem>;
+  update(
+    id: string,
+    userId: string,
+    data: {
+      title?: string;
+      description?: string | null;
+      url?: string | null;
+      priority?: Priority;
+    }
+  ): Promise<WishlistItem>;
   delete(id: string, userId: string): Promise<void>;
   count(userId: string): Promise<number>;
 }
@@ -58,12 +62,16 @@ export class WishlistItemRepository implements IWishlistItemRepository {
     });
   }
 
-  async update(id: string, userId: string, data: {
-    title?: string;
-    description?: string | null;
-    url?: string | null;
-    priority?: Priority;
-  }): Promise<WishlistItem> {
+  async update(
+    id: string,
+    userId: string,
+    data: {
+      title?: string;
+      description?: string | null;
+      url?: string | null;
+      priority?: Priority;
+    }
+  ): Promise<WishlistItem> {
     this.logger.info(`Updating wishlist item: ${id} for user: ${userId}`);
     return this.prisma.wishlistItem.update({
       where: { id, userId },

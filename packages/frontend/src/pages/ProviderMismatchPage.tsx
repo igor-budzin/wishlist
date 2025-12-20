@@ -19,8 +19,12 @@ export default function ProviderMismatchPage() {
   const navigate = useNavigate();
   const [searchParams] = useSearchParams();
 
-  const attemptedProvider = (searchParams.get('attemptedWith') || '').toLowerCase() as Provider | '';
-  const registeredProvider = (searchParams.get('registeredWith') || '').toLowerCase() as Provider | '';
+  const attemptedProvider = (searchParams.get('attemptedWith') || '').toLowerCase() as
+    | Provider
+    | '';
+  const registeredProvider = (searchParams.get('registeredWith') || '').toLowerCase() as
+    | Provider
+    | '';
 
   const effectiveProvider: Provider | '' = useMemo(() => {
     if (registeredProvider && PROVIDER_LABELS[registeredProvider]) {
@@ -52,11 +56,13 @@ export default function ProviderMismatchPage() {
             <CardDescription>
               {effectiveProvider ? (
                 <>
-                  This email is already registered with {PROVIDER_LABELS[effectiveProvider]}. Please continue with{' '}
-                  {PROVIDER_LABELS[effectiveProvider]} to sign in.
+                  This email is already registered with {PROVIDER_LABELS[effectiveProvider]}. Please
+                  continue with {PROVIDER_LABELS[effectiveProvider]} to sign in.
                 </>
               ) : (
-                <>This email is already registered. Please continue with your original login method.</>
+                <>
+                  This email is already registered. Please continue with your original login method.
+                </>
               )}
             </CardDescription>
           </CardHeader>
@@ -73,11 +79,7 @@ export default function ProviderMismatchPage() {
                 Continue with {PROVIDER_LABELS[effectiveProvider]}
               </Button>
             )}
-            <Button
-              variant="ghost"
-              className="w-full h-[40px]"
-              onClick={() => navigate('/login')}
-            >
+            <Button variant="ghost" className="w-full h-[40px]" onClick={() => navigate('/login')}>
               Back to login
             </Button>
           </CardContent>
@@ -86,4 +88,3 @@ export default function ProviderMismatchPage() {
     </div>
   );
 }
-
