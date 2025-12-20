@@ -14,7 +14,10 @@ function getLoginErrorRedirectUrl(): string {
   return `${FRONTEND_URL}/login?error=auth_failed`;
 }
 
-function getProviderMismatchRedirectUrl(existingProvider: string | undefined, attemptedProvider: string): string {
+function getProviderMismatchRedirectUrl(
+  existingProvider: string | undefined,
+  attemptedProvider: string
+): string {
   const encodedAttempted = encodeURIComponent(attemptedProvider);
   const encodedExisting = existingProvider ? encodeURIComponent(existingProvider) : '';
 
@@ -32,7 +35,10 @@ function createOAuthCallbackHandler(provider: 'google' | 'facebook' | 'github') 
         if (err instanceof ProviderConflictError) {
           const conflictError = err as ProviderConflictError;
           res.redirect(
-            getProviderMismatchRedirectUrl(conflictError.existingProvider, conflictError.attemptedProvider || provider)
+            getProviderMismatchRedirectUrl(
+              conflictError.existingProvider,
+              conflictError.attemptedProvider || provider
+            )
           );
           return;
         }
@@ -46,7 +52,7 @@ function createOAuthCallbackHandler(provider: 'google' | 'facebook' | 'github') 
         return;
       }
 
-      req.logIn(user, (loginError: Error | null) => {
+      req.logIn(user as Express.User, (loginError: Error | null) => {
         if (loginError) {
           return next(loginError);
         }

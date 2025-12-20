@@ -54,6 +54,7 @@ cp packages/backend/.env.example packages/backend/.env
 Edit `packages/backend/.env` with your configuration:
 
 **Required Configuration:**
+
 ```env
 # Database
 DATABASE_URL="postgresql://username:password@localhost:5432/wishlist_db"
@@ -68,6 +69,7 @@ FRONTEND_URL="http://localhost:3000"
 ```
 
 **Generate a secure session secret:**
+
 ```bash
 node -e "console.log(require('crypto').randomBytes(64).toString('hex'))"
 ```
@@ -137,6 +139,7 @@ This will start:
 ## Authentication Setup
 
 The application uses OAuth 2.0 authentication with session-based authentication. Users can login with Google, Facebook, or GitHub.
+
 <!-- Apple Sign In is currently disabled but can be re-enabled - see setup guide below -->
 
 ### Quick Start (Google OAuth)
@@ -156,6 +159,7 @@ The application uses OAuth 2.0 authentication with session-based authentication.
    - Copy the Client ID and Client Secret
 
 5. **Update your `.env` file:**
+
    ```env
    GOOGLE_CLIENT_ID="your-client-id.apps.googleusercontent.com"
    GOOGLE_CLIENT_SECRET="your-client-secret"
@@ -183,7 +187,7 @@ The application uses OAuth 2.0 authentication with session-based authentication.
    FACEBOOK_APP_SECRET="your-facebook-app-secret"
    FACEBOOK_CALLBACK_URL="http://localhost:3002/api/auth/facebook/callback"
    ```
-</details>
+   </details>
 
 <details>
 <summary><b>GitHub OAuth Setup</b></summary>
@@ -199,12 +203,13 @@ The application uses OAuth 2.0 authentication with session-based authentication.
    GITHUB_CLIENT_SECRET="your-github-client-secret"
    GITHUB_CALLBACK_URL="http://localhost:3002/api/auth/github/callback"
    ```
-</details>
+   </details>
 
 <details>
 <summary><b>Apple Sign In Setup (CURRENTLY DISABLED)</b></summary>
 
 **Note**: Apple authentication is currently disabled in the codebase but can be easily re-enabled by uncommenting code in the following files:
+
 - `packages/frontend/src/pages/LoginPage.tsx` (lines 68-77)
 - `packages/backend/src/features/auth/passport.config.ts` (lines 136-180)
 - `packages/backend/src/routes/auth.routes.ts` (lines 48-59)
@@ -226,7 +231,7 @@ The application uses OAuth 2.0 authentication with session-based authentication.
    APPLE_CALLBACK_URL="http://localhost:3002/api/auth/apple/callback"
    ```
    **Note**: Replace newlines in the private key with `\n`
-</details>
+   </details>
 
 ### Session Management
 
@@ -351,18 +356,21 @@ Change ports in:
 ### Authentication Issues
 
 **"OAuth callback error"**
+
 1. Ensure callback URLs in `.env` match provider configuration exactly
 2. Check that SESSION_SECRET is set
 3. Verify OAuth provider credentials are correct
 4. Check backend logs for detailed error messages
 
 **"Session not persisting"**
+
 1. Ensure PostgreSQL is running (sessions are stored there)
 2. Check that session table exists in database
 3. Verify cookies are enabled in browser
 4. Check that FRONTEND_URL matches your actual frontend URL
 
 **"Cannot access wishlist items"**
+
 1. Ensure you're logged in (check `/api/auth/me`)
 2. Wishlist items are user-specific - each user only sees their own items
 3. Check that userId is set on items (should happen automatically)

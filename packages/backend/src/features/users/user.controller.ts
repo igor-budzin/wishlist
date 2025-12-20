@@ -6,9 +6,7 @@ import type { IUserService } from './user.service.js';
 
 @injectable()
 export class UserController {
-  constructor(
-    @inject(TYPES.UserService) private service: IUserService
-  ) {}
+  constructor(@inject(TYPES.UserService) private service: IUserService) {}
 
   async getPublicProfile(req: Request, res: Response, next: NextFunction): Promise<void> {
     try {

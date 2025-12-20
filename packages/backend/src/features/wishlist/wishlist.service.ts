@@ -7,7 +7,7 @@ import {
   CreateWishlistItemDTO,
   UpdateWishlistItemDTO,
   toPrismaPriority,
-  fromPrismaPriority
+  fromPrismaPriority,
 } from './wishlist.schema.js';
 
 export interface WishlistItemResponse {
@@ -24,7 +24,11 @@ export interface IWishlistItemService {
   getAllItems(userId: string): Promise<WishlistItemResponse[]>;
   getItemById(id: string, userId: string): Promise<WishlistItemResponse>;
   createItem(data: CreateWishlistItemDTO, userId: string): Promise<WishlistItemResponse>;
-  updateItem(id: string, userId: string, data: UpdateWishlistItemDTO): Promise<WishlistItemResponse>;
+  updateItem(
+    id: string,
+    userId: string,
+    data: UpdateWishlistItemDTO
+  ): Promise<WishlistItemResponse>;
   deleteItem(id: string, userId: string): Promise<void>;
 }
 
@@ -64,7 +68,11 @@ export class WishlistItemService implements IWishlistItemService {
     return this.toResponse(item);
   }
 
-  async updateItem(id: string, userId: string, data: UpdateWishlistItemDTO): Promise<WishlistItemResponse> {
+  async updateItem(
+    id: string,
+    userId: string,
+    data: UpdateWishlistItemDTO
+  ): Promise<WishlistItemResponse> {
     // Check if item exists
     await this.getItemById(id, userId);
 

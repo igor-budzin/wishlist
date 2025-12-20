@@ -23,36 +23,27 @@ container.bind<Logger>(TYPES.Logger).to(Logger).inSingletonScope();
 container.bind<ConfigService>(TYPES.ConfigService).to(ConfigService).inSingletonScope();
 
 // Repositories
-container.bind<WishlistItemRepository>(TYPES.WishlistItemRepository)
+container
+  .bind<WishlistItemRepository>(TYPES.WishlistItemRepository)
   .to(WishlistItemRepository)
   .inSingletonScope();
-container.bind<AuthRepository>(TYPES.AuthRepository)
-  .to(AuthRepository)
-  .inSingletonScope();
-container.bind<UserRepository>(TYPES.UserRepository)
-  .to(UserRepository)
-  .inSingletonScope();
+container.bind<AuthRepository>(TYPES.AuthRepository).to(AuthRepository).inSingletonScope();
+container.bind<UserRepository>(TYPES.UserRepository).to(UserRepository).inSingletonScope();
 
 // Services
-container.bind<WishlistItemService>(TYPES.WishlistItemService)
+container
+  .bind<WishlistItemService>(TYPES.WishlistItemService)
   .to(WishlistItemService)
   .inSingletonScope();
-container.bind<AuthService>(TYPES.AuthService)
-  .to(AuthService)
-  .inSingletonScope();
-container.bind<UserService>(TYPES.UserService)
-  .to(UserService)
-  .inSingletonScope();
+container.bind<AuthService>(TYPES.AuthService).to(AuthService).inSingletonScope();
+container.bind<UserService>(TYPES.UserService).to(UserService).inSingletonScope();
 
 // Controllers
-container.bind<WishlistItemController>(TYPES.WishlistItemController)
+container
+  .bind<WishlistItemController>(TYPES.WishlistItemController)
   .to(WishlistItemController)
   .inTransientScope();
-container.bind<AuthController>(TYPES.AuthController)
-  .to(AuthController)
-  .inTransientScope();
-container.bind<UserController>(TYPES.UserController)
-  .to(UserController)
-  .inTransientScope();
+container.bind<AuthController>(TYPES.AuthController).to(AuthController).inTransientScope();
+container.bind<UserController>(TYPES.UserController).to(UserController).inTransientScope();
 
 export { container };

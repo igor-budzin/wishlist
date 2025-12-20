@@ -6,9 +6,7 @@ import type { IWishlistItemService } from './wishlist.service.js';
 
 @injectable()
 export class WishlistItemController {
-  constructor(
-    @inject(TYPES.WishlistItemService) private service: IWishlistItemService
-  ) {}
+  constructor(@inject(TYPES.WishlistItemService) private service: IWishlistItemService) {}
 
   async getAll(req: Request, res: Response, next: NextFunction): Promise<void> {
     try {

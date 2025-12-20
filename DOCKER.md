@@ -12,12 +12,14 @@ This document describes how to set up and run the infrastructure services for th
 The docker-compose setup includes the following services:
 
 ### PostgreSQL
+
 - **Image**: postgres:16-alpine
 - **Port**: 5432 (configurable via `POSTGRES_PORT`)
 - **Database**: wishlist_db
 - **Purpose**: Main application database
 
 ### pgAdmin
+
 - **Image**: dpage/pgadmin4:latest
 - **Port**: 5050 (configurable via `PGADMIN_PORT`)
 - **Purpose**: Web-based PostgreSQL administration tool
@@ -165,6 +167,7 @@ npm run db:seed
 ```
 
 The seed script will:
+
 - Clear all existing wishlist items (if any)
 - Create 8 sample wishlist items with various priorities and details
 
@@ -173,6 +176,7 @@ The seed script will:
 ### When to Run Seed
 
 Run the seed script:
+
 - After initial setup to get sample data
 - After resetting the database
 - When you need fresh test data for development
@@ -195,6 +199,7 @@ These volumes persist even when containers are stopped. To completely remove dat
 ### Port Already in Use
 
 If you get a port conflict error, either:
+
 1. Stop the service using the port
 2. Change the port in the `.env` file
 

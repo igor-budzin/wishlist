@@ -11,11 +11,13 @@ The frontend build has been optimized to reduce bundle size, improve load times,
 ### 1. Code Splitting
 
 **Route-based code splitting** using React.lazy() and Suspense:
+
 - Each page component is loaded only when needed
 - Reduces initial bundle size
 - Improves time to interactive (TTI)
 
 **Vendor chunking** separates dependencies into logical groups:
+
 - `vendor-react`: React core libraries
 - `vendor-ui`: UI utility libraries (clsx, tailwind-merge, etc.)
 - `vendor-forms`: Form libraries (react-hook-form, zod)
@@ -24,12 +26,14 @@ The frontend build has been optimized to reduce bundle size, improve load times,
 ### 2. Minification & Tree Shaking
 
 **Terser minification** with aggressive settings:
+
 - Removes console.log statements in production
 - Strips comments and debugger statements
 - Optimizes function calls and variable names
 - Reduces JavaScript bundle size by ~40-50%
 
 **Tree shaking** automatically removes unused code:
+
 - Dead code elimination
 - Unused imports removal
 - Works with ES modules
@@ -37,11 +41,13 @@ The frontend build has been optimized to reduce bundle size, improve load times,
 ### 3. Compression
 
 **Gzip compression** for all static assets:
+
 - Pre-compressed files generated during build
 - Nginx serves .gz files directly (gzip_static)
 - Reduces transfer size by ~60-70%
 
 **Brotli compression** (optional):
+
 - Better compression than gzip (~15-20% smaller)
 - Requires nginx-module-brotli
 - Currently disabled as nginx:alpine doesn't include it by default
@@ -49,6 +55,7 @@ The frontend build has been optimized to reduce bundle size, improve load times,
 ### 4. Asset Optimization
 
 **Organized asset structure:**
+
 ```
 dist/
 ├── assets/
@@ -60,6 +67,7 @@ dist/
 ```
 
 **Cache headers:**
+
 - Static assets (JS, CSS, fonts): 1 year cache with immutable flag
 - index.html: no-cache to ensure updates
 - Content-based hashing prevents cache issues
@@ -67,11 +75,13 @@ dist/
 ### 5. CSS Optimization
 
 **CSS code splitting:**
+
 - Each route gets its own CSS file
 - Critical CSS can be inlined (future enhancement)
 - Reduces initial CSS payload
 
 **PostCSS optimizations:**
+
 - Autoprefixer for browser compatibility
 - Tailwind CSS purge removes unused styles
 - Minification and compression
@@ -79,25 +89,32 @@ dist/
 ## Build Scripts
 
 ### Standard Production Build
+
 ```bash
 npm run build
 ```
+
 Runs TypeScript compilation followed by optimized Vite build.
 
 ### Analyze Bundle Size
+
 ```bash
 npm run build:analyze
 ```
+
 Generates a visual bundle size report at `dist/stats.html`:
+
 - Shows all chunks and their sizes
 - Displays gzip and brotli compressed sizes
 - Identifies large dependencies
 - Helps find optimization opportunities
 
 ### Preview Production Build
+
 ```bash
 npm run preview
 ```
+
 Serves the production build locally for testing.
 
 ## Performance Metrics
@@ -105,11 +122,13 @@ Serves the production build locally for testing.
 ### Expected Bundle Sizes
 
 **Before optimization:**
+
 - Initial bundle: ~800-1000 KB
 - Largest chunk: ~400-500 KB
 - Total transferred (uncompressed): ~1.5 MB
 
 **After optimization:**
+
 - Initial bundle: ~200-300 KB (gzipped: ~80-100 KB)
 - Largest vendor chunk: ~150-200 KB (gzipped: ~50-70 KB)
 - Total transferred (gzipped): ~300-400 KB
@@ -118,6 +137,7 @@ Serves the production build locally for testing.
 ### Route-based Chunks
 
 Each route creates a separate chunk:
+
 - HomePage: ~30-50 KB
 - AddItemPage: ~25-40 KB
 - EditItemPage: ~25-40 KB
@@ -143,17 +163,20 @@ The production nginx configuration includes:
 ### Using the Bundle Analyzer
 
 Run the analyzer to visualize your bundle:
+
 ```bash
 cd packages/frontend
 npm run build:analyze
 ```
 
 This will:
+
 1. Build the production bundle
 2. Generate `dist/stats.html`
 3. Open it in your browser
 
 **What to look for:**
+
 - Large dependencies (>100 KB)
 - Duplicate code across chunks
 - Opportunities for lazy loading
@@ -174,12 +197,13 @@ The GitHub Actions workflow automatically builds optimized bundles for pull requ
 1. **Check bundle size impact** using the analyzer
 2. **Consider alternatives** (smaller libraries)
 3. **Use tree-shakeable imports**:
+
    ```tsx
    // Good
-   import { debounce } from 'lodash-es'
+   import { debounce } from 'lodash-es';
 
    // Bad (imports entire library)
-   import _ from 'lodash'
+   import _ from 'lodash';
    ```
 
 ### When Adding Components

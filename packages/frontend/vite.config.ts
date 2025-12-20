@@ -29,7 +29,7 @@ export default defineConfig({
   resolve: {
     alias: {
       '@wishlist/shared': path.resolve(__dirname, '../shared/src'),
-      'src': path.resolve(__dirname, './src'),
+      src: path.resolve(__dirname, './src'),
     },
   },
   server: {

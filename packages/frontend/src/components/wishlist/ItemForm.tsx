@@ -13,13 +13,7 @@ import {
 } from '../ui/form';
 import { Input } from '../ui/input';
 import { Textarea } from '../ui/textarea';
-import {
-  Select,
-  SelectContent,
-  SelectItem,
-  SelectTrigger,
-  SelectValue,
-} from '../ui/select';
+import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '../ui/select';
 
 interface ItemFormProps {
   defaultValues?: Partial<WishlistItemFormData>;
@@ -58,9 +52,7 @@ export function ItemForm({ defaultValues, onSubmit, submitLabel, isSubmitting }:
               <FormControl>
                 <Input placeholder="Enter item title..." {...field} />
               </FormControl>
-              <FormDescription>
-                Give your wishlist item a descriptive title
-              </FormDescription>
+              <FormDescription>Give your wishlist item a descriptive title</FormDescription>
               <FormMessage />
             </FormItem>
           )}
@@ -80,9 +72,7 @@ export function ItemForm({ defaultValues, onSubmit, submitLabel, isSubmitting }:
                   {...field}
                 />
               </FormControl>
-              <FormDescription>
-                Provide additional details or notes about this item
-              </FormDescription>
+              <FormDescription>Provide additional details or notes about this item</FormDescription>
               <FormMessage />
             </FormItem>
           )}
@@ -95,15 +85,9 @@ export function ItemForm({ defaultValues, onSubmit, submitLabel, isSubmitting }:
             <FormItem>
               <FormLabel>URL (optional)</FormLabel>
               <FormControl>
-                <Input
-                  type="url"
-                  placeholder="https://example.com/product"
-                  {...field}
-                />
+                <Input type="url" placeholder="https://example.com/product" {...field} />
               </FormControl>
-              <FormDescription>
-                Link to where this item can be found
-              </FormDescription>
+              <FormDescription>Link to where this item can be found</FormDescription>
               <FormMessage />
             </FormItem>
           )}
@@ -127,9 +111,7 @@ export function ItemForm({ defaultValues, onSubmit, submitLabel, isSubmitting }:
                   <SelectItem value="high">High</SelectItem>
                 </SelectContent>
               </Select>
-              <FormDescription>
-                How important is this item to you?
-              </FormDescription>
+              <FormDescription>How important is this item to you?</FormDescription>
               <FormMessage />
             </FormItem>
           )}
