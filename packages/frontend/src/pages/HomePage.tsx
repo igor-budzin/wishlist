@@ -5,6 +5,7 @@ import type { WishlistItem } from '@wishlist/shared';
 import { Card, CardDescription, CardHeader, CardTitle } from '../components/ui/card';
 import { Button } from '../components/ui/button';
 import { AppHeader } from '../components/AppHeader';
+import { AddItemChoiceDialog } from '../components/wishlist/AddItemChoiceDialog';
 import { DeleteConfirmDialog } from '../components/wishlist/DeleteConfirmDialog';
 import { WishlistItemCard } from '../components/wishlist/WishlistItemCard';
 import { UserProfile } from '../components/UserProfile';
@@ -17,6 +18,7 @@ export default function HomePage() {
   const { user } = useAuth();
   const navigate = useNavigate();
   const [deletingItem, setDeletingItem] = useState<WishlistItem | null>(null);
+  const [showAddChoiceDialog, setShowAddChoiceDialog] = useState(false);
 
   return (
     <div className="min-h-screen bg-background">
@@ -24,7 +26,7 @@ export default function HomePage() {
       <AppHeader
         actions={
           <>
-            <Button onClick={() => navigate('/add')} size="sm" className="md:px-3">
+            <Button onClick={() => setShowAddChoiceDialog(true)} size="sm" className="md:px-3">
               <Plus className="h-4 w-4 md:mr-2" />
               <span className="hidden md:inline">Add Item</span>
             </Button>
@@ -87,6 +89,16 @@ export default function HomePage() {
           </p>
         </div>
       </footer>
+
+      {/* Add Item Choice Dialog */}
+      <AddItemChoiceDialog
+        open={showAddChoiceDialog}
+        onOpenChange={setShowAddChoiceDialog}
+        onChoiceSelect={(_choice) => {
+          navigate('/add');
+          setShowAddChoiceDialog(false);
+        }}
+      />
 
       {/* Delete Confirmation Dialog */}
       <DeleteConfirmDialog
