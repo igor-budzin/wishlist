@@ -26,6 +26,14 @@ function getPriorityVariant(priority: string) {
 }
 
 export function WishlistItemCard({ item, onEdit, onDelete }: WishlistItemCardProps) {
+  // Format price for display
+  const formattedPrice =
+    item.priceAmount && item.priceCurrency
+      ? `${item.priceCurrency} ${parseFloat(item.priceAmount).toFixed(2)}`
+      : item.priceAmount
+        ? parseFloat(item.priceAmount).toFixed(2)
+        : null;
+
   return (
     <Card className="flex flex-col transition-all hover:shadow-lg">
       <CardHeader className="space-y-3">
@@ -33,6 +41,9 @@ export function WishlistItemCard({ item, onEdit, onDelete }: WishlistItemCardPro
           <CardTitle className="text-lg leading-tight line-clamp-2">{item.title}</CardTitle>
           <Badge variant={getPriorityVariant(item.priority)}>{item.priority}</Badge>
         </div>
+        {formattedPrice && (
+          <div className="text-lg font-semibold text-primary">{formattedPrice}</div>
+        )}
         {item.description && (
           <CardDescription className="line-clamp-3">{item.description}</CardDescription>
         )}

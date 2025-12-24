@@ -8,6 +8,8 @@ A full-stack TypeScript monorepo with React frontend and Express backend.
 - **Backend**: Express, Prisma ORM, Passport.js
 - **Database**: PostgreSQL with session store
 - **Authentication**: OAuth 2.0 (Google, Facebook, GitHub) <!-- Apple temporarily disabled -->
+- **AI Integration**: OpenAI GPT-4o Mini for product extraction from URLs
+- **Web Scraping**: Cheerio (fast) + Playwright (SPA fallback)
 - **Session Management**: Express sessions with PostgreSQL store
 - **Shared**: TypeScript types and utilities
 - **Code Quality**: ESLint, Prettier
@@ -250,6 +252,83 @@ The application uses OAuth 2.0 authentication with session-based authentication.
 - ✅ Helmet middleware for security headers
 - ✅ User isolation (users only see their own data)
 
+## AI-Powered Link Analysis Setup
+
+The application can automatically extract product details from URLs using AI. This feature allows users to paste a product link and have the title, description, and price automatically extracted.
+
+### Prerequisites
+
+1. **OpenAI API Key** (Required for link analysis feature)
+   - Sign up at [OpenAI Platform](https://platform.openai.com/)
+   - Navigate to [API Keys page](https://platform.openai.com/api-keys)
+   - Click "Create new secret key"
+   - Copy the key (starts with `sk-proj-...`)
+   - **Note**: Billing must be set up (GPT-4o Mini is very affordable: ~$0.0003 per analysis)
+
+2. **Update `.env` file:**
+
+   ```env
+   OPENAI_API_KEY="sk-proj-your-actual-key-here"
+   ```
+
+3. **Restart backend server**
+
+   ```bash
+   npm run dev:backend
+   ```
+
+### Usage
+
+1. Click "Add from Link" button on homepage
+2. Paste a product URL (e.g., from Amazon, Etsy, etc.)
+3. Click "Analyze Link"
+4. System extracts:
+   - Product name/title
+   - Description (1-2 sentences)
+   - Price (if available)
+5. Review and edit the extracted details
+6. Click "Add to Wishlist" to save
+
+### Features
+
+- **Smart Detection:** AI determines if URL is a product page
+- **Multilingual Support:** Supports product pages in ANY language (English, Ukrainian, Russian, Spanish, etc.)
+- **Multi-Currency:** Extracts prices in any currency with automatic currency code detection (USD, EUR, UAH, etc.)
+- **Hybrid Scraping:** Fast Cheerio parsing with Playwright fallback for JavaScript-heavy sites
+- **Manual Override:** Non-product pages can still be added manually
+- **Privacy:** Content is sent to OpenAI for analysis (see [OpenAI's privacy policy](https://openai.com/policies/privacy-policy))
+
+### Troubleshooting
+
+**"AI service not configured" error:**
+
+- Ensure `OPENAI_API_KEY` is set in `.env`
+- Restart backend server after adding key
+
+**"Failed to fetch URL content" error:**
+
+- URL may be blocked by website
+- Check internet connection
+- Some sites block automated access
+
+**No price extracted:**
+
+- Not all sites have machine-readable prices
+- Manually enter price if needed
+
+### Cost Estimation
+
+**OpenAI GPT-4o Mini Pricing:**
+
+- Input: ~$0.15 per 1M tokens
+- Output: ~$0.60 per 1M tokens
+
+**Typical Cost per Analysis:** ~$0.0003-0.0005 (less than a tenth of a cent)
+
+**For 1,000 analyses:** ~$0.30-0.50
+
+Very affordable for personal/small-team use!
+
 ## API Endpoints
 
 **Note**: All wishlist endpoints require authentication. Include session cookie with requests.
@@ -279,6 +358,28 @@ The application uses OAuth 2.0 authentication with session-based authentication.
 - `PUT /api/items/:id` - Update item (must belong to user)
 - `DELETE /api/items/:id` - Delete item (must belong to user)
 
+### Link Analysis (Requires authentication and OpenAI API key)
+
+- `POST /api/analyze-link` - Analyze product URL with AI
+  ```json
+  {
+    "url": "https://www.example.com/product"
+  }
+  ```
+  **Response:**
+  ```json
+  {
+    "success": true,
+    "data": {
+      "isProduct": true,
+      "title": "Product Name",
+      "description": "Short product description",
+      "price": "$19.99",
+      "confidence": 0.9
+    }
+  }
+  ```
+
 ### Health Check
 
 - `GET /health` - Server health status (no auth required)
@@ -307,6 +408,37 @@ To create a new migration after schema changes:
 ```bash
 npm run db:migrate:dev --workspace=@wishlist/backend
 ```
+
+### Price Field Migration
+
+The price field has been split into separate `priceAmount` (exact Decimal) and `priceCurrency` (ISO 4217 code) fields to enable better filtering, sorting, and currency handling.
+
+**For existing installations:**
+
+If you have existing data with the old `price` field, run the data migration script after applying the database migration:
+
+```bash
+# 1. Apply database migration (adds new fields)
+npm run db:migrate:dev --workspace=@wishlist/backend
+
+# 2. Migrate existing price data
+npx tsx packages/backend/src/scripts/migrate-price-data.ts
+```
+
+The migration script will:
+
+- Parse existing price strings (e.g., "$19.99" → amount: 19.99, currency: USD)
+- Handle various formats: `$19.99`, `€29.99`, `¥1500`, `19.99 USD`, etc.
+- Generate a report (`migration-report.csv`) with results
+- Keep the original `price` field as a fallback
+
+**Supported currency formats:**
+
+- Symbol first: `$19.99`, `€29.99`, `£45.50`, `¥1500`, `₴499`
+- Code after: `19.99 USD`, `29.99 EUR`, `1500 JPY`, `499 UAH`
+- Code first: `USD 19.99`, `EUR 29.99`, `UAH 1299`
+- Amount only: `19.99` (no currency)
+- 36 supported currencies including: USD, EUR, GBP, JPY, UAH, CAD, AUD, and more
 
 ## Development Workflow
 

@@ -1,5 +1,5 @@
 import { injectable, inject } from 'inversify';
-import { PrismaClient, WishlistItem, Priority } from '@prisma/client';
+import { PrismaClient, WishlistItem, Priority, Prisma } from '@prisma/client';
 import { TYPES } from '../../types.js';
 import type { ILogger } from '../../lib/logger.js';
 
@@ -10,6 +10,10 @@ export interface IWishlistItemRepository {
     title: string;
     description?: string;
     url?: string;
+    /** @deprecated Use priceAmount and priceCurrency instead */
+    price?: string;
+    priceAmount?: Prisma.Decimal;
+    priceCurrency?: string;
     priority: Priority;
     userId: string;
   }): Promise<WishlistItem>;
@@ -20,6 +24,10 @@ export interface IWishlistItemRepository {
       title?: string;
       description?: string | null;
       url?: string | null;
+      /** @deprecated Use priceAmount and priceCurrency instead */
+      price?: string | null;
+      priceAmount?: Prisma.Decimal | null;
+      priceCurrency?: string | null;
       priority?: Priority;
     }
   ): Promise<WishlistItem>;
@@ -53,6 +61,7 @@ export class WishlistItemRepository implements IWishlistItemRepository {
     title: string;
     description?: string;
     url?: string;
+    price?: string;
     priority: Priority;
     userId: string;
   }): Promise<WishlistItem> {
@@ -69,6 +78,7 @@ export class WishlistItemRepository implements IWishlistItemRepository {
       title?: string;
       description?: string | null;
       url?: string | null;
+      price?: string | null;
       priority?: Priority;
     }
   ): Promise<WishlistItem> {

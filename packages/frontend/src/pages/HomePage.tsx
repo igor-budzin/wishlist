@@ -94,8 +94,12 @@ export default function HomePage() {
       <AddItemChoiceDialog
         open={showAddChoiceDialog}
         onOpenChange={setShowAddChoiceDialog}
-        onChoiceSelect={(_choice) => {
-          navigate('/add');
+        onChoiceSelect={(choice) => {
+          if (choice === 'link') {
+            navigate('/add-from-link');
+          } else {
+            navigate('/add');
+          }
           setShowAddChoiceDialog(false);
         }}
       />
