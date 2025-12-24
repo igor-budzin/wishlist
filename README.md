@@ -421,6 +421,7 @@ Wishlist items support multi-currency pricing with two separate fields:
 USD, EUR, GBP, JPY, CAD, AUD, CHF, CNY, INR, MXN, BRL, ZAR, NZD, SGD, HKD, SEK, NOK, DKK, PLN, CZK, HUF, RON, TRY, THB, PHP, IDR, MYR, KRW, RUB, AED, SAR, ILS, EGP, VND, UAH
 
 Both fields are optional, enabling:
+
 - Filtering and sorting by price
 - Multi-currency support across all languages
 - Automatic currency extraction from product links via AI
