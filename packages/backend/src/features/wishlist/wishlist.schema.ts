@@ -48,10 +48,6 @@ export const createWishlistItemSchema = z
     description: z.string().max(1000).optional(),
     url: z.string().url('Invalid URL format').optional().or(z.literal('')),
 
-    // DEPRECATED: Keep for backwards compatibility
-    price: z.string().max(50).optional().or(z.literal('')),
-
-    // NEW: Separate price fields
     priceAmount: z
       .string()
       .regex(/^\d+(\.\d{1,2})?$/, 'Price must be a valid number with up to 2 decimal places')
@@ -81,10 +77,6 @@ export const updateWishlistItemSchema = z
     description: z.string().max(1000).optional().nullable(),
     url: z.string().url('Invalid URL format').optional().nullable().or(z.literal('')),
 
-    // DEPRECATED
-    price: z.string().max(50).optional().nullable().or(z.literal('')),
-
-    // NEW
     priceAmount: z
       .string()
       .regex(/^\d+(\.\d{1,2})?$/, 'Price must be a valid number with up to 2 decimal places')

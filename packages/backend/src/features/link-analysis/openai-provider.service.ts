@@ -57,28 +57,26 @@ EXTRACTION GUIDELINES (for product pages only):
 - Extract the most concise yet informative description (1-2 sentences, max 3 if needed)
 - For price, extract BOTH the numeric amount AND currency code separately:
   - priceAmount: Numeric value only (e.g., "19.99", "1500")
-  - priceCurrency: ISO 4217 code if identifiable (e.g., "USD", "EUR", "JPY")
+  - priceCurrency: ISO 4217 code if identifiable (e.g., "USD", "EUR", "JPY", "UAH")
   - If currency cannot be determined, leave priceCurrency as null
-  - Also provide the full price string in the "price" field for backwards compatibility
 
 Respond ONLY with valid JSON in this exact format:
 {
   "isProduct": boolean,
   "title": string | null,
   "description": string | null,
-  "price": string | null,
   "priceAmount": string | null,
   "priceCurrency": string | null,
   "reasoning": string
 }
 
 Price extraction examples (support ANY currency):
-- "$19.99" → price: "$19.99", priceAmount: "19.99", priceCurrency: "USD"
-- "€29.99" → price: "€29.99", priceAmount: "29.99", priceCurrency: "EUR"
-- "1,500円" → price: "1,500円", priceAmount: "1500", priceCurrency: "JPY"
-- "₴499" or "499 грн" → price: "₴499", priceAmount: "499", priceCurrency: "UAH"
-- "£45.50" → price: "£45.50", priceAmount: "45.50", priceCurrency: "GBP"
-- "20" → price: "20", priceAmount: "20", priceCurrency: null
+- "$19.99" → priceAmount: "19.99", priceCurrency: "USD"
+- "€29.99" → priceAmount: "29.99", priceCurrency: "EUR"
+- "1,500円" → priceAmount: "1500", priceCurrency: "JPY"
+- "₴499" or "499 грн" → priceAmount: "499", priceCurrency: "UAH"
+- "£45.50" → priceAmount: "45.50", priceCurrency: "GBP"
+- "20" → priceAmount: "20", priceCurrency: null
 
 In "reasoning" field, explain what URL/content patterns you found that led to your decision.`;
 

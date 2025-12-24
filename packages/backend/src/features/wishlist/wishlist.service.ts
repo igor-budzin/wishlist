@@ -15,8 +15,6 @@ export interface WishlistItemResponse {
   title: string;
   description: string | null;
   url: string | null;
-  /** @deprecated Use priceAmount and priceCurrency instead */
-  price: string | null;
   priceAmount: string | null; // Decimal serialized as string
   priceCurrency: string | null;
   priority: 'low' | 'medium' | 'high';
@@ -65,9 +63,6 @@ export class WishlistItemService implements IWishlistItemService {
       title: data.title,
       description: data.description,
       url: data.url || undefined,
-      // DEPRECATED: Still accept old price field for backwards compatibility
-      price: data.price || undefined,
-      // NEW: Handle new price fields
       priceAmount: data.priceAmount ? new Prisma.Decimal(data.priceAmount) : undefined,
       priceCurrency: data.priceCurrency || undefined,
       priority: toPrismaPriority(data.priority || 'medium'),
@@ -91,9 +86,6 @@ export class WishlistItemService implements IWishlistItemService {
     if (data.title !== undefined) updateData.title = data.title;
     if (data.description !== undefined) updateData.description = data.description;
     if (data.url !== undefined) updateData.url = data.url || null;
-    // DEPRECATED
-    if (data.price !== undefined) updateData.price = data.price || null;
-    // NEW: Handle new price fields
     if (data.priceAmount !== undefined) {
       updateData.priceAmount = data.priceAmount ? new Prisma.Decimal(data.priceAmount) : null;
     }
@@ -118,7 +110,6 @@ export class WishlistItemService implements IWishlistItemService {
       title: item.title,
       description: item.description,
       url: item.url,
-      price: item.price, // DEPRECATED
       priceAmount: item.priceAmount?.toString() || null, // Decimal to string
       priceCurrency: item.priceCurrency,
       priority: fromPrismaPriority(item.priority),

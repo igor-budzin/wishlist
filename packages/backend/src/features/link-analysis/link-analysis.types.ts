@@ -2,8 +2,6 @@ export interface ProductData {
   isProduct: boolean;
   title: string | null;
   description: string | null;
-  /** @deprecated Use priceAmount and priceCurrency instead */
-  price: string | null;
   priceAmount?: string | null;
   priceCurrency?: string | null;
   confidence: number;
@@ -26,8 +24,6 @@ export interface AIProviderResponse {
   isProduct: boolean;
   title: string | null;
   description: string | null;
-  /** @deprecated Use priceAmount and priceCurrency instead */
-  price: string | null;
   priceAmount?: string | null;
   priceCurrency?: string | null;
   reasoning: string;

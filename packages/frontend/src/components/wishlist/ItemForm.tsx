@@ -33,7 +33,6 @@ export function ItemForm({ defaultValues, onSubmit, submitLabel, isSubmitting }:
       title: defaultValues?.title || '',
       description: defaultValues?.description || '',
       url: defaultValues?.url || '',
-      price: defaultValues?.price || '',
       priceAmount: defaultValues?.priceAmount || '',
       priceCurrency: defaultValues?.priceCurrency || '',
       priority: defaultValues?.priority || 'medium',

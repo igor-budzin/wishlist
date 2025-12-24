@@ -23,9 +23,8 @@ model WishlistItem {
   title         String
   description   String?
   url           String?
-  price         String?     // DEPRECATED: Keeping temporarily for safe migration
-  priceAmount   Decimal?    // NEW: Exact price amount (e.g., 19.99)
-  priceCurrency String?     // NEW: ISO 4217 currency code (e.g., USD, EUR, GBP)
+  priceAmount   Decimal?    // Exact price amount (e.g., 19.99)
+  priceCurrency String?     // ISO 4217 currency code (e.g., USD, EUR, GBP)
   priority      Priority @default(MEDIUM)
   userId        String
   user          User     @relation(fields: [userId], references: [id], onDelete: Cascade)

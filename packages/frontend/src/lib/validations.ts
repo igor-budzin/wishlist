@@ -52,10 +52,6 @@ export const wishlistItemSchema = z
       .or(z.literal('')),
     url: z.string().url('Must be a valid URL').optional().or(z.literal('')),
 
-    // DEPRECATED: Keep for backwards compatibility
-    price: z.string().max(50, 'Price must be less than 50 characters').optional().or(z.literal('')),
-
-    // NEW: Separate price fields
     priceAmount: z
       .string()
       .regex(/^\d+(\.\d{1,2})?$/, 'Price must be a number with up to 2 decimal places')

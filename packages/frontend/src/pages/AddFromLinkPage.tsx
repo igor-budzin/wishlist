@@ -32,7 +32,6 @@ function isProductData(data: unknown): data is ProductData {
     typeof pd.confidence === 'number' &&
     (pd.title === null || typeof pd.title === 'string') &&
     (pd.description === null || typeof pd.description === 'string') &&
-    (pd.price === null || typeof pd.price === 'string') &&
     (pd.reason === undefined || typeof pd.reason === 'string')
   );
 }
@@ -226,7 +225,6 @@ export default function AddFromLinkPage() {
                     title: analysisResult.title || '',
                     description: analysisResult.description || '',
                     url: link,
-                    price: analysisResult.price || '',
                     priceAmount: analysisResult.priceAmount || '',
                     priceCurrency: isValidCurrency(analysisResult.priceCurrency)
                       ? analysisResult.priceCurrency

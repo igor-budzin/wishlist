@@ -374,7 +374,8 @@ Very affordable for personal/small-team use!
       "isProduct": true,
       "title": "Product Name",
       "description": "Short product description",
-      "price": "$19.99",
+      "priceAmount": "19.99",
+      "priceCurrency": "USD",
       "confidence": 0.9
     }
   }
@@ -409,36 +410,20 @@ To create a new migration after schema changes:
 npm run db:migrate:dev --workspace=@wishlist/backend
 ```
 
-### Price Field Migration
+### Price and Currency Support
 
-The price field has been split into separate `priceAmount` (exact Decimal) and `priceCurrency` (ISO 4217 code) fields to enable better filtering, sorting, and currency handling.
+Wishlist items support multi-currency pricing with two separate fields:
 
-**For existing installations:**
+- **priceAmount**: Exact price amount stored as Decimal (e.g., 19.99)
+- **priceCurrency**: ISO 4217 currency code (e.g., USD, EUR, GBP, JPY, UAH)
 
-If you have existing data with the old `price` field, run the data migration script after applying the database migration:
+**Supported currencies (36 total):**
+USD, EUR, GBP, JPY, CAD, AUD, CHF, CNY, INR, MXN, BRL, ZAR, NZD, SGD, HKD, SEK, NOK, DKK, PLN, CZK, HUF, RON, TRY, THB, PHP, IDR, MYR, KRW, RUB, AED, SAR, ILS, EGP, VND, UAH
 
-```bash
-# 1. Apply database migration (adds new fields)
-npm run db:migrate:dev --workspace=@wishlist/backend
-
-# 2. Migrate existing price data
-npx tsx packages/backend/src/scripts/migrate-price-data.ts
-```
-
-The migration script will:
-
-- Parse existing price strings (e.g., "$19.99" → amount: 19.99, currency: USD)
-- Handle various formats: `$19.99`, `€29.99`, `¥1500`, `19.99 USD`, etc.
-- Generate a report (`migration-report.csv`) with results
-- Keep the original `price` field as a fallback
-
-**Supported currency formats:**
-
-- Symbol first: `$19.99`, `€29.99`, `£45.50`, `¥1500`, `₴499`
-- Code after: `19.99 USD`, `29.99 EUR`, `1500 JPY`, `499 UAH`
-- Code first: `USD 19.99`, `EUR 29.99`, `UAH 1299`
-- Amount only: `19.99` (no currency)
-- 36 supported currencies including: USD, EUR, GBP, JPY, UAH, CAD, AUD, and more
+Both fields are optional, enabling:
+- Filtering and sorting by price
+- Multi-currency support across all languages
+- Automatic currency extraction from product links via AI
 
 ## Development Workflow
 

@@ -34,9 +34,8 @@ export class LinkAnalysisService implements ILinkAnalysisService {
         isProduct: aiResult.isProduct,
         title: aiResult.title,
         description: aiResult.description,
-        price: aiResult.price, // DEPRECATED
-        priceAmount: aiResult.priceAmount, // NEW
-        priceCurrency: aiResult.priceCurrency, // NEW
+        priceAmount: aiResult.priceAmount,
+        priceCurrency: aiResult.priceCurrency,
         confidence,
         reason: aiResult.reasoning,
       };
@@ -50,7 +49,6 @@ export class LinkAnalysisService implements ILinkAnalysisService {
     isProduct: boolean;
     title: string | null;
     description: string | null;
-    price: string | null;
     priceAmount?: string | null;
   }): number {
     if (!result.isProduct) {
@@ -61,8 +59,7 @@ export class LinkAnalysisService implements ILinkAnalysisService {
     let confidence = 0;
     if (result.title) confidence += 0.4;
     if (result.description) confidence += 0.3;
-    // Use priceAmount if available, fallback to old price field
-    if (result.priceAmount || result.price) confidence += 0.3;
+    if (result.priceAmount) confidence += 0.3;
 
     return Math.min(confidence, 1.0);
   }
