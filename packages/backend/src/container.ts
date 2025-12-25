@@ -13,6 +13,12 @@ import { AuthController } from './features/auth/auth.controller.js';
 import { UserRepository } from './features/users/user.repository.js';
 import { UserService } from './features/users/user.service.js';
 import { UserController } from './features/users/user.controller.js';
+import { LinkAnalysisService } from './features/link-analysis/link-analysis.service.js';
+import { LinkAnalysisController } from './features/link-analysis/link-analysis.controller.js';
+import { ContentExtractorService } from './features/link-analysis/content-extractor.service.js';
+import { OpenAIProvider } from './features/link-analysis/openai-provider.service.js';
+import { MockAIProvider } from './features/link-analysis/mock-ai-provider.service.js';
+import type { IAIProvider } from './features/link-analysis/ai-provider.interface.js';
 import { prisma } from './lib/prisma.js';
 
 const container = new Container();
@@ -37,6 +43,22 @@ container
   .inSingletonScope();
 container.bind<AuthService>(TYPES.AuthService).to(AuthService).inSingletonScope();
 container.bind<UserService>(TYPES.UserService).to(UserService).inSingletonScope();
+container
+  .bind<LinkAnalysisService>(TYPES.LinkAnalysisService)
+  .to(LinkAnalysisService)
+  .inSingletonScope();
+container
+  .bind<ContentExtractorService>(TYPES.ContentExtractor)
+  .to(ContentExtractorService)
+  .inSingletonScope();
+
+// Use MockAIProvider in test/CI environments, OpenAIProvider in production
+const shouldUseMock = process.env.NODE_ENV === 'test' || process.env.CI === 'true';
+if (shouldUseMock) {
+  container.bind<IAIProvider>(TYPES.AIProvider).to(MockAIProvider).inSingletonScope();
+} else {
+  container.bind<IAIProvider>(TYPES.AIProvider).to(OpenAIProvider).inSingletonScope();
+}
 
 // Controllers
 container
@@ -45,5 +67,9 @@ container
   .inTransientScope();
 container.bind<AuthController>(TYPES.AuthController).to(AuthController).inTransientScope();
 container.bind<UserController>(TYPES.UserController).to(UserController).inTransientScope();
+container
+  .bind<LinkAnalysisController>(TYPES.LinkAnalysisController)
+  .to(LinkAnalysisController)
+  .inTransientScope();
 
 export { container };

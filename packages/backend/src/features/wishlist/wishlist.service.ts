@@ -1,5 +1,5 @@
 import { injectable, inject } from 'inversify';
-import { WishlistItem } from '@prisma/client';
+import { WishlistItem, Prisma } from '@prisma/client';
 import { TYPES } from '../../types.js';
 import type { IWishlistItemRepository } from './wishlist.repository.js';
 import type { ILogger } from '../../lib/logger.js';
@@ -15,6 +15,8 @@ export interface WishlistItemResponse {
   title: string;
   description: string | null;
   url: string | null;
+  priceAmount: string | null; // Decimal serialized as string
+  priceCurrency: string | null;
   priority: 'low' | 'medium' | 'high';
   createdAt: Date;
   updatedAt: Date;
@@ -61,6 +63,8 @@ export class WishlistItemService implements IWishlistItemService {
       title: data.title,
       description: data.description,
       url: data.url || undefined,
+      priceAmount: data.priceAmount ? new Prisma.Decimal(data.priceAmount) : undefined,
+      priceCurrency: data.priceCurrency || undefined,
       priority: toPrismaPriority(data.priority || 'medium'),
       userId,
     });
@@ -82,6 +86,10 @@ export class WishlistItemService implements IWishlistItemService {
     if (data.title !== undefined) updateData.title = data.title;
     if (data.description !== undefined) updateData.description = data.description;
     if (data.url !== undefined) updateData.url = data.url || null;
+    if (data.priceAmount !== undefined) {
+      updateData.priceAmount = data.priceAmount ? new Prisma.Decimal(data.priceAmount) : null;
+    }
+    if (data.priceCurrency !== undefined) updateData.priceCurrency = data.priceCurrency || null;
     if (data.priority !== undefined) updateData.priority = toPrismaPriority(data.priority);
 
     const item = await this.repository.update(id, userId, updateData);
@@ -102,6 +110,8 @@ export class WishlistItemService implements IWishlistItemService {
       title: item.title,
       description: item.description,
       url: item.url,
+      priceAmount: item.priceAmount?.toString() || null, // Decimal to string
+      priceCurrency: item.priceCurrency,
       priority: fromPrismaPriority(item.priority),
       createdAt: item.createdAt,
       updatedAt: item.updatedAt,

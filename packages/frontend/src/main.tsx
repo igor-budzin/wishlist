@@ -10,6 +10,7 @@ import './styles/index.css';
 // Lazy load page components for code splitting
 const HomePage = lazy(() => import('./pages/HomePage'));
 const AddItemPage = lazy(() => import('./pages/AddItemPage'));
+const AddFromLinkPage = lazy(() => import('./pages/AddFromLinkPage'));
 const EditItemPage = lazy(() => import('./pages/EditItemPage'));
 const LoginPage = lazy(() => import('./pages/LoginPage'));
 const ProfilePage = lazy(() => import('./pages/ProfilePage'));
@@ -50,6 +51,16 @@ const router = createBrowserRouter([
           <LazyRoute>
             <ProtectedLayout>
               <AddItemPage />
+            </ProtectedLayout>
+          </LazyRoute>
+        ),
+      },
+      {
+        path: 'add-from-link',
+        element: (
+          <LazyRoute>
+            <ProtectedLayout>
+              <AddFromLinkPage />
             </ProtectedLayout>
           </LazyRoute>
         ),

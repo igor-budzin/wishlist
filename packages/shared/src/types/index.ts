@@ -3,6 +3,8 @@ export interface WishlistItem {
   title: string;
   description?: string;
   url?: string;
+  priceAmount?: string; // Decimal serialized as string
+  priceCurrency?: string; // ISO 4217 currency code (USD, EUR, etc.)
   priority: 'low' | 'medium' | 'high';
   userId: string;
   createdAt: Date;
@@ -35,4 +37,14 @@ export interface PublicUserProfile {
     mediumPriority: number;
     lowPriority: number;
   };
+}
+
+export interface ProductData {
+  isProduct: boolean;
+  title: string | null;
+  description: string | null;
+  priceAmount?: string | null; // Numeric price amount
+  priceCurrency?: string | null; // ISO 4217 currency code
+  confidence: number;
+  reason?: string; // Explanation of why it was/wasn't identified as a product
 }

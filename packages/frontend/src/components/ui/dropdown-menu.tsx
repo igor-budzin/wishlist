@@ -4,7 +4,7 @@ import { Check } from '../icons/Check';
 import { ChevronRight } from '../icons/ChevronRight';
 import { Circle } from '../icons/Circle';
 
-import { cn } from 'src/lib/utils';
+import { cn } from '../../lib/utils';
 
 const DropdownMenu = DropdownMenuPrimitive.Root;
 
