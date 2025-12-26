@@ -116,6 +116,72 @@ This will start:
 
 **Note**: You must configure OAuth providers before you can login. See [Authentication Setup](#authentication-setup).
 
+## Docker Images
+
+Pre-built Docker images are available on GitHub Container Registry for easy deployment.
+
+### Latest Images (Main Branch)
+
+Pull the latest production-ready images:
+
+```bash
+# Frontend
+docker pull ghcr.io/igor-budzin/wishlist-frontend:latest
+
+# Backend
+docker pull ghcr.io/igor-budzin/wishlist-backend:latest
+```
+
+### Specific Versions
+
+Pull specific versions using commit SHA or timestamp:
+
+```bash
+# By short SHA (7 characters)
+docker pull ghcr.io/igor-budzin/wishlist-frontend:sha-abc1234
+docker pull ghcr.io/igor-budzin/wishlist-backend:sha-abc1234
+
+# By full SHA (40 characters) - for audit/compliance
+docker pull ghcr.io/igor-budzin/wishlist-frontend:sha-1234567890abcdef...
+docker pull ghcr.io/igor-budzin/wishlist-backend:sha-1234567890abcdef...
+
+# By timestamp - for time-based rollback
+docker pull ghcr.io/igor-budzin/wishlist-frontend:2025-12-26T14-30-45Z
+docker pull ghcr.io/igor-budzin/wishlist-backend:2025-12-26T14-30-45Z
+```
+
+### PR Preview Images
+
+Test PR changes before merging:
+
+```bash
+# By PR number
+docker pull ghcr.io/igor-budzin/wishlist-frontend:pr-123
+docker pull ghcr.io/igor-budzin/wishlist-backend:pr-123
+
+# By branch name
+docker pull ghcr.io/igor-budzin/wishlist-frontend:pr-feature-name
+docker pull ghcr.io/igor-budzin/wishlist-backend:pr-feature-name
+```
+
+### Running with Docker
+
+Quick start with the latest images:
+
+```bash
+# Frontend (serves on port 80)
+docker run -d -p 80:80 ghcr.io/igor-budzin/wishlist-frontend:latest
+
+# Backend (runs on port 3002)
+docker run -d -p 3002:3002 \
+  -e DATABASE_URL="postgresql://user:password@host:5432/wishlist_db" \
+  -e SESSION_SECRET="your-secure-session-secret-min-32-chars" \
+  -e FRONTEND_URL="http://localhost:3000" \
+  ghcr.io/igor-budzin/wishlist-backend:latest
+```
+
+For detailed Docker deployment instructions, tag strategy, and rollback procedures, see [DOCKER.md](./DOCKER.md).
+
 ## Available Scripts
 
 ### Root Level

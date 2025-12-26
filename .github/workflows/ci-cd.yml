@@ -1,3 +1,5 @@
+# CI/CD Pipeline for Pull Request Validation
+# This workflow validates PRs before merge. For production deployment, see deploy.yml
 name: CI/CD Pipeline
 
 on:
@@ -220,6 +222,8 @@ jobs:
     runs-on: ubuntu-latest
     needs: build
     timeout-minutes: 20
+    # Note: This job creates PR-specific tags only. Production tags (latest, sha-*, timestamps)
+    # are created by the deploy.yml workflow when PRs are merged to main.
 
     steps:
       - name: Checkout code
