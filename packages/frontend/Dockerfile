@@ -21,6 +21,12 @@ RUN npm run build:shared
 # Copy frontend source
 COPY packages/frontend ./packages/frontend
 
+# Declare build arguments for Vite environment variables
+ARG VITE_API_URL
+
+# Set as environment variable so Vite can access during build
+ENV VITE_API_URL=$VITE_API_URL
+
 # Build frontend with Vite
 RUN npm run build:frontend
 
