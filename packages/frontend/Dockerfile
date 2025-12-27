@@ -1,3 +1,18 @@
+# ============================================
+# DEPRECATED: Frontend-only Dockerfile
+# ============================================
+# This Dockerfile is DEPRECATED and not used in the default deployment.
+#
+# The recommended deployment uses packages/backend/Dockerfile which builds
+# BOTH frontend and backend into a single unified image. Express serves the
+# frontend static files along with the API.
+#
+# This file is kept for reference if you need to deploy frontend separately
+# (e.g., to a CDN or static hosting service like Vercel/Netlify).
+#
+# For default deployment, see: packages/backend/Dockerfile
+# ============================================
+
 # Stage 1: Build
 FROM node:20-alpine AS builder
 

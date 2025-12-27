@@ -1,14 +1,13 @@
-# Stage 1: Build
-FROM node:20-alpine AS builder
+# Stage 1: Build shared package
+FROM node:20-alpine AS shared-builder
 
 WORKDIR /app
 
 # Copy package files for all workspaces
 COPY package.json package-lock.json ./
 COPY packages/shared/package.json ./packages/shared/
-COPY packages/backend/package.json ./packages/backend/
 
-# Install all dependencies (including workspaces and dev dependencies)
+# Install all dependencies
 RUN npm ci
 
 # Copy root tsconfig (needed for shared package build)
@@ -17,6 +16,47 @@ COPY tsconfig.json ./
 # Copy shared package source and build it first (dependency)
 COPY packages/shared ./packages/shared
 RUN npm run build:shared
+
+# Stage 2: Build frontend
+FROM node:20-alpine AS frontend-builder
+
+WORKDIR /app
+
+# Copy package files
+COPY package.json package-lock.json tsconfig.json ./
+COPY packages/shared/package.json ./packages/shared/
+COPY packages/frontend/package.json ./packages/frontend/
+
+# Install dependencies
+RUN npm ci
+
+# Copy shared package build output
+COPY --from=shared-builder /app/packages/shared/dist ./packages/shared/dist
+
+# Copy frontend source
+COPY packages/frontend ./packages/frontend
+
+# Build frontend with VITE_API_URL (empty for same-origin)
+ARG VITE_API_URL=""
+ENV VITE_API_URL=$VITE_API_URL
+RUN npm run build:frontend
+
+# Stage 3: Build backend
+FROM node:20-alpine AS backend-builder
+
+WORKDIR /app
+
+# Copy package files
+COPY package.json package-lock.json tsconfig.json ./
+COPY packages/shared/package.json ./packages/shared/
+COPY packages/backend/package.json ./packages/backend/
+
+# Install dependencies
+RUN npm ci
+
+# Copy shared package build output
+COPY --from=shared-builder /app/packages/shared/dist ./packages/shared/dist
+COPY packages/shared ./packages/shared
 
 # Copy backend source including Prisma schema
 COPY packages/backend ./packages/backend
@@ -27,7 +67,7 @@ RUN npx prisma generate --schema=./packages/backend/prisma/schema.prisma
 # Build backend TypeScript
 RUN npm run build:backend
 
-# Stage 2: Production
+# Stage 4: Production
 FROM node:20-alpine
 
 WORKDIR /app
@@ -46,18 +86,21 @@ RUN wget -qO- https://gobinaries.com/tj/node-prune | sh && \
     rm /usr/local/bin/node-prune
 
 # Copy built shared package
-COPY --from=builder /app/packages/shared/dist ./packages/shared/dist
-COPY --from=builder /app/packages/shared/package.json ./packages/shared/
+COPY --from=shared-builder /app/packages/shared/dist ./packages/shared/dist
+COPY --from=shared-builder /app/packages/shared/package.json ./packages/shared/
 
 # Copy built backend files
-COPY --from=builder /app/packages/backend/dist ./packages/backend/dist
+COPY --from=backend-builder /app/packages/backend/dist ./packages/backend/dist
 
 # Copy Prisma schema and migrations
-COPY --from=builder /app/packages/backend/prisma ./packages/backend/prisma
+COPY --from=backend-builder /app/packages/backend/prisma ./packages/backend/prisma
 
 # Copy generated Prisma client
-COPY --from=builder /app/node_modules/.prisma ./node_modules/.prisma
-COPY --from=builder /app/node_modules/@prisma ./node_modules/@prisma
+COPY --from=backend-builder /app/node_modules/.prisma ./node_modules/.prisma
+COPY --from=backend-builder /app/node_modules/@prisma ./node_modules/@prisma
+
+# Copy built frontend files
+COPY --from=frontend-builder /app/packages/frontend/dist ./packages/frontend/dist
 
 # Remove unnecessary Prisma query engine binaries (keep only linux-musl-openssl for Alpine)
 RUN find /app/node_modules/.prisma -name 'libquery_engine-*' ! -name '*linux-musl-openssl*' -delete && \

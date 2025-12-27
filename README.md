@@ -120,15 +120,14 @@ This will start:
 
 Pre-built Docker images are available on GitHub Container Registry for easy deployment.
 
-### Latest Images (Main Branch)
+**Note:** The application now uses a **unified deployment model** where the backend image includes the frontend static files. Express serves both the API and the frontend from a single container.
 
-Pull the latest production-ready images:
+### Latest Image (Main Branch)
+
+Pull the latest production-ready unified image:
 
 ```bash
-# Frontend
-docker pull ghcr.io/igor-budzin/wishlist-frontend:latest
-
-# Backend
+# Unified image (backend + frontend)
 docker pull ghcr.io/igor-budzin/wishlist-backend:latest
 ```
 
@@ -138,15 +137,12 @@ Pull specific versions using commit SHA or timestamp:
 
 ```bash
 # By short SHA (7 characters)
-docker pull ghcr.io/igor-budzin/wishlist-frontend:sha-abc1234
 docker pull ghcr.io/igor-budzin/wishlist-backend:sha-abc1234
 
 # By full SHA (40 characters) - for audit/compliance
-docker pull ghcr.io/igor-budzin/wishlist-frontend:sha-1234567890abcdef...
 docker pull ghcr.io/igor-budzin/wishlist-backend:sha-1234567890abcdef...
 
 # By timestamp - for time-based rollback
-docker pull ghcr.io/igor-budzin/wishlist-frontend:2025-12-26T14-30-45Z
 docker pull ghcr.io/igor-budzin/wishlist-backend:2025-12-26T14-30-45Z
 ```
 
@@ -156,31 +152,121 @@ Test PR changes before merging:
 
 ```bash
 # By PR number
-docker pull ghcr.io/igor-budzin/wishlist-frontend:pr-123
 docker pull ghcr.io/igor-budzin/wishlist-backend:pr-123
 
 # By branch name
-docker pull ghcr.io/igor-budzin/wishlist-frontend:pr-feature-name
 docker pull ghcr.io/igor-budzin/wishlist-backend:pr-feature-name
 ```
 
 ### Running with Docker
 
-Quick start with the latest images:
+Quick start with the latest image:
 
 ```bash
-# Frontend (serves on port 80)
-docker run -d -p 80:80 ghcr.io/igor-budzin/wishlist-frontend:latest
-
-# Backend (runs on port 3002)
+# Unified image serves both frontend and API
 docker run -d -p 3002:3002 \
   -e DATABASE_URL="postgresql://user:password@host:5432/wishlist_db" \
   -e SESSION_SECRET="your-secure-session-secret-min-32-chars" \
-  -e FRONTEND_URL="http://localhost:3000" \
+  -e NODE_ENV="production" \
   ghcr.io/igor-budzin/wishlist-backend:latest
+
+# Access the application:
+# - Frontend: http://localhost:3002
+# - API: http://localhost:3002/api
 ```
 
+**Legacy Frontend Image:** A separate frontend-only Docker image is no longer built by default. For separate frontend deployment (e.g., CDN or static hosting), see `packages/frontend/Dockerfile` (deprecated).
+
 For detailed Docker deployment instructions, tag strategy, and rollback procedures, see [DOCKER.md](./DOCKER.md).
+
+## Production Deployment
+
+### Railway (Recommended - Single Service)
+
+The application is configured for single-service deployment on Railway, where the Express backend serves both the API and the frontend static files.
+
+**Benefits:**
+- Single service = lower cost
+- Same-origin = better session handling, no CORS complexity
+- Simplified deployment and configuration
+
+**Setup:**
+
+1. **Create a PostgreSQL database** on Railway
+
+2. **Create a new service** and connect your GitHub repository
+
+3. **Configure environment variables:**
+   - `DATABASE_URL` - Provided by Railway PostgreSQL
+   - `SESSION_SECRET` - Generate with: `node -e "console.log(require('crypto').randomBytes(64).toString('hex'))"`
+   - `NODE_ENV` - Set to `production`
+   - `PORT` - Optional, defaults to 3002
+   - OAuth credentials (Google, Facebook, GitHub)
+   - `OPENAI_API_KEY` - For AI link analysis (optional)
+
+4. **Deploy** - Railway will:
+   - Build the frontend using Vite
+   - Build the backend using TypeScript
+   - Create a single Docker image containing both
+   - Run database migrations
+   - Start the Express server on the assigned port
+
+5. **Access your app** at the Railway-provided URL
+
+**Important Notes:**
+- `FRONTEND_URL` is NOT needed in production (same-origin deployment)
+- `VITE_API_URL` is automatically set to empty (same-origin)
+- The Express server serves both `/api/*` endpoints and static frontend files
+- Frontend routing works correctly (SPA fallback configured)
+
+### Alternative Deployments
+
+<details>
+<summary><b>Separate Frontend + Backend Deployment</b></summary>
+
+If you prefer to deploy frontend and backend separately:
+
+**Frontend (Vercel/Netlify):**
+1. Deploy `packages/frontend` to Vercel or Netlify
+2. Set build command: `npm run build:frontend`
+3. Set output directory: `dist`
+4. Set environment variable: `VITE_API_URL=https://your-backend.railway.app`
+
+**Backend (Railway/Render):**
+1. Deploy `packages/backend` to Railway or Render
+2. Configure environment variables (include `FRONTEND_URL` for CORS)
+3. Backend will enable CORS for the frontend domain
+
+**Note:** This approach requires CORS configuration and separate service costs.
+</details>
+
+<details>
+<summary><b>Local Production Testing</b></summary>
+
+Test the production build locally:
+
+1. **Build all packages:**
+   ```bash
+   npm run build
+   ```
+
+2. **Set environment variables:**
+   ```bash
+   # In packages/backend/.env
+   NODE_ENV=production
+   ```
+
+3. **Start backend:**
+   ```bash
+   npm run start --workspace=@wishlist/backend
+   ```
+
+4. **Visit** http://localhost:3002
+   - Frontend served from Express
+   - API available at http://localhost:3002/api
+   - SPA routing works correctly
+
+</details>
 
 ## Available Scripts
 
