@@ -22,6 +22,7 @@ export function createSessionConfig() {
   }
 
   const isProduction = process.env.NODE_ENV === 'production';
+  const cookieDomain = process.env.COOKIE_DOMAIN;
 
   return session({
     store: new PgSession({
@@ -37,6 +38,7 @@ export function createSessionConfig() {
       httpOnly: true, // Prevent JavaScript access
       maxAge: 30 * 24 * 60 * 60 * 1000, // 30 days
       sameSite: 'lax', // CSRF protection
+      domain: cookieDomain, // Cookie domain for cross-subdomain sharing
     },
     name: 'wishlist.sid', // Custom session cookie name
   });
