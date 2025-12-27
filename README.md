@@ -116,68 +116,44 @@ This will start:
 
 **Note**: You must configure OAuth providers before you can login. See [Authentication Setup](#authentication-setup).
 
-## Docker Images
+## Docker
 
-Pre-built Docker images are available on GitHub Container Registry for easy deployment.
+The application uses a **unified deployment model** where a single Docker image contains both the backend API and frontend static files. Express serves both from the same container, eliminating CORS complexity and improving session handling.
 
-**Note:** The application now uses a **unified deployment model** where the backend image includes the frontend static files. Express serves both the API and the frontend from a single container.
+### Build Locally
 
-### Latest Image (Main Branch)
-
-Pull the latest production-ready unified image:
+Build the Docker image locally for testing:
 
 ```bash
-# Unified image (backend + frontend)
-docker pull ghcr.io/igor-budzin/wishlist-backend:latest
+docker build -f packages/backend/Dockerfile -t wishlist:latest .
 ```
 
-### Specific Versions
+### Run Locally
 
-Pull specific versions using commit SHA or timestamp:
-
-```bash
-# By short SHA (7 characters)
-docker pull ghcr.io/igor-budzin/wishlist-backend:sha-abc1234
-
-# By full SHA (40 characters) - for audit/compliance
-docker pull ghcr.io/igor-budzin/wishlist-backend:sha-1234567890abcdef...
-
-# By timestamp - for time-based rollback
-docker pull ghcr.io/igor-budzin/wishlist-backend:2025-12-26T14-30-45Z
-```
-
-### PR Preview Images
-
-Test PR changes before merging:
+Test the production image locally:
 
 ```bash
-# By PR number
-docker pull ghcr.io/igor-budzin/wishlist-backend:pr-123
-
-# By branch name
-docker pull ghcr.io/igor-budzin/wishlist-backend:pr-feature-name
-```
-
-### Running with Docker
-
-Quick start with the latest image:
-
-```bash
-# Unified image serves both frontend and API
 docker run -d -p 3002:3002 \
   -e DATABASE_URL="postgresql://user:password@host:5432/wishlist_db" \
   -e SESSION_SECRET="your-secure-session-secret-min-32-chars" \
   -e NODE_ENV="production" \
-  ghcr.io/igor-budzin/wishlist-backend:latest
+  wishlist:latest
 
 # Access the application:
 # - Frontend: http://localhost:3002
 # - API: http://localhost:3002/api
 ```
 
-**Legacy Frontend Image:** A separate frontend-only Docker image is no longer built by default. For separate frontend deployment (e.g., CDN or static hosting), see `packages/frontend/Dockerfile` (deprecated).
+### Dockerfile Structure
 
-For detailed Docker deployment instructions, tag strategy, and rollback procedures, see [DOCKER.md](./DOCKER.md).
+The Dockerfile uses a multi-stage build:
+
+1. **Stage 1:** Build shared package
+2. **Stage 2:** Build frontend (Vite with compression)
+3. **Stage 3:** Build backend (TypeScript compilation)
+4. **Stage 4:** Production image (optimized, production dependencies only)
+
+**Note:** GitHub Actions no longer builds Docker images. Images are built directly on Railway during deployment.
 
 ## Production Deployment
 
@@ -187,39 +163,51 @@ The application is configured for single-service deployment on Railway, where th
 
 **Benefits:**
 
-- Single service = lower cost
-- Same-origin = better session handling, no CORS complexity
-- Simplified deployment and configuration
+- ✅ Single service = lower cost
+- ✅ Same-origin = better session handling, no CORS complexity
+- ✅ Simplified deployment and configuration
+- ✅ Automatic builds from GitHub
+- ✅ No need for separate image registry
 
-**Setup:**
+**Quick Start:**
 
-1. **Create a PostgreSQL database** on Railway
+1. Create a PostgreSQL database on Railway
+2. Create a new service and connect your GitHub repository
+3. Configure environment variables (see below)
+4. Railway automatically builds and deploys from `railway.toml`
 
-2. **Create a new service** and connect your GitHub repository
+**📖 Detailed Setup Guide:** See [RAILWAY.md](./RAILWAY.md) for complete deployment instructions including:
 
-3. **Configure environment variables:**
-   - `DATABASE_URL` - Provided by Railway PostgreSQL
-   - `SESSION_SECRET` - Generate with: `node -e "console.log(require('crypto').randomBytes(64).toString('hex'))"`
-   - `NODE_ENV` - Set to `production`
-   - `PORT` - Optional, defaults to 3002
-   - OAuth credentials (Google, Facebook, GitHub)
-   - `OPENAI_API_KEY` - For AI link analysis (optional)
+- Step-by-step Railway configuration
+- Environment variables reference
+- OAuth provider setup
+- Custom domain configuration
+- Troubleshooting guide
+- Cost optimization tips
 
-4. **Deploy** - Railway will:
-   - Build the frontend using Vite
-   - Build the backend using TypeScript
-   - Create a single Docker image containing both
-   - Run database migrations
-   - Start the Express server on the assigned port
+**Required Environment Variables:**
 
-5. **Access your app** at the Railway-provided URL
+```bash
+NODE_ENV=production
+SESSION_SECRET=<generate-with-crypto>
+DATABASE_URL=<auto-generated-by-railway>
+BACKEND_URL=https://your-app.railway.app
+GOOGLE_CLIENT_ID=<from-google-console>
+GOOGLE_CLIENT_SECRET=<from-google-console>
+GITHUB_CLIENT_ID=<from-github-settings>
+GITHUB_CLIENT_SECRET=<from-github-settings>
+```
 
-**Important Notes:**
+**How It Works:**
 
-- `FRONTEND_URL` is NOT needed in production (same-origin deployment)
-- `VITE_API_URL` is automatically set to empty (same-origin)
-- The Express server serves both `/api/*` endpoints and static frontend files
-- Frontend routing works correctly (SPA fallback configured)
+Railway automatically:
+
+- Detects `railway.toml` configuration
+- Builds Docker image using `packages/backend/Dockerfile`
+- Runs database migrations on startup
+- Serves both API (`/api/*`) and frontend from same domain
+- Monitors health via `/health` endpoint
+- Redeploys on push to `main` branch
 
 ### Alternative Deployments
 
