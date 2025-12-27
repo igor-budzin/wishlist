@@ -22,7 +22,14 @@ export function createSessionConfig() {
   }
 
   const isProduction = process.env.NODE_ENV === 'production';
-  const cookieDomain = process.env.COOKIE_DOMAIN;
+  const cookieDomain = process.env.COOKIE_DOMAIN || undefined;
+
+  // Log cookie configuration for debugging
+  console.log('Session cookie config:', {
+    isProduction,
+    cookieDomain,
+    secure: isProduction,
+  });
 
   return session({
     store: new PgSession({
