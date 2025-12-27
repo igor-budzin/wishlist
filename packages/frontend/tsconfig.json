@@ -7,7 +7,7 @@
     "noEmit": true,
     "baseUrl": ".",
     "paths": {
-      "@wishlist/shared": ["../shared/src"],
+      "@wishlist/shared": ["../shared/dist"],
       "src/*": ["src/*"]
     }
   },

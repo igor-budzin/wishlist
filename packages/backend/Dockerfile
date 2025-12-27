@@ -30,8 +30,10 @@ COPY packages/frontend/package.json ./packages/frontend/
 # Install dependencies
 RUN npm ci
 
-# Copy shared package build output
+# Copy built shared package (for imports and TypeScript references)
 COPY --from=shared-builder /app/packages/shared/dist ./packages/shared/dist
+COPY --from=shared-builder /app/packages/shared/package.json ./packages/shared/package.json
+COPY --from=shared-builder /app/packages/shared/tsconfig.json ./packages/shared/tsconfig.json
 
 # Copy frontend source
 COPY packages/frontend ./packages/frontend
