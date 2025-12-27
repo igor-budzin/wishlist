@@ -5,24 +5,13 @@ import { TYPES } from '../types.js';
 import { AuthController } from '../features/auth/auth.controller.js';
 import { requireAuth } from '../features/auth/auth.middleware.js';
 import { ProviderConflictError } from '../features/auth/auth.service.js';
-import type { IConfigService } from '../config/index.js';
 
 const router = Router();
 const authController = container.get<AuthController>(TYPES.AuthController);
-const config = container.get<IConfigService>(TYPES.ConfigService);
-
-// In production (same-origin), use relative URLs. In development, use FRONTEND_URL for CORS
-function getFrontendUrl(): string {
-  if (config.isProduction()) {
-    // Same-origin deployment - use relative URLs
-    return '';
-  }
-  // Development - use FRONTEND_URL for separate frontend server
-  return process.env.FRONTEND_URL || 'http://localhost:3000';
-}
+const FRONTEND_URL = process.env.FRONTEND_URL || 'http://localhost:3000';
 
 function getLoginErrorRedirectUrl(): string {
-  return `${getFrontendUrl()}/login?error=auth_failed`;
+  return `${FRONTEND_URL}/login?error=auth_failed`;
 }
 
 function getProviderMismatchRedirectUrl(
@@ -33,10 +22,10 @@ function getProviderMismatchRedirectUrl(
   const encodedExisting = existingProvider ? encodeURIComponent(existingProvider) : '';
 
   if (encodedExisting) {
-    return `${getFrontendUrl()}/auth/provider-mismatch?registeredWith=${encodedExisting}&attemptedWith=${encodedAttempted}`;
+    return `${FRONTEND_URL}/auth/provider-mismatch?registeredWith=${encodedExisting}&attemptedWith=${encodedAttempted}`;
   }
 
-  return `${getFrontendUrl()}/auth/provider-mismatch?attemptedWith=${encodedAttempted}`;
+  return `${FRONTEND_URL}/auth/provider-mismatch?attemptedWith=${encodedAttempted}`;
 }
 
 function createOAuthCallbackHandler(provider: 'google' | 'facebook' | 'github') {
@@ -68,7 +57,7 @@ function createOAuthCallbackHandler(provider: 'google' | 'facebook' | 'github') 
           return next(loginError);
         }
 
-        res.redirect(getFrontendUrl() || '/');
+        res.redirect(FRONTEND_URL);
       });
     })(req, res, next);
   };
