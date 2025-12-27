@@ -3,6 +3,8 @@ import cors from 'cors';
 import helmet from 'helmet';
 import passport from 'passport';
 import path from 'path';
+import { fileURLToPath } from 'url';
+import { dirname } from 'path';
 import expressStaticGzip from 'express-static-gzip';
 import routes from './routes/index.js';
 import authRoutes from './routes/auth.routes.js';
@@ -16,6 +18,10 @@ import { TYPES } from './types.js';
 import type { IAuthService } from './features/auth/auth.service.js';
 import type { ILogger } from './lib/logger.js';
 import type { IConfigService } from './config/index.js';
+
+// ES module __dirname equivalent
+const __filename = fileURLToPath(import.meta.url);
+const __dirname = dirname(__filename);
 
 const app = express();
 
@@ -79,8 +85,12 @@ if (config.isProduction()) {
     })
   );
 
-  // SPA fallback - serve index.html for all non-API routes
-  app.get('*', (_req, res) => {
+  // SPA fallback - serve index.html for all non-API, non-health routes
+  app.get('*', (req, res, next) => {
+    // Skip SPA fallback for API routes and health check
+    if (req.path.startsWith('/api') || req.path === '/health') {
+      return next();
+    }
     res.setHeader('Cache-Control', 'no-cache, no-store, must-revalidate');
     res.sendFile(path.join(__dirname, '../../frontend/dist/index.html'));
   });
