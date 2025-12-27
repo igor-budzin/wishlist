@@ -42,10 +42,7 @@ async function refreshAccessToken(): Promise<boolean> {
 /**
  * Make an API request with automatic token refresh on 401
  */
-export async function apiRequest(
-  url: string,
-  options: RequestInit = {}
-): Promise<Response> {
+export async function apiRequest(url: string, options: RequestInit = {}): Promise<Response> {
   const accessToken = localStorage.getItem('access_token');
 
   // Add Authorization header if we have a token

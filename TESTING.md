@@ -75,11 +75,13 @@ Tests the following:
    - Verifies Prisma can connect to PostgreSQL
    - Executes a simple query to confirm database is accessible
 
-3. **API Endpoints**
-   - GET `/api/items` - Returns array of items
-   - GET `/api/items/:id` - Returns 404 for non-existent items
-   - POST `/api/items` - Returns 400 without required title
-   - POST, GET, DELETE - Full CRUD cycle test
+3. **API Authentication** (JWT-based)
+   - GET `/api/items` - Returns 401 (requires authentication)
+   - POST `/api/items` - Returns 401 (requires authentication)
+   - DELETE `/api/items/:id` - Returns 401 (requires authentication)
+
+4. **Public Endpoints**
+   - OAuth routes are accessible (`/api/auth/google`, `/api/auth/facebook`, `/api/auth/github`)
 
 ### Frontend Smoke Tests (`packages/frontend/src/components/App.test.tsx`)
 
@@ -139,6 +141,25 @@ The smoke tests don't require the dev servers to be running:
 - Environment: Node.js
 - Global test APIs enabled
 - 30 second timeout for tests (to accommodate database operations)
+- Setup file at `src/test-utils/setup.ts` - loads `.env` file and configures test environment
+
+**Test Environment Setup (`packages/backend/src/test-utils/setup.ts`)**:
+
+- Automatically loads environment variables from `packages/backend/.env`
+- Sets `NODE_ENV=test`
+- Configures JWT secrets for testing
+- Uses the same database as development (ensure Docker is running)
+- Integration tests share the development database
+
+**Test Types**:
+
+1. **Unit Tests**: Mock external dependencies (Prisma, services)
+   - `jwt.service.test.ts` - JWT token generation and verification (19 tests)
+   - `auth.middleware.test.ts` - JWT authentication middleware (9 tests)
+   - `auth.controller.test.ts` - Auth controller endpoints (13 tests)
+2. **Integration Tests**: Use real database connection
+   - `smoke.test.ts` - API endpoints and database connectivity (6 tests)
+   - `link-analysis.controller.test.ts` - Link analysis endpoints (2 tests)
 
 ### Frontend (`packages/frontend/vitest.config.ts`)
 

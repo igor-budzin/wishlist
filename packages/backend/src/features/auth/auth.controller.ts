@@ -117,11 +117,7 @@ export class AuthController {
       }
 
       // Generate new access token
-      const accessToken = this.jwtService.generateAccessToken(
-        user.id,
-        user.email,
-        user.provider
-      );
+      const accessToken = this.jwtService.generateAccessToken(user.id, user.email, user.provider);
 
       this.logger.info(`Access token refreshed for user: ${user.id}`);
 

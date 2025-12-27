@@ -4,7 +4,11 @@ import { container } from '../container.js';
 import { TYPES } from '../types.js';
 import { AuthController } from '../features/auth/auth.controller.js';
 import { requireAuth } from '../features/auth/auth.middleware.js';
-import { ProviderConflictError, type UserResponse, type IAuthService } from '../features/auth/auth.service.js';
+import {
+  ProviderConflictError,
+  type UserResponse,
+  type IAuthService,
+} from '../features/auth/auth.service.js';
 import type { IJwtService } from '../features/auth/jwt.service.js';
 
 const router = Router();
@@ -58,7 +62,8 @@ function createOAuthCallbackHandler(provider: 'google' | 'facebook' | 'github') 
 
         // Generate JWT token pair
         const userResponse = user as UserResponse;
-        const { accessToken, refreshToken, tokenId, expiresAt } = jwtService.generateTokenPair(userResponse);
+        const { accessToken, refreshToken, tokenId, expiresAt } =
+          jwtService.generateTokenPair(userResponse);
 
         // Store refresh token in database
         await authService.storeRefreshToken(userResponse.id, tokenId, expiresAt);
