@@ -65,9 +65,7 @@ if (config.isProduction()) {
   // Middleware to set cache headers for static assets
   app.use((req, res, next) => {
     // Cache hashed assets for 1 year
-    if (
-      req.path.match(/\.(js|css|png|jpg|jpeg|gif|ico|svg|woff|woff2|ttf|eot)$/)
-    ) {
+    if (req.path.match(/\.(js|css|png|jpg|jpeg|gif|ico|svg|woff|woff2|ttf|eot)$/)) {
       res.setHeader('Cache-Control', 'public, max-age=31536000, immutable');
     }
     next();
