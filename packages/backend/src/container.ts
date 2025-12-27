@@ -9,6 +9,7 @@ import { WishlistItemService } from './features/wishlist/wishlist.service.js';
 import { WishlistItemController } from './features/wishlist/wishlist.controller.js';
 import { AuthRepository } from './features/auth/auth.repository.js';
 import { AuthService } from './features/auth/auth.service.js';
+import { JwtService } from './features/auth/jwt.service.js';
 import { AuthController } from './features/auth/auth.controller.js';
 import { UserRepository } from './features/users/user.repository.js';
 import { UserService } from './features/users/user.service.js';
@@ -42,6 +43,7 @@ container
   .to(WishlistItemService)
   .inSingletonScope();
 container.bind<AuthService>(TYPES.AuthService).to(AuthService).inSingletonScope();
+container.bind<JwtService>(TYPES.JwtService).to(JwtService).inSingletonScope();
 container.bind<UserService>(TYPES.UserService).to(UserService).inSingletonScope();
 container
   .bind<LinkAnalysisService>(TYPES.LinkAnalysisService)

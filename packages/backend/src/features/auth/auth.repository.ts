@@ -1,5 +1,5 @@
 import { injectable, inject } from 'inversify';
-import { PrismaClient, User } from '@prisma/client';
+import { PrismaClient, User, RefreshToken } from '@prisma/client';
 import { TYPES } from '../../types.js';
 import type { ILogger } from '../../lib/logger.js';
 
@@ -11,12 +11,22 @@ export interface CreateUserData {
   avatar?: string;
 }
 
+export interface CreateRefreshTokenData {
+  tokenId: string;
+  userId: string;
+  expiresAt: Date;
+}
+
 export interface IAuthRepository {
   findById(id: string): Promise<User | null>;
   findByEmail(email: string): Promise<User | null>;
   findByProvider(provider: string, providerId: string): Promise<User | null>;
   create(data: CreateUserData): Promise<User>;
   updateLastLogin(id: string): Promise<void>;
+  createRefreshToken(data: CreateRefreshTokenData): Promise<RefreshToken>;
+  findRefreshToken(tokenId: string): Promise<RefreshToken | null>;
+  revokeRefreshToken(tokenId: string): Promise<void>;
+  deleteUserRefreshTokens(userId: string): Promise<void>;
 }
 
 @injectable()
@@ -70,6 +80,39 @@ export class AuthRepository implements IAuthRepository {
     await this.prisma.user.update({
       where: { id },
       data: { updatedAt: new Date() },
+    });
+  }
+
+  async createRefreshToken(data: CreateRefreshTokenData): Promise<RefreshToken> {
+    this.logger.debug(`Creating refresh token for user: ${data.userId}`);
+    return this.prisma.refreshToken.create({
+      data: {
+        tokenId: data.tokenId,
+        userId: data.userId,
+        expiresAt: data.expiresAt,
+      },
+    });
+  }
+
+  async findRefreshToken(tokenId: string): Promise<RefreshToken | null> {
+    this.logger.debug(`Finding refresh token: ${tokenId}`);
+    return this.prisma.refreshToken.findUnique({
+      where: { tokenId },
+    });
+  }
+
+  async revokeRefreshToken(tokenId: string): Promise<void> {
+    this.logger.debug(`Revoking refresh token: ${tokenId}`);
+    await this.prisma.refreshToken.update({
+      where: { tokenId },
+      data: { revoked: true },
+    });
+  }
+
+  async deleteUserRefreshTokens(userId: string): Promise<void> {
+    this.logger.debug(`Deleting all refresh tokens for user: ${userId}`);
+    await this.prisma.refreshToken.deleteMany({
+      where: { userId },
     });
   }
 }

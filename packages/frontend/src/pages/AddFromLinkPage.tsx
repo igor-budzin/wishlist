@@ -12,6 +12,7 @@ import { toast } from 'sonner';
 import { Loader2 } from '../components/icons';
 import { useWishlist } from '../contexts/WishlistContext';
 import { SUPPORTED_CURRENCIES } from '../lib/validations';
+import { apiRequest, getApiUrl } from '../lib/api';
 
 // Helper to validate currency code
 function isValidCurrency(
@@ -74,10 +75,9 @@ export default function AddFromLinkPage() {
     setError(null);
 
     try {
-      const response = await fetch('/api/analyze-link', {
+      const response = await apiRequest(getApiUrl('/api/analyze-link'), {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
-        credentials: 'include',
         body: JSON.stringify({ url: link }),
       });
 
