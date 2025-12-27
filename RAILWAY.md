@@ -96,6 +96,14 @@ After first deployment, Railway will provide a domain like `your-app.railway.app
 BACKEND_URL=https://your-app.railway.app
 ```
 
+⚠️ **Critical:** Ensure `BACKEND_URL` does NOT contain:
+
+- Trailing slashes: ~~`https://your-app.railway.app/`~~ ❌
+- Template brackets: ~~`{your-app.railway.app}`~~ ❌
+- Extra characters: ~~`https://your-app.railway.app}`~~ ❌
+
+✅ **Correct format:** `https://your-app.railway.app`
+
 ### 4. Configure OAuth Providers
 
 #### Google OAuth
@@ -107,7 +115,14 @@ BACKEND_URL=https://your-app.railway.app
    ```
    https://your-app.railway.app/api/auth/google/callback
    ```
+   ⚠️ **Important:** Replace `your-app.railway.app` with your actual Railway domain
 5. Copy Client ID and Secret to Railway variables
+
+**Note:** The app automatically constructs callback URLs using `BACKEND_URL`, so you only need to set:
+
+- `GOOGLE_CLIENT_ID`
+- `GOOGLE_CLIENT_SECRET`
+- `BACKEND_URL` (your Railway domain)
 
 #### GitHub OAuth
 
@@ -118,7 +133,14 @@ BACKEND_URL=https://your-app.railway.app
    ```
    https://your-app.railway.app/api/auth/github/callback
    ```
+   ⚠️ **Important:** Replace `your-app.railway.app` with your actual Railway domain
 5. Copy Client ID and Secret to Railway variables
+
+**Note:** The app automatically constructs callback URLs using `BACKEND_URL`, so you only need to set:
+
+- `GITHUB_CLIENT_ID`
+- `GITHUB_CLIENT_SECRET`
+- `BACKEND_URL` (your Railway domain)
 
 ### 5. Deploy
 
