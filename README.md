@@ -186,6 +186,7 @@ For detailed Docker deployment instructions, tag strategy, and rollback procedur
 The application is configured for single-service deployment on Railway, where the Express backend serves both the API and the frontend static files.
 
 **Benefits:**
+
 - Single service = lower cost
 - Same-origin = better session handling, no CORS complexity
 - Simplified deployment and configuration
@@ -214,6 +215,7 @@ The application is configured for single-service deployment on Railway, where th
 5. **Access your app** at the Railway-provided URL
 
 **Important Notes:**
+
 - `FRONTEND_URL` is NOT needed in production (same-origin deployment)
 - `VITE_API_URL` is automatically set to empty (same-origin)
 - The Express server serves both `/api/*` endpoints and static frontend files
@@ -227,17 +229,20 @@ The application is configured for single-service deployment on Railway, where th
 If you prefer to deploy frontend and backend separately:
 
 **Frontend (Vercel/Netlify):**
+
 1. Deploy `packages/frontend` to Vercel or Netlify
 2. Set build command: `npm run build:frontend`
 3. Set output directory: `dist`
 4. Set environment variable: `VITE_API_URL=https://your-backend.railway.app`
 
 **Backend (Railway/Render):**
+
 1. Deploy `packages/backend` to Railway or Render
 2. Configure environment variables (include `FRONTEND_URL` for CORS)
 3. Backend will enable CORS for the frontend domain
 
 **Note:** This approach requires CORS configuration and separate service costs.
+
 </details>
 
 <details>
@@ -246,17 +251,20 @@ If you prefer to deploy frontend and backend separately:
 Test the production build locally:
 
 1. **Build all packages:**
+
    ```bash
    npm run build
    ```
 
 2. **Set environment variables:**
+
    ```bash
    # In packages/backend/.env
    NODE_ENV=production
    ```
 
 3. **Start backend:**
+
    ```bash
    npm run start --workspace=@wishlist/backend
    ```
