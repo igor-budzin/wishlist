@@ -13,6 +13,7 @@ const AddItemPage = lazy(() => import('./pages/AddItemPage'));
 const AddFromLinkPage = lazy(() => import('./pages/AddFromLinkPage'));
 const EditItemPage = lazy(() => import('./pages/EditItemPage'));
 const LoginPage = lazy(() => import('./pages/LoginPage'));
+const AuthCallbackPage = lazy(() => import('./pages/AuthCallbackPage'));
 const ProfilePage = lazy(() => import('./pages/ProfilePage'));
 const PublicProfilePage = lazy(() => import('./pages/PublicProfilePage'));
 const SubscriptionsPage = lazy(() => import('./pages/SubscriptionsPage'));
@@ -80,6 +81,14 @@ const router = createBrowserRouter([
         element: (
           <LazyRoute>
             <LoginPage />
+          </LazyRoute>
+        ),
+      },
+      {
+        path: 'auth/callback',
+        element: (
+          <LazyRoute>
+            <AuthCallbackPage />
           </LazyRoute>
         ),
       },

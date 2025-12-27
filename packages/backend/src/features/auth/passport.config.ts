@@ -2,32 +2,10 @@ import passport from 'passport';
 import { Strategy as GoogleStrategy } from 'passport-google-oauth20';
 import { Strategy as FacebookStrategy } from 'passport-facebook';
 import { Strategy as GitHubStrategy } from 'passport-github2';
-import type { IAuthService, UserResponse } from './auth.service.js';
+import type { IAuthService } from './auth.service.js';
 import type { ILogger } from '../../lib/logger.js';
 
 export function configurePassport(authService: IAuthService, logger: ILogger) {
-  // Serialize user to session
-  passport.serializeUser((user: Express.User, done) => {
-    logger.debug(`Serializing user to session: ${(user as UserResponse).id}`);
-    done(null, (user as UserResponse).id);
-  });
-
-  // Deserialize user from session
-  passport.deserializeUser(async (id: string, done) => {
-    try {
-      logger.debug(`Deserializing user from session: ${id}`);
-      const user = await authService.getUserById(id);
-      if (!user) {
-        logger.warn(`User not found during deserialization: ${id}`);
-        return done(null, false);
-      }
-      done(null, user);
-    } catch (error) {
-      logger.error('Error deserializing user', error);
-      done(error);
-    }
-  });
-
   // Google OAuth Strategy
   if (process.env.GOOGLE_CLIENT_ID && process.env.GOOGLE_CLIENT_SECRET) {
     passport.use(

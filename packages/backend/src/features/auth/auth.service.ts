@@ -24,6 +24,10 @@ export interface UserResponse {
 export interface IAuthService {
   findOrCreateUser(oauthData: OAuthUserData): Promise<UserResponse>;
   getUserById(id: string): Promise<UserResponse | null>;
+  storeRefreshToken(userId: string, tokenId: string, expiresAt: Date): Promise<void>;
+  revokeRefreshToken(tokenId: string): Promise<void>;
+  revokeAllUserTokens(userId: string): Promise<void>;
+  isRefreshTokenValid(tokenId: string): Promise<boolean>;
 }
 
 export class ProviderConflictError extends Error {
@@ -87,6 +91,46 @@ export class AuthService implements IAuthService {
       return null;
     }
     return this.toResponse(user);
+  }
+
+  async storeRefreshToken(userId: string, tokenId: string, expiresAt: Date): Promise<void> {
+    this.logger.debug(`Storing refresh token for user: ${userId}`);
+    await this.repository.createRefreshToken({
+      tokenId,
+      userId,
+      expiresAt,
+    });
+  }
+
+  async revokeRefreshToken(tokenId: string): Promise<void> {
+    this.logger.info(`Revoking refresh token: ${tokenId}`);
+    await this.repository.revokeRefreshToken(tokenId);
+  }
+
+  async revokeAllUserTokens(userId: string): Promise<void> {
+    this.logger.info(`Revoking all refresh tokens for user: ${userId}`);
+    await this.repository.deleteUserRefreshTokens(userId);
+  }
+
+  async isRefreshTokenValid(tokenId: string): Promise<boolean> {
+    const token = await this.repository.findRefreshToken(tokenId);
+
+    if (!token) {
+      this.logger.debug(`Refresh token not found: ${tokenId}`);
+      return false;
+    }
+
+    if (token.revoked) {
+      this.logger.debug(`Refresh token is revoked: ${tokenId}`);
+      return false;
+    }
+
+    if (token.expiresAt < new Date()) {
+      this.logger.debug(`Refresh token is expired: ${tokenId}`);
+      return false;
+    }
+
+    return true;
   }
 
   private toResponse(user: User): UserResponse {

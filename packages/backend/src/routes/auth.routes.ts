@@ -4,10 +4,13 @@ import { container } from '../container.js';
 import { TYPES } from '../types.js';
 import { AuthController } from '../features/auth/auth.controller.js';
 import { requireAuth } from '../features/auth/auth.middleware.js';
-import { ProviderConflictError } from '../features/auth/auth.service.js';
+import { ProviderConflictError, type UserResponse, type IAuthService } from '../features/auth/auth.service.js';
+import type { IJwtService } from '../features/auth/jwt.service.js';
 
 const router = Router();
 const authController = container.get<AuthController>(TYPES.AuthController);
+const jwtService = container.get<IJwtService>(TYPES.JwtService);
+const authService = container.get<IAuthService>(TYPES.AuthService);
 const FRONTEND_URL = process.env.FRONTEND_URL || 'http://localhost:3000';
 
 function getLoginErrorRedirectUrl(): string {
@@ -30,35 +33,42 @@ function getProviderMismatchRedirectUrl(
 
 function createOAuthCallbackHandler(provider: 'google' | 'facebook' | 'github') {
   return (req: Request, res: Response, next: NextFunction) => {
-    passport.authenticate(provider, (err: unknown, user: unknown) => {
-      if (err) {
-        if (err instanceof ProviderConflictError) {
-          const conflictError = err as ProviderConflictError;
-          res.redirect(
-            getProviderMismatchRedirectUrl(
-              conflictError.existingProvider,
-              conflictError.attemptedProvider || provider
-            )
-          );
+    passport.authenticate(provider, async (err: unknown, user: unknown) => {
+      try {
+        if (err) {
+          if (err instanceof ProviderConflictError) {
+            const conflictError = err as ProviderConflictError;
+            res.redirect(
+              getProviderMismatchRedirectUrl(
+                conflictError.existingProvider,
+                conflictError.attemptedProvider || provider
+              )
+            );
+            return;
+          }
+
+          res.redirect(getLoginErrorRedirectUrl());
           return;
         }
 
-        res.redirect(getLoginErrorRedirectUrl());
-        return;
-      }
-
-      if (!user) {
-        res.redirect(getLoginErrorRedirectUrl());
-        return;
-      }
-
-      req.logIn(user as Express.User, (loginError: Error | null) => {
-        if (loginError) {
-          return next(loginError);
+        if (!user) {
+          res.redirect(getLoginErrorRedirectUrl());
+          return;
         }
 
-        res.redirect(FRONTEND_URL);
-      });
+        // Generate JWT token pair
+        const userResponse = user as UserResponse;
+        const { accessToken, refreshToken, tokenId, expiresAt } = jwtService.generateTokenPair(userResponse);
+
+        // Store refresh token in database
+        await authService.storeRefreshToken(userResponse.id, tokenId, expiresAt);
+
+        // Redirect with tokens in URL fragment
+        const redirectUrl = `${FRONTEND_URL}/auth/callback#access_token=${accessToken}&refresh_token=${refreshToken}`;
+        res.redirect(redirectUrl);
+      } catch (error) {
+        next(error);
+      }
     })(req, res, next);
   };
 }
@@ -68,6 +78,9 @@ router.get('/me', requireAuth, (req, res, next) => authController.me(req, res, n
 
 // Logout
 router.post('/logout', (req, res, next) => authController.logout(req, res, next));
+
+// Refresh access token
+router.post('/refresh', (req, res, next) => authController.refresh(req, res, next));
 
 // Google OAuth
 router.get('/google', passport.authenticate('google', { scope: ['profile', 'email'] }));

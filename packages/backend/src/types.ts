@@ -12,6 +12,7 @@ export const TYPES = {
   // Services
   WishlistItemService: Symbol.for('WishlistItemService'),
   AuthService: Symbol.for('AuthService'),
+  JwtService: Symbol.for('JwtService'),
   UserService: Symbol.for('UserService'),
   LinkAnalysisService: Symbol.for('LinkAnalysisService'),
   ContentExtractor: Symbol.for('ContentExtractor'),

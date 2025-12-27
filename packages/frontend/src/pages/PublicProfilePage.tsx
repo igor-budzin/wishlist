@@ -7,8 +7,7 @@ import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '../co
 import { Badge } from '../components/ui/badge';
 import { Button } from '../components/ui/button';
 import { Loader2, AlertCircle } from '../components/icons';
-
-const API_URL = import.meta.env.VITE_API_URL || 'http://localhost:3002';
+import { apiRequest, getApiUrl } from '../lib/api';
 
 export default function PublicProfilePage() {
   const { userId } = useParams<{ userId: string }>();
@@ -28,9 +27,7 @@ export default function PublicProfilePage() {
         setLoading(true);
         setError(null);
 
-        const response = await fetch(`${API_URL}/api/users/${userId}`, {
-          credentials: 'include',
-        });
+        const response = await apiRequest(getApiUrl(`/api/users/${userId}`));
 
         const data: ApiResponse<PublicUserProfile> = await response.json();
 

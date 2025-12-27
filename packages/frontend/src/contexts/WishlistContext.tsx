@@ -3,6 +3,7 @@ import { useNavigate } from 'react-router-dom';
 import { toast } from 'sonner';
 import type { WishlistItem, ApiResponse } from '@wishlist/shared';
 import type { WishlistItemFormData } from '../lib/validations';
+import { apiRequest, getApiUrl } from '../lib/api';
 
 interface WishlistContextType {
   items: WishlistItem[];
@@ -29,9 +30,7 @@ export function WishlistProvider({ children }: WishlistProviderProps) {
 
   const fetchItems = useCallback(async () => {
     try {
-      const response = await fetch('/api/items', {
-        credentials: 'include',
-      });
+      const response = await apiRequest(getApiUrl('/api/items'));
 
       if (response.status === 401) {
         navigate('/login', { replace: true });
@@ -58,10 +57,9 @@ export function WishlistProvider({ children }: WishlistProviderProps) {
 
   const createItem = async (data: WishlistItemFormData) => {
     try {
-      const response = await fetch('/api/items', {
+      const response = await apiRequest(getApiUrl('/api/items'), {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
-        credentials: 'include',
         body: JSON.stringify(data),
       });
 
@@ -88,10 +86,9 @@ export function WishlistProvider({ children }: WishlistProviderProps) {
 
   const updateItem = async (id: string, data: WishlistItemFormData) => {
     try {
-      const response = await fetch(`/api/items/${id}`, {
+      const response = await apiRequest(getApiUrl(`/api/items/${id}`), {
         method: 'PUT',
         headers: { 'Content-Type': 'application/json' },
-        credentials: 'include',
         body: JSON.stringify(data),
       });
 
@@ -118,9 +115,8 @@ export function WishlistProvider({ children }: WishlistProviderProps) {
 
   const deleteItem = async (id: string) => {
     try {
-      const response = await fetch(`/api/items/${id}`, {
+      const response = await apiRequest(getApiUrl(`/api/items/${id}`), {
         method: 'DELETE',
-        credentials: 'include',
       });
 
       if (response.status === 401) {

@@ -44,11 +44,28 @@ model User {
   providerId    String
   avatar        String?
   wishlistItems WishlistItem[]
+  refreshTokens RefreshToken[]
   createdAt     DateTime       @default(now())
   updatedAt     DateTime       @updatedAt
 
   @@unique([provider, providerId])
   @@map("users")
+}
+
+model RefreshToken {
+  id        String   @id @default(cuid())
+  tokenId   String   @unique
+  userId    String
+  user      User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+  revoked   Boolean  @default(false)
+  expiresAt DateTime
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  @@index([userId])
+  @@index([tokenId])
+  @@index([expiresAt])
+  @@map("refresh_tokens")
 }
 
 enum Priority {
