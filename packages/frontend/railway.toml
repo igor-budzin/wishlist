@@ -1,0 +1,13 @@
+# Railway configuration for frontend service
+[build]
+builder = "dockerfile"
+dockerfilePath = "packages/frontend/Dockerfile"
+
+[build.buildArgs]
+VITE_API_URL = "${{BACKEND_URL}}"
+
+[deploy]
+healthcheckPath = "/health"
+healthcheckTimeout = 100
+restartPolicyType = "on_failure"
+restartPolicyMaxRetries = 10
