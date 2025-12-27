@@ -218,12 +218,13 @@ jobs:
           test -d packages/backend/dist || (echo "Backend build failed" && exit 1)
 
   docker-build:
-    name: Build & Push Docker Images
+    name: Build & Push Docker Image
     runs-on: ubuntu-latest
     needs: build
     timeout-minutes: 20
     # Note: This job creates PR-specific tags only. Production tags (latest, sha-*, timestamps)
     # are created by the deploy.yml workflow when PRs are merged to main.
+    # Frontend is built inside the backend Docker image, so only one image is created.
 
     steps:
       - name: Checkout code
@@ -239,26 +240,6 @@ jobs:
           username: ${{ github.actor }}
           password: ${{ secrets.GITHUB_TOKEN }}
 
-      - name: Extract frontend metadata
-        id: frontend-meta
-        uses: docker/metadata-action@v5
-        with:
-          images: ghcr.io/${{ github.repository_owner }}/wishlist-frontend
-          tags: |
-            type=ref,event=pr,prefix=pr-
-            type=sha,prefix=pr-${{ github.event.pull_request.number }}-
-
-      - name: Build and push frontend image
-        uses: docker/build-push-action@v5
-        with:
-          context: .
-          file: ./packages/frontend/Dockerfile
-          push: true
-          tags: ${{ steps.frontend-meta.outputs.tags }}
-          labels: ${{ steps.frontend-meta.outputs.labels }}
-          cache-from: type=gha
-          cache-to: type=gha,mode=max
-
       - name: Extract backend metadata
         id: backend-meta
         uses: docker/metadata-action@v5
@@ -268,7 +249,7 @@ jobs:
             type=ref,event=pr,prefix=pr-
             type=sha,prefix=pr-${{ github.event.pull_request.number }}-
 
-      - name: Build and push backend image
+      - name: Build and push backend image (includes frontend)
         uses: docker/build-push-action@v5
         with:
           context: .
@@ -278,20 +259,31 @@ jobs:
           labels: ${{ steps.backend-meta.outputs.labels }}
           cache-from: type=gha
           cache-to: type=gha,mode=max
+          build-args: |
+            VITE_API_URL=
 
-      - name: Update PR comment with Docker images
+      - name: Update PR comment with Docker image
         uses: marocchino/sticky-pull-request-comment@v2
         with:
           header: test-results
           append: true
           message: |
 
-            ### 🐳 Docker Images
-            - Frontend: `ghcr.io/${{ github.repository_owner }}/wishlist-frontend:pr-${{ github.event.pull_request.number }}`
-            - Backend: `ghcr.io/${{ github.repository_owner }}/wishlist-backend:pr-${{ github.event.pull_request.number }}`
+            ### 🐳 Docker Image
+            - **Unified Image** (backend + frontend): `ghcr.io/${{ github.repository_owner }}/wishlist-backend:pr-${{ github.event.pull_request.number }}`
 
-            **Pull images:**
+            **Pull image:**
             ```bash
-            docker pull ghcr.io/${{ github.repository_owner }}/wishlist-frontend:pr-${{ github.event.pull_request.number }}
             docker pull ghcr.io/${{ github.repository_owner }}/wishlist-backend:pr-${{ github.event.pull_request.number }}
             ```
+
+            **Run locally:**
+            ```bash
+            docker run -p 3002:3002 \
+              -e DATABASE_URL="postgresql://user:pass@host:5432/db" \
+              -e SESSION_SECRET="your-secret" \
+              -e NODE_ENV="production" \
+              ghcr.io/${{ github.repository_owner }}/wishlist-backend:pr-${{ github.event.pull_request.number }}
+            ```
+
+            Frontend will be served at http://localhost:3002
