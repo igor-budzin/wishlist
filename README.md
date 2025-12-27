@@ -153,8 +153,6 @@ The Dockerfile uses a multi-stage build:
 3. **Stage 3:** Build backend (TypeScript compilation)
 4. **Stage 4:** Production image (optimized, production dependencies only)
 
-**Note:** GitHub Actions no longer builds Docker images. Images are built directly on Railway during deployment.
-
 ## Production Deployment
 
 ### Railway (Recommended - Single Service)
