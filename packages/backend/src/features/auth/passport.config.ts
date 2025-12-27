@@ -5,30 +5,6 @@ import { Strategy as GitHubStrategy } from 'passport-github2';
 import type { IAuthService, UserResponse } from './auth.service.js';
 import type { ILogger } from '../../lib/logger.js';
 
-/**
- * Get the callback URL for OAuth providers
- * In production, uses BACKEND_URL to construct absolute URLs
- * In development, uses relative URLs (handled by passport with local server)
- */
-function getCallbackUrl(path: string, envVar?: string): string {
-  // If specific callback URL is provided via env var, use it
-  if (envVar) {
-    return envVar;
-  }
-
-  // In production, construct absolute URL using BACKEND_URL
-  const backendUrl = process.env.BACKEND_URL;
-  if (backendUrl) {
-    // Remove any trailing slash from BACKEND_URL and any leading slash from path
-    const cleanBackendUrl = backendUrl.replace(/\/+$/, '');
-    const cleanPath = path.replace(/^\/+/, '');
-    return `${cleanBackendUrl}/${cleanPath}`;
-  }
-
-  // In development, use relative URL
-  return path;
-}
-
 export function configurePassport(authService: IAuthService, logger: ILogger) {
   // Serialize user to session
   passport.serializeUser((user: Express.User, done) => {
@@ -59,7 +35,7 @@ export function configurePassport(authService: IAuthService, logger: ILogger) {
         {
           clientID: process.env.GOOGLE_CLIENT_ID,
           clientSecret: process.env.GOOGLE_CLIENT_SECRET,
-          callbackURL: getCallbackUrl('api/auth/google/callback', process.env.GOOGLE_CALLBACK_URL),
+          callbackURL: process.env.GOOGLE_CALLBACK_URL || '/api/auth/google/callback',
         },
         async (_accessToken, _refreshToken, profile, done) => {
           try {
@@ -93,10 +69,7 @@ export function configurePassport(authService: IAuthService, logger: ILogger) {
         {
           clientID: process.env.FACEBOOK_APP_ID,
           clientSecret: process.env.FACEBOOK_APP_SECRET,
-          callbackURL: getCallbackUrl(
-            'api/auth/facebook/callback',
-            process.env.FACEBOOK_CALLBACK_URL
-          ),
+          callbackURL: process.env.FACEBOOK_CALLBACK_URL || '/api/auth/facebook/callback',
           profileFields: ['id', 'displayName', 'emails', 'photos'],
         },
         async (_accessToken, _refreshToken, profile, done) => {
@@ -131,7 +104,7 @@ export function configurePassport(authService: IAuthService, logger: ILogger) {
         {
           clientID: process.env.GITHUB_CLIENT_ID,
           clientSecret: process.env.GITHUB_CLIENT_SECRET,
-          callbackURL: getCallbackUrl('api/auth/github/callback', process.env.GITHUB_CALLBACK_URL),
+          callbackURL: process.env.GITHUB_CALLBACK_URL || '/api/auth/github/callback',
           scope: ['user:email'],
         },
         async (

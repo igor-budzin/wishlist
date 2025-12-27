@@ -17,33 +17,7 @@ COPY tsconfig.json ./
 COPY packages/shared ./packages/shared
 RUN npm run build:shared
 
-# Stage 2: Build frontend
-FROM node:20-alpine AS frontend-builder
-
-WORKDIR /app
-
-# Copy package files
-COPY package.json package-lock.json tsconfig.json ./
-COPY packages/shared/package.json ./packages/shared/
-COPY packages/frontend/package.json ./packages/frontend/
-
-# Install dependencies
-RUN npm ci
-
-# Copy built shared package (for imports and TypeScript references)
-COPY --from=shared-builder /app/packages/shared/dist ./packages/shared/dist
-COPY --from=shared-builder /app/packages/shared/package.json ./packages/shared/package.json
-COPY --from=shared-builder /app/packages/shared/tsconfig.json ./packages/shared/tsconfig.json
-
-# Copy frontend source
-COPY packages/frontend ./packages/frontend
-
-# Build frontend with VITE_API_URL (empty for same-origin)
-ARG VITE_API_URL=""
-ENV VITE_API_URL=$VITE_API_URL
-RUN npm run build:frontend
-
-# Stage 3: Build backend
+# Stage 2: Build backend
 FROM node:20-alpine AS backend-builder
 
 WORKDIR /app
@@ -69,7 +43,7 @@ RUN npx prisma generate --schema=./packages/backend/prisma/schema.prisma
 # Build backend TypeScript
 RUN npm run build:backend
 
-# Stage 4: Production
+# Stage 3: Production
 FROM node:20-alpine
 
 WORKDIR /app
@@ -100,9 +74,6 @@ COPY --from=backend-builder /app/packages/backend/prisma ./packages/backend/pris
 # Copy generated Prisma client
 COPY --from=backend-builder /app/node_modules/.prisma ./node_modules/.prisma
 COPY --from=backend-builder /app/node_modules/@prisma ./node_modules/@prisma
-
-# Copy built frontend files
-COPY --from=frontend-builder /app/packages/frontend/dist ./packages/frontend/dist
 
 # Remove unnecessary Prisma query engine binaries (keep only linux-musl-openssl for Alpine)
 RUN find /app/node_modules/.prisma -name 'libquery_engine-*' ! -name '*linux-musl-openssl*' -delete && \
