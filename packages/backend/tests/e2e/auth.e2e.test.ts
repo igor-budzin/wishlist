@@ -220,6 +220,9 @@ describe('Auth E2E Tests', () => {
 
       expect(response1.status).toBe(200);
 
+      // Wait 1+ second to ensure different iat timestamp (JWT has second-level precision)
+      await wait(1100);
+
       // Act - Refresh again with same refresh token
       const response2 = await request(app)
         .post('/api/auth/refresh')
