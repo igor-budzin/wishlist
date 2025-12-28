@@ -63,10 +63,13 @@ describe('Auth E2E Tests', () => {
 
     it('should validate access token attaches correct user to request', async () => {
       // Arrange
-      const user = await createTestUser({
-        name: 'John Doe',
-        email: 'john@test.e2e.local',
-      }, testContext);
+      const user = await createTestUser(
+        {
+          name: 'John Doe',
+          email: 'john@test.e2e.local',
+        },
+        testContext
+      );
       const accessToken = jwtService.generateAccessToken(user.id, user.email, user.provider);
 
       // Act
@@ -384,11 +387,14 @@ describe('Auth E2E Tests', () => {
 
     it('should find existing user on subsequent Google OAuth login', async () => {
       // Arrange - Create user first
-      const existingUser = await createTestUser({
-        email: 'existing@gmail.com',
-        provider: 'google',
-        providerId: 'google-existing-123',
-      }, testContext);
+      const existingUser = await createTestUser(
+        {
+          email: 'existing@gmail.com',
+          provider: 'google',
+          providerId: 'google-existing-123',
+        },
+        testContext
+      );
 
       const mockProfile = createMockGoogleProfile({
         id: 'google-existing-123',
@@ -453,11 +459,14 @@ describe('Auth E2E Tests', () => {
 
     it('should handle provider mismatch error', async () => {
       // Arrange - Create user with Google
-      await createTestUser({
-        email: 'conflict@example.com',
-        provider: 'google',
-        providerId: 'google-123',
-      }, testContext);
+      await createTestUser(
+        {
+          email: 'conflict@example.com',
+          provider: 'google',
+          providerId: 'google-123',
+        },
+        testContext
+      );
 
       // Try to login with Facebook using same email
       const mockProfile = createMockFacebookProfile({
