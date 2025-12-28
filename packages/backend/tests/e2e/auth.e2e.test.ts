@@ -191,241 +191,241 @@ describe('Auth E2E Tests', () => {
       }
     });
 
-      // it('should reject refresh with revoked refresh token', async () => {
-      //   try {
-      //     // Arrange
-      //     const user = await createTestUser({}, testContext);
-      //     const tokens = await createTestTokenPair(user.id);
+    // it('should reject refresh with revoked refresh token', async () => {
+    //   try {
+    //     // Arrange
+    //     const user = await createTestUser({}, testContext);
+    //     const tokens = await createTestTokenPair(user.id);
 
-      //     // Revoke the token via logout
-      //     await request(app).post('/api/auth/logout').send({ refreshToken: tokens.refreshToken });
+    //     // Revoke the token via logout
+    //     await request(app).post('/api/auth/logout').send({ refreshToken: tokens.refreshToken });
 
-      //     // Act - Try to refresh with revoked token
-      //     const response = await request(app)
-      //       .post('/api/auth/refresh')
-      //       .send({ refreshToken: tokens.refreshToken });
+    //     // Act - Try to refresh with revoked token
+    //     const response = await request(app)
+    //       .post('/api/auth/refresh')
+    //       .send({ refreshToken: tokens.refreshToken });
 
-      //     // Assert
-      //     expect(response.status).toBe(401);
-      //     expect(response.body.success).toBe(false);
-      //     expect(response.body.error).toBe('Refresh token has been revoked');
-      //   } finally {
-      //     // Explicit cleanup
-      //     await testContext.cleanup();
-      //   }
-      // });
+    //     // Assert
+    //     expect(response.status).toBe(401);
+    //     expect(response.body.success).toBe(false);
+    //     expect(response.body.error).toBe('Refresh token has been revoked');
+    //   } finally {
+    //     // Explicit cleanup
+    //     await testContext.cleanup();
+    //   }
+    // });
 
-      // it('should reject refresh when user no longer exists', async () => {
-      //   try {
-      //     // Arrange
-      //     const user = await createTestUser({}, testContext);
-      //     const tokens = await createTestTokenPair(user.id);
+    // it('should reject refresh when user no longer exists', async () => {
+    //   try {
+    //     // Arrange
+    //     const user = await createTestUser({}, testContext);
+    //     const tokens = await createTestTokenPair(user.id);
 
-      //     // Delete the user (cascade delete also removes refresh tokens)
-      //     await prisma.user.delete({ where: { id: user.id } });
+    //     // Delete the user (cascade delete also removes refresh tokens)
+    //     await prisma.user.delete({ where: { id: user.id } });
 
-      //     // Act
-      //     const response = await request(app)
-      //       .post('/api/auth/refresh')
-      //       .send({ refreshToken: tokens.refreshToken });
+    //     // Act
+    //     const response = await request(app)
+    //       .post('/api/auth/refresh')
+    //       .send({ refreshToken: tokens.refreshToken });
 
-      //     // Assert - Returns 401 because cascade delete removed the token
-      //     expect(response.status).toBe(401);
-      //     expect(response.body.success).toBe(false);
-      //     expect(response.body.error).toBe('Refresh token has been revoked');
-      //   } finally {
-      //     // Explicit cleanup (user already deleted, but cleanup handles this gracefully)
-      //     await testContext.cleanup();
-      //   }
-      // });
+    //     // Assert - Returns 401 because cascade delete removed the token
+    //     expect(response.status).toBe(401);
+    //     expect(response.body.success).toBe(false);
+    //     expect(response.body.error).toBe('Refresh token has been revoked');
+    //   } finally {
+    //     // Explicit cleanup (user already deleted, but cleanup handles this gracefully)
+    //     await testContext.cleanup();
+    //   }
+    // });
 
-      // it('should keep refresh token valid after access token refresh', async () => {
-      //   try {
-      //     // Arrange
-      //     const user = await createTestUser({}, testContext);
-      //     const tokens = await createTestTokenPair(user.id);
+    // it('should keep refresh token valid after access token refresh', async () => {
+    //   try {
+    //     // Arrange
+    //     const user = await createTestUser({}, testContext);
+    //     const tokens = await createTestTokenPair(user.id);
 
-      //     // Act - Refresh once
-      //     const response1 = await request(app)
-      //       .post('/api/auth/refresh')
-      //       .send({ refreshToken: tokens.refreshToken });
+    //     // Act - Refresh once
+    //     const response1 = await request(app)
+    //       .post('/api/auth/refresh')
+    //       .send({ refreshToken: tokens.refreshToken });
 
-      //     // Assert - First refresh succeeds
-      //     expect(response1.status).toBe(200);
-      //     expect(response1.body.success).toBe(true);
-      //     expect(response1.body.data.accessToken).toBeDefined();
+    //     // Assert - First refresh succeeds
+    //     expect(response1.status).toBe(200);
+    //     expect(response1.body.success).toBe(true);
+    //     expect(response1.body.data.accessToken).toBeDefined();
 
-      //     // Act - Refresh again with same refresh token
-      //     const response2 = await request(app)
-      //       .post('/api/auth/refresh')
-      //       .send({ refreshToken: tokens.refreshToken });
+    //     // Act - Refresh again with same refresh token
+    //     const response2 = await request(app)
+    //       .post('/api/auth/refresh')
+    //       .send({ refreshToken: tokens.refreshToken });
 
-      //     // Assert - Second refresh also succeeds
-      //     expect(response2.status).toBe(200);
-      //     expect(response2.body.success).toBe(true);
-      //     expect(response2.body.data.accessToken).toBeDefined();
-      //   } finally {
-      //     // Explicit cleanup
-      //     await testContext.cleanup();
-      //   }
-      // });
+    //     // Assert - Second refresh also succeeds
+    //     expect(response2.status).toBe(200);
+    //     expect(response2.body.success).toBe(true);
+    //     expect(response2.body.data.accessToken).toBeDefined();
+    //   } finally {
+    //     // Explicit cleanup
+    //     await testContext.cleanup();
+    //   }
+    // });
 
-      it('should generate unique access tokens on each refresh', async () => {
-        try {
-          // Arrange
-          const user = await createTestUser({}, testContext);
-          const tokens = await createTestTokenPair(user.id);
+    it('should generate unique access tokens on each refresh', async () => {
+      try {
+        // Arrange
+        const user = await createTestUser({}, testContext);
+        const tokens = await createTestTokenPair(user.id);
 
-          // Verify token exists before first refresh
-          const tokenCheck1 = await prisma.refreshToken.findUnique({
-            where: { tokenId: tokens.tokenId },
-          });
-          expect(tokenCheck1).toBeTruthy();
-          expect(tokenCheck1!.revoked).toBe(false);
+        // Verify token exists before first refresh
+        const tokenCheck1 = await prisma.refreshToken.findUnique({
+          where: { tokenId: tokens.tokenId },
+        });
+        expect(tokenCheck1).toBeTruthy();
+        expect(tokenCheck1!.revoked).toBe(false);
 
-          // Act - First refresh
-          const response1 = await request(app)
-            .post('/api/auth/refresh')
-            .send({ refreshToken: tokens.refreshToken });
-          expect(response1.status).toBe(200);
+        // Act - First refresh
+        const response1 = await request(app)
+          .post('/api/auth/refresh')
+          .send({ refreshToken: tokens.refreshToken });
+        expect(response1.status).toBe(200);
 
-          // Verify token still exists after first refresh
-          const tokenCheck2 = await prisma.refreshToken.findUnique({
-            where: { tokenId: tokens.tokenId },
-          });
-          expect(tokenCheck2).toBeTruthy();
-          expect(tokenCheck2!.revoked).toBe(false);
+        // Verify token still exists after first refresh
+        const tokenCheck2 = await prisma.refreshToken.findUnique({
+          where: { tokenId: tokens.tokenId },
+        });
+        expect(tokenCheck2).toBeTruthy();
+        expect(tokenCheck2!.revoked).toBe(false);
 
-          // Wait 1+ second to ensure different iat timestamp (JWT has second-level precision)
-          await wait(1100);
+        // Wait 1+ second to ensure different iat timestamp (JWT has second-level precision)
+        await wait(1100);
 
-          // Verify token still exists before second refresh
-          const tokenCheck3 = await prisma.refreshToken.findUnique({
-            where: { tokenId: tokens.tokenId },
-          });
-          expect(tokenCheck3).toBeTruthy();
-          expect(tokenCheck3!.revoked).toBe(false);
+        // Verify token still exists before second refresh
+        const tokenCheck3 = await prisma.refreshToken.findUnique({
+          where: { tokenId: tokens.tokenId },
+        });
+        expect(tokenCheck3).toBeTruthy();
+        expect(tokenCheck3!.revoked).toBe(false);
 
-          // Act - Second refresh
-          const response2 = await request(app)
-            .post('/api/auth/refresh')
-            .send({ refreshToken: tokens.refreshToken });
-          expect(response2.status).toBe(200);
+        // Act - Second refresh
+        const response2 = await request(app)
+          .post('/api/auth/refresh')
+          .send({ refreshToken: tokens.refreshToken });
+        expect(response2.status).toBe(200);
 
-          // Assert - Tokens should be different
-          const accessToken1 = response1.body.data.accessToken;
-          const accessToken2 = response2.body.data.accessToken;
-          expect(accessToken1).toBeDefined();
-          expect(accessToken2).toBeDefined();
-          expect(accessToken1).not.toBe(accessToken2);
-        } finally {
-          // Explicit cleanup
-          await testContext.cleanup();
-        }
-      });
+        // Assert - Tokens should be different
+        const accessToken1 = response1.body.data.accessToken;
+        const accessToken2 = response2.body.data.accessToken;
+        expect(accessToken1).toBeDefined();
+        expect(accessToken2).toBeDefined();
+        expect(accessToken1).not.toBe(accessToken2);
+      } finally {
+        // Explicit cleanup
+        await testContext.cleanup();
+      }
+    });
 
-      // it('should verify different users get different access tokens', async () => {
-      //   try {
-      //     // Arrange - Create two different users
-      //     const user1 = await createTestUser({}, testContext);
-      //     const tokens1 = await createTestTokenPair(user1.id);
+    // it('should verify different users get different access tokens', async () => {
+    //   try {
+    //     // Arrange - Create two different users
+    //     const user1 = await createTestUser({}, testContext);
+    //     const tokens1 = await createTestTokenPair(user1.id);
 
-      //     const user2 = await createTestUser({}, testContext);
-      //     const tokens2 = await createTestTokenPair(user2.id);
+    //     const user2 = await createTestUser({}, testContext);
+    //     const tokens2 = await createTestTokenPair(user2.id);
 
-      //     // Act - Refresh tokens for both users
-      //     const response1 = await request(app)
-      //       .post('/api/auth/refresh')
-      //       .send({ refreshToken: tokens1.refreshToken });
+    //     // Act - Refresh tokens for both users
+    //     const response1 = await request(app)
+    //       .post('/api/auth/refresh')
+    //       .send({ refreshToken: tokens1.refreshToken });
 
-      //     const response2 = await request(app)
-      //       .post('/api/auth/refresh')
-      //       .send({ refreshToken: tokens2.refreshToken });
+    //     const response2 = await request(app)
+    //       .post('/api/auth/refresh')
+    //       .send({ refreshToken: tokens2.refreshToken });
 
-      //     // Assert - Both refreshes succeed
-      //     expect(response1.status).toBe(200);
-      //     expect(response2.status).toBe(200);
+    //     // Assert - Both refreshes succeed
+    //     expect(response1.status).toBe(200);
+    //     expect(response2.status).toBe(200);
 
-      //     const accessToken1 = response1.body.data.accessToken;
-      //     const accessToken2 = response2.body.data.accessToken;
+    //     const accessToken1 = response1.body.data.accessToken;
+    //     const accessToken2 = response2.body.data.accessToken;
 
-      //     // Verify tokens work for correct users
-      //     const meResponse1 = await makeAuthenticatedRequest(app, accessToken1).get('/api/auth/me');
-      //     expect(meResponse1.status).toBe(200);
-      //     expect(meResponse1.body.data.id).toBe(user1.id);
+    //     // Verify tokens work for correct users
+    //     const meResponse1 = await makeAuthenticatedRequest(app, accessToken1).get('/api/auth/me');
+    //     expect(meResponse1.status).toBe(200);
+    //     expect(meResponse1.body.data.id).toBe(user1.id);
 
-      //     const meResponse2 = await makeAuthenticatedRequest(app, accessToken2).get('/api/auth/me');
-      //     expect(meResponse2.status).toBe(200);
-      //     expect(meResponse2.body.data.id).toBe(user2.id);
+    //     const meResponse2 = await makeAuthenticatedRequest(app, accessToken2).get('/api/auth/me');
+    //     expect(meResponse2.status).toBe(200);
+    //     expect(meResponse2.body.data.id).toBe(user2.id);
 
-      //     // Verify tokens are different
-      //     expect(accessToken1).not.toBe(accessToken2);
+    //     // Verify tokens are different
+    //     expect(accessToken1).not.toBe(accessToken2);
 
-      //     // Verify the users are different
-      //     expect(user1.id).not.toBe(user2.id);
-      //   } finally {
-      //     // Explicit cleanup (cleans both users)
-      //     await testContext.cleanup();
-      //   }
-      // });
+    //     // Verify the users are different
+    //     expect(user1.id).not.toBe(user2.id);
+    //   } finally {
+    //     // Explicit cleanup (cleans both users)
+    //     await testContext.cleanup();
+    //   }
+    // });
 
-      // it('should reject refresh with expired refresh token (DB level)', async () => {
-      //   try {
-      //     // Arrange
-      //     const user = await createTestUser({}, testContext);
-      //     const tokens = await createTestTokenPair(user.id);
+    // it('should reject refresh with expired refresh token (DB level)', async () => {
+    //   try {
+    //     // Arrange
+    //     const user = await createTestUser({}, testContext);
+    //     const tokens = await createTestTokenPair(user.id);
 
-      //     // Manually expire the token in database
-      //     await prisma.refreshToken.update({
-      //       where: { tokenId: tokens.tokenId },
-      //       data: { expiresAt: new Date(Date.now() - 1000) }, // 1 second in the past
-      //     });
+    //     // Manually expire the token in database
+    //     await prisma.refreshToken.update({
+    //       where: { tokenId: tokens.tokenId },
+    //       data: { expiresAt: new Date(Date.now() - 1000) }, // 1 second in the past
+    //     });
 
-      //     // Act
-      //     const response = await request(app)
-      //       .post('/api/auth/refresh')
-      //       .send({ refreshToken: tokens.refreshToken });
+    //     // Act
+    //     const response = await request(app)
+    //       .post('/api/auth/refresh')
+    //       .send({ refreshToken: tokens.refreshToken });
 
-      //     // Assert - Token is expired at DB level
-      //     expect(response.status).toBe(401);
-      //     expect(response.body.success).toBe(false);
-      //     expect(response.body.error).toBe('Refresh token has been revoked');
-      //   } finally {
-      //     // Explicit cleanup
-      //     await testContext.cleanup();
-      //   }
-      // });
+    //     // Assert - Token is expired at DB level
+    //     expect(response.status).toBe(401);
+    //     expect(response.body.success).toBe(false);
+    //     expect(response.body.error).toBe('Refresh token has been revoked');
+    //   } finally {
+    //     // Explicit cleanup
+    //     await testContext.cleanup();
+    //   }
+    // });
 
-      // it('should refresh successfully even when access token has expired', async () => {
-      //   try {
-      //     // Arrange
-      //     const user = await createTestUser({}, testContext);
-      //     const tokens = await createTestTokenPair(user.id);
+    // it('should refresh successfully even when access token has expired', async () => {
+    //   try {
+    //     // Arrange
+    //     const user = await createTestUser({}, testContext);
+    //     const tokens = await createTestTokenPair(user.id);
 
-      //     // Note: We can't easily force the access token to expire without changing env vars
-      //     // This test verifies that refresh works regardless of access token state
-      //     // The refresh token is still valid, so refresh should work
+    //     // Note: We can't easily force the access token to expire without changing env vars
+    //     // This test verifies that refresh works regardless of access token state
+    //     // The refresh token is still valid, so refresh should work
 
-      //     // Act - Refresh using the valid refresh token
-      //     const response = await request(app)
-      //       .post('/api/auth/refresh')
-      //       .send({ refreshToken: tokens.refreshToken });
+    //     // Act - Refresh using the valid refresh token
+    //     const response = await request(app)
+    //       .post('/api/auth/refresh')
+    //       .send({ refreshToken: tokens.refreshToken });
 
-      //     // Assert - Refresh succeeds
-      //     expect(response.status).toBe(200);
-      //     expect(response.body.success).toBe(true);
-      //     expect(response.body.data.accessToken).toBeDefined();
+    //     // Assert - Refresh succeeds
+    //     expect(response.status).toBe(200);
+    //     expect(response.body.success).toBe(true);
+    //     expect(response.body.data.accessToken).toBeDefined();
 
-      //     // Verify new access token works
-      //     const newAccessToken = response.body.data.accessToken;
-      //     const meResponse = await makeAuthenticatedRequest(app, newAccessToken).get('/api/auth/me');
-      //     expect(meResponse.status).toBe(200);
-      //     expect(meResponse.body.data.id).toBe(user.id);
-      //   } finally {
-      //     // Explicit cleanup
-      //     await testContext.cleanup();
-      //   }
-      // });
+    //     // Verify new access token works
+    //     const newAccessToken = response.body.data.accessToken;
+    //     const meResponse = await makeAuthenticatedRequest(app, newAccessToken).get('/api/auth/me');
+    //     expect(meResponse.status).toBe(200);
+    //     expect(meResponse.body.data.id).toBe(user.id);
+    //   } finally {
+    //     // Explicit cleanup
+    //     await testContext.cleanup();
+    //   }
+    // });
   });
 
   describe.sequential('Logout & Token Revocation', () => {
@@ -488,9 +488,7 @@ describe('Auth E2E Tests', () => {
       await request(app).post('/api/auth/logout').send({ refreshToken: tokens.refreshToken });
 
       // Act - Try to use access token (should still work)
-      const response = await makeAuthenticatedRequest(app, tokens.accessToken).get(
-        '/api/auth/me'
-      );
+      const response = await makeAuthenticatedRequest(app, tokens.accessToken).get('/api/auth/me');
 
       // Assert - Access token still valid (logout doesn't invalidate it immediately)
       expect(response.status).toBe(200);
@@ -523,168 +521,168 @@ describe('Auth E2E Tests', () => {
     });
 
     it('should create new user on first Google OAuth login', async () => {
-        // Arrange
-        const mockProfile = createMockGoogleProfile({
-          id: 'google-new-user-123',
-          emails: [{ value: 'newuser@gmail.com' }],
-        });
-        mockStrategies.googleMock.setMockProfile(mockProfile);
-
-        // Act
-        const response = await request(app).get('/api/auth/google/callback').expect(302);
-
-        // Assert - Should redirect with tokens
-        expect(response.headers.location).toMatch(/access_token=/);
-        expect(response.headers.location).toMatch(/refresh_token=/);
-
-        // Verify user created in database
-        const userInDb = await prisma.user.findUnique({
-          where: { email: 'newuser@gmail.com' },
-        });
-        expect(userInDb).not.toBeNull();
-        expect(userInDb!.provider).toBe('google');
-        expect(userInDb!.providerId).toBe('google-new-user-123');
+      // Arrange
+      const mockProfile = createMockGoogleProfile({
+        id: 'google-new-user-123',
+        emails: [{ value: 'newuser@gmail.com' }],
       });
+      mockStrategies.googleMock.setMockProfile(mockProfile);
 
-      it('should find existing user on subsequent Google OAuth login', async () => {
-        // Arrange - Create user first
-        const existingUser = await createTestUser(
-          {
-            email: 'existing@gmail.com',
-            provider: 'google',
-            providerId: 'google-existing-123',
-          },
-          testContext
-        );
+      // Act
+      const response = await request(app).get('/api/auth/google/callback').expect(302);
 
-        const mockProfile = createMockGoogleProfile({
-          id: 'google-existing-123',
-          emails: [{ value: 'existing@gmail.com' }],
-        });
-        mockStrategies.googleMock.setMockProfile(mockProfile);
+      // Assert - Should redirect with tokens
+      expect(response.headers.location).toMatch(/access_token=/);
+      expect(response.headers.location).toMatch(/refresh_token=/);
 
-        // Act
-        const response = await request(app).get('/api/auth/google/callback').expect(302);
-
-        // Assert - Should redirect with tokens
-        expect(response.headers.location).toMatch(/access_token=/);
-
-        // Verify no duplicate user created
-        const usersInDb = await prisma.user.findMany({
-          where: { email: 'existing@gmail.com' },
-        });
-        expect(usersInDb.length).toBe(1);
-        expect(usersInDb[0].id).toBe(existingUser.id);
+      // Verify user created in database
+      const userInDb = await prisma.user.findUnique({
+        where: { email: 'newuser@gmail.com' },
       });
+      expect(userInDb).not.toBeNull();
+      expect(userInDb!.provider).toBe('google');
+      expect(userInDb!.providerId).toBe('google-new-user-123');
+    });
 
-      it('should generate token pair and store refresh token on OAuth success', async () => {
-        // Arrange
-        const mockProfile = createMockGoogleProfile({
-          id: 'google-token-test',
-          emails: [{ value: 'tokentest@gmail.com' }],
-        });
-        mockStrategies.googleMock.setMockProfile(mockProfile);
+    it('should find existing user on subsequent Google OAuth login', async () => {
+      // Arrange - Create user first
+      const existingUser = await createTestUser(
+        {
+          email: 'existing@gmail.com',
+          provider: 'google',
+          providerId: 'google-existing-123',
+        },
+        testContext
+      );
 
-        // Act
-        const response = await request(app).get('/api/auth/google/callback').expect(302);
-
-        // Assert - Redirect contains tokens
-        const redirectUrl = response.headers.location;
-        expect(redirectUrl).toMatch(/access_token=[^&]+/);
-        expect(redirectUrl).toMatch(/refresh_token=[^&]+/);
-
-        // Verify refresh token stored in database
-        const user = await prisma.user.findUnique({
-          where: { email: 'tokentest@gmail.com' },
-          include: { refreshTokens: true },
-        });
-        expect(user).not.toBeNull();
-        expect(user!.refreshTokens.length).toBeGreaterThan(0);
-        expect(user!.refreshTokens[0].revoked).toBe(false);
+      const mockProfile = createMockGoogleProfile({
+        id: 'google-existing-123',
+        emails: [{ value: 'existing@gmail.com' }],
       });
+      mockStrategies.googleMock.setMockProfile(mockProfile);
 
-      it('should redirect to frontend with tokens in URL fragment', async () => {
-        // Arrange
-        const mockProfile = createMockGoogleProfile();
-        mockStrategies.googleMock.setMockProfile(mockProfile);
+      // Act
+      const response = await request(app).get('/api/auth/google/callback').expect(302);
 
-        // Act
-        const response = await request(app).get('/api/auth/google/callback').expect(302);
+      // Assert - Should redirect with tokens
+      expect(response.headers.location).toMatch(/access_token=/);
 
-        // Assert
-        const frontendUrl = process.env.FRONTEND_URL || 'http://localhost:3000';
-        expect(response.headers.location).toMatch(
-          new RegExp(`^${frontendUrl.replace(/[.*+?^${}()|[\]\\]/g, '\\$&')}/auth/callback#`)
-        );
+      // Verify no duplicate user created
+      const usersInDb = await prisma.user.findMany({
+        where: { email: 'existing@gmail.com' },
       });
+      expect(usersInDb.length).toBe(1);
+      expect(usersInDb[0].id).toBe(existingUser.id);
+    });
 
-      it('should handle provider mismatch error', async () => {
-        // Arrange - Create user with Google
-        await createTestUser(
-          {
-            email: 'conflict@example.com',
-            provider: 'google',
-            providerId: 'google-123',
-          },
-          testContext
-        );
-
-        // Try to login with Facebook using same email
-        const mockProfile = createMockFacebookProfile({
-          id: 'facebook-456',
-          emails: [{ value: 'conflict@example.com' }],
-        });
-        mockStrategies.facebookMock.setMockProfile(mockProfile);
-
-        // Act
-        const response = await request(app).get('/api/auth/facebook/callback').expect(302);
-
-        // Assert - Should redirect to provider mismatch page
-        expect(response.headers.location).toMatch(/provider-mismatch/);
-        expect(response.headers.location).toMatch(/registeredWith=google/);
-        expect(response.headers.location).toMatch(/attemptedWith=facebook/);
+    it('should generate token pair and store refresh token on OAuth success', async () => {
+      // Arrange
+      const mockProfile = createMockGoogleProfile({
+        id: 'google-token-test',
+        emails: [{ value: 'tokentest@gmail.com' }],
       });
+      mockStrategies.googleMock.setMockProfile(mockProfile);
 
-      it('should support Facebook OAuth flow', async () => {
-        // Arrange
-        const mockProfile = createMockFacebookProfile({
-          id: 'facebook-test-123',
-          emails: [{ value: 'fbuser@facebook.com' }],
-        });
-        mockStrategies.facebookMock.setMockProfile(mockProfile);
+      // Act
+      const response = await request(app).get('/api/auth/google/callback').expect(302);
 
-        // Act
-        const response = await request(app).get('/api/auth/facebook/callback').expect(302);
+      // Assert - Redirect contains tokens
+      const redirectUrl = response.headers.location;
+      expect(redirectUrl).toMatch(/access_token=[^&]+/);
+      expect(redirectUrl).toMatch(/refresh_token=[^&]+/);
 
-        // Assert
-        expect(response.headers.location).toMatch(/access_token=/);
-
-        const user = await prisma.user.findUnique({
-          where: { email: 'fbuser@facebook.com' },
-        });
-        expect(user!.provider).toBe('facebook');
-        expect(user!.providerId).toBe('facebook-test-123');
+      // Verify refresh token stored in database
+      const user = await prisma.user.findUnique({
+        where: { email: 'tokentest@gmail.com' },
+        include: { refreshTokens: true },
       });
+      expect(user).not.toBeNull();
+      expect(user!.refreshTokens.length).toBeGreaterThan(0);
+      expect(user!.refreshTokens[0].revoked).toBe(false);
+    });
 
-      it('should support GitHub OAuth flow', async () => {
-        // Arrange
-        const mockProfile = createMockGitHubProfile({
-          id: 'github-test-123',
-          emails: [{ value: 'ghuser@github.com' }],
-        });
-        mockStrategies.githubMock.setMockProfile(mockProfile);
+    it('should redirect to frontend with tokens in URL fragment', async () => {
+      // Arrange
+      const mockProfile = createMockGoogleProfile();
+      mockStrategies.googleMock.setMockProfile(mockProfile);
 
-        // Act
-        const response = await request(app).get('/api/auth/github/callback').expect(302);
+      // Act
+      const response = await request(app).get('/api/auth/google/callback').expect(302);
 
-        // Assert
-        expect(response.headers.location).toMatch(/access_token=/);
+      // Assert
+      const frontendUrl = process.env.FRONTEND_URL || 'http://localhost:3000';
+      expect(response.headers.location).toMatch(
+        new RegExp(`^${frontendUrl.replace(/[.*+?^${}()|[\]\\]/g, '\\$&')}/auth/callback#`)
+      );
+    });
 
-        const user = await prisma.user.findUnique({
-          where: { email: 'ghuser@github.com' },
-        });
-        expect(user!.provider).toBe('github');
-        expect(user!.providerId).toBe('github-test-123');
+    it('should handle provider mismatch error', async () => {
+      // Arrange - Create user with Google
+      await createTestUser(
+        {
+          email: 'conflict@example.com',
+          provider: 'google',
+          providerId: 'google-123',
+        },
+        testContext
+      );
+
+      // Try to login with Facebook using same email
+      const mockProfile = createMockFacebookProfile({
+        id: 'facebook-456',
+        emails: [{ value: 'conflict@example.com' }],
       });
+      mockStrategies.facebookMock.setMockProfile(mockProfile);
+
+      // Act
+      const response = await request(app).get('/api/auth/facebook/callback').expect(302);
+
+      // Assert - Should redirect to provider mismatch page
+      expect(response.headers.location).toMatch(/provider-mismatch/);
+      expect(response.headers.location).toMatch(/registeredWith=google/);
+      expect(response.headers.location).toMatch(/attemptedWith=facebook/);
+    });
+
+    it('should support Facebook OAuth flow', async () => {
+      // Arrange
+      const mockProfile = createMockFacebookProfile({
+        id: 'facebook-test-123',
+        emails: [{ value: 'fbuser@facebook.com' }],
+      });
+      mockStrategies.facebookMock.setMockProfile(mockProfile);
+
+      // Act
+      const response = await request(app).get('/api/auth/facebook/callback').expect(302);
+
+      // Assert
+      expect(response.headers.location).toMatch(/access_token=/);
+
+      const user = await prisma.user.findUnique({
+        where: { email: 'fbuser@facebook.com' },
+      });
+      expect(user!.provider).toBe('facebook');
+      expect(user!.providerId).toBe('facebook-test-123');
+    });
+
+    it('should support GitHub OAuth flow', async () => {
+      // Arrange
+      const mockProfile = createMockGitHubProfile({
+        id: 'github-test-123',
+        emails: [{ value: 'ghuser@github.com' }],
+      });
+      mockStrategies.githubMock.setMockProfile(mockProfile);
+
+      // Act
+      const response = await request(app).get('/api/auth/github/callback').expect(302);
+
+      // Assert
+      expect(response.headers.location).toMatch(/access_token=/);
+
+      const user = await prisma.user.findUnique({
+        where: { email: 'ghuser@github.com' },
+      });
+      expect(user!.provider).toBe('github');
+      expect(user!.providerId).toBe('github-test-123');
+    });
   });
 });
