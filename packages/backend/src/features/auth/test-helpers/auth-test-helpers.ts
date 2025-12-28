@@ -100,13 +100,8 @@ export async function deleteTestUser(userId: string): Promise<void> {
  * Prisma cascade will automatically delete associated refresh tokens
  */
 export async function cleanupAllTestData(): Promise<void> {
-  await prisma.user.deleteMany({
-    where: {
-      email: {
-        endsWith: TEST_EMAIL_DOMAIN,
-      },
-    },
-  });
+  await prisma.user.deleteMany();
+  await prisma.refreshToken.deleteMany();
 }
 
 /**
