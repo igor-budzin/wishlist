@@ -121,7 +121,7 @@ export async function createTestTokenPair(userId: string): Promise<TokenPair> {
   const user = await prisma.user.findUnique({
     where: { id: userId },
   });
-
+console.log('user', user);
   if (!user) {
     throw new Error(`User with id ${userId} not found`);
   }
