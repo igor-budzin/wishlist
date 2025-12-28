@@ -19,7 +19,7 @@ import {
   createMockGitHubProfile,
 } from '../../src/features/auth/test-helpers/mock-oauth-strategies.js';
 
-describe('Auth E2E Tests', () => {
+describe.sequential('Auth E2E Tests', () => {
   const jwtService = container.get<IJwtService>(TYPES.JwtService);
 
   beforeAll(async () => {
