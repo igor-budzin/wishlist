@@ -49,6 +49,12 @@ app.get('/health', (_req, res) => {
   res.json({ status: 'ok', timestamp: new Date().toISOString() });
 });
 
+// Test endpoints (only in non-production environments)
+if (process.env.NODE_ENV !== 'production') {
+  const { addTestEndpoints } = await import('./features/auth/test-helpers/test-app-setup.js');
+  addTestEndpoints(app);
+}
+
 // Error handling
 app.use(errorHandler);
 
