@@ -33,7 +33,7 @@ describe('Social OAuth Browser E2E Tests', () => {
 
   beforeAll(async () => {
     browser = await chromium.launch({
-      headless: true,
+      headless: false,
       args: ['--no-sandbox', '--disable-setuid-sandbox'],
     });
   });
