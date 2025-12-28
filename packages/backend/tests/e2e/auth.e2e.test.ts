@@ -280,7 +280,8 @@ describe('Auth E2E Tests', () => {
         const response1 = await request(app)
           .post('/api/auth/refresh')
           .send({ refreshToken: tokens.refreshToken });
-console.log('response1', response1.body.data);
+        console.log('response1 status', response1.status);
+        console.log('response1', response1.body.data);
         expect(response1.status).toBe(200);
 
         // Wait 1+ second to ensure different iat timestamp (JWT has second-level precision)
@@ -290,7 +291,8 @@ console.log('response1', response1.body.data);
         const response2 = await request(app)
           .post('/api/auth/refresh')
           .send({ refreshToken: tokens.refreshToken });
-console.log('response2', response2.body.data);
+        console.log('response2 status', response1.status);
+        console.log('response2', response2.body.data);
         expect(response2.status).toBe(200);
 
         // Assert - Tokens should be different
