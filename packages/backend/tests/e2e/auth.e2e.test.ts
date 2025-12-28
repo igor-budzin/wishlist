@@ -220,8 +220,22 @@ describe('Auth E2E Tests', () => {
 
       expect(response1.status).toBe(200);
 
+      // Verify token is still in database and not revoked
+      const tokenInDb = await prisma.refreshToken.findUnique({
+        where: { tokenId: tokens.tokenId },
+      });
+      expect(tokenInDb).not.toBeNull();
+      expect(tokenInDb!.revoked).toBe(false);
+
       // Wait 1+ second to ensure different iat timestamp (JWT has second-level precision)
       await wait(1100);
+
+      // Verify token is STILL in database and not revoked after wait
+      const tokenStillInDb = await prisma.refreshToken.findUnique({
+        where: { tokenId: tokens.tokenId },
+      });
+      expect(tokenStillInDb).not.toBeNull();
+      expect(tokenStillInDb!.revoked).toBe(false);
 
       // Act - Refresh again with same refresh token
       const response2 = await request(app)
