@@ -38,6 +38,15 @@ cd packages/backend && npm test
 # Run backend smoke tests only
 cd packages/backend && npm run test:smoke
 
+# Run E2E tests (requires frontend and backend servers running)
+cd packages/backend && npm run test:e2e
+
+# Run browser-based E2E tests for authentication (requires servers)
+cd packages/backend && npm run test:e2e:browser
+
+# Run browser-based E2E tests for social OAuth flow (requires servers)
+cd packages/backend && npm run test:e2e:social-auth
+
 # Run tests in watch mode (re-runs on file changes)
 cd packages/backend && npm run test:watch
 
@@ -160,6 +169,10 @@ The smoke tests don't require the dev servers to be running:
 2. **Integration Tests**: Use real database connection
    - `smoke.test.ts` - API endpoints and database connectivity (6 tests)
    - `link-analysis.controller.test.ts` - Link analysis endpoints (2 tests)
+   - `auth.e2e.test.ts` - End-to-end authentication flow testing with JWT tokens
+3. **Browser E2E Tests**: Use Playwright to test real browser interactions (requires servers running)
+   - `auth-browser.e2e.test.ts` - Manual browser verification tests (placeholder)
+   - `social-auth-browser.e2e.test.ts` - Complete social OAuth flow in real browser
 
 ### Frontend (`packages/frontend/vitest.config.ts`)
 
@@ -188,6 +201,65 @@ npm test
 # Or run smoke tests only (faster)
 npm run test:smoke
 ```
+
+## End-to-End (E2E) Testing
+
+### Social OAuth Browser E2E Tests
+
+The `social-auth-browser.e2e.test.ts` file contains comprehensive browser-based E2E tests for the social authentication flow using Playwright. These tests verify the complete OAuth flow in a real browser environment.
+
+**Prerequisites**:
+
+- Frontend server running on `http://localhost:3000`
+- Backend server running on `http://localhost:3002`
+- Test environment (`NODE_ENV=test`) with test login endpoint enabled
+
+**Test Coverage**:
+
+1. **Login Page UI**
+   - Displays all OAuth provider buttons (Google, Facebook, GitHub)
+   - Redirects authenticated users away from login page
+
+2. **OAuth Login Flow**
+   - Completes OAuth login and stores JWT tokens in localStorage
+   - Displays authenticated UI after successful login
+   - Allows authenticated API requests with stored tokens
+   - Handles login errors gracefully
+
+3. **Authenticated State Management**
+   - Persists authentication across page refreshes
+   - Protects routes and redirects to login when not authenticated
+   - Allows navigation between authenticated pages
+
+4. **Logout Flow**
+   - Clears tokens and redirects to login after logout
+   - Prevents access to protected pages after logout
+
+5. **Token Security**
+   - Clears tokens from URL hash after storing them
+   - Does not expose tokens in browser history
+
+6. **Multiple Users**
+   - Handles different users in different browser contexts
+
+**Running the Tests**:
+
+```bash
+# Start the servers first
+npm run dev  # in root directory
+
+# In another terminal, run the E2E tests
+cd packages/backend && npm run test:e2e:social-auth
+```
+
+**Test Implementation Details**:
+
+The tests use a test-only endpoint (`/api/auth/test-login`) that simulates the OAuth callback without requiring actual OAuth provider interaction. This endpoint:
+
+- Creates or finds a test user in the database
+- Generates JWT access and refresh tokens
+- Redirects to the frontend auth callback page with tokens
+- Follows the same flow as real OAuth providers
 
 ## Writing New Tests
 
