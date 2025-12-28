@@ -17,5 +17,8 @@ export default defineConfig({
       ],
     },
     testTimeout: 30000,
+    // Force sequential test file execution to prevent E2E tests
+    // from conflicting with unit tests that may touch the database
+    fileParallelism: false,
   },
 });
