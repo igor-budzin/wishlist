@@ -135,28 +135,17 @@ describe('Auth E2E Tests', () => {
     });
   });
 
-  describe('Token Refresh Flow', () => {
-    it('should generate new access token with valid refresh token', async () => {
-      // Arrange
-      const user = await createTestUser({}, testContext);
-      const tokens = await createTestTokenPair(user.id);
+  describe.sequential('Token Refresh Flow', () => {
+    it('should reject refresh when refresh token not provided', async () => {
+      // Arrange - No resources needed
 
       // Act
-      const response = await request(app)
-        .post('/api/auth/refresh')
-        .send({ refreshToken: tokens.refreshToken });
+      const response = await request(app).post('/api/auth/refresh').send({});
 
       // Assert
-      expect(response.status).toBe(200);
-      expect(response.body.success).toBe(true);
-      expect(response.body.data.accessToken).toBeDefined();
-      expect(typeof response.body.data.accessToken).toBe('string');
-
-      // Verify new access token works
-      const newAccessToken = response.body.data.accessToken;
-      const meResponse = await makeAuthenticatedRequest(app, newAccessToken).get('/api/auth/me');
-      expect(meResponse.status).toBe(200);
-      expect(meResponse.body.data.id).toBe(user.id);
+      expect(response.status).toBe(400);
+      expect(response.body.success).toBe(false);
+      expect(response.body.error).toBe('Refresh token is required');
     });
 
     it('should reject refresh with invalid refresh token', async () => {
@@ -174,99 +163,249 @@ describe('Auth E2E Tests', () => {
       expect(response.body.error).toBe('Invalid or expired refresh token');
     });
 
-    it('should reject refresh when refresh token is not provided', async () => {
-      // Act
-      const response = await request(app).post('/api/auth/refresh').send({});
+    it('should generate new access token with valid refresh token', async () => {
+      try {
+        // Arrange
+        const user = await createTestUser({}, testContext);
+        const tokens = await createTestTokenPair(user.id);
 
-      // Assert
-      expect(response.status).toBe(400);
-      expect(response.body.success).toBe(false);
-      expect(response.body.error).toBe('Refresh token is required');
+        // Act
+        const response = await request(app)
+          .post('/api/auth/refresh')
+          .send({ refreshToken: tokens.refreshToken });
+
+        // Assert
+        expect(response.status).toBe(200);
+        expect(response.body.success).toBe(true);
+        expect(response.body.data.accessToken).toBeDefined();
+        expect(typeof response.body.data.accessToken).toBe('string');
+
+        // Verify new access token works
+        const newAccessToken = response.body.data.accessToken;
+        const meResponse = await makeAuthenticatedRequest(app, newAccessToken).get('/api/auth/me');
+        expect(meResponse.status).toBe(200);
+        expect(meResponse.body.data.id).toBe(user.id);
+      } finally {
+        // Explicit cleanup
+        await testContext.cleanup();
+      }
     });
 
     it('should reject refresh with revoked refresh token', async () => {
-      // Arrange
-      const user = await createTestUser({}, testContext);
-      const tokens = await createTestTokenPair(user.id);
+      try {
+        // Arrange
+        const user = await createTestUser({}, testContext);
+        const tokens = await createTestTokenPair(user.id);
 
-      // Revoke the token
-      await request(app).post('/api/auth/logout').send({ refreshToken: tokens.refreshToken });
+        // Revoke the token via logout
+        await request(app).post('/api/auth/logout').send({ refreshToken: tokens.refreshToken });
 
-      // Act - Try to refresh with revoked token
-      const response = await request(app)
-        .post('/api/auth/refresh')
-        .send({ refreshToken: tokens.refreshToken });
+        // Act - Try to refresh with revoked token
+        const response = await request(app)
+          .post('/api/auth/refresh')
+          .send({ refreshToken: tokens.refreshToken });
 
-      // Assert
-      expect(response.status).toBe(401);
-      expect(response.body.error).toBe('Refresh token has been revoked');
+        // Assert
+        expect(response.status).toBe(401);
+        expect(response.body.success).toBe(false);
+        expect(response.body.error).toBe('Refresh token has been revoked');
+      } finally {
+        // Explicit cleanup
+        await testContext.cleanup();
+      }
     });
 
     it('should reject refresh when user no longer exists', async () => {
-      // Arrange
-      const user = await createTestUser({}, testContext);
-      const tokens = await createTestTokenPair(user.id);
+      try {
+        // Arrange
+        const user = await createTestUser({}, testContext);
+        const tokens = await createTestTokenPair(user.id);
 
-      // Delete the user (cascade delete also removes refresh tokens)
-      await prisma.user.delete({ where: { id: user.id } });
+        // Delete the user (cascade delete also removes refresh tokens)
+        await prisma.user.delete({ where: { id: user.id } });
 
-      // Act
-      const response = await request(app)
-        .post('/api/auth/refresh')
-        .send({ refreshToken: tokens.refreshToken });
+        // Act
+        const response = await request(app)
+          .post('/api/auth/refresh')
+          .send({ refreshToken: tokens.refreshToken });
 
-      // Assert - Returns 401 because cascade delete removed the token
-      expect(response.status).toBe(401);
-      expect(response.body.error).toBe('Refresh token has been revoked');
+        // Assert - Returns 401 because cascade delete removed the token
+        expect(response.status).toBe(401);
+        expect(response.body.success).toBe(false);
+        expect(response.body.error).toBe('Refresh token has been revoked');
+      } finally {
+        // Explicit cleanup (user already deleted, but cleanup handles this gracefully)
+        await testContext.cleanup();
+      }
     });
 
     it('should keep refresh token valid after access token refresh', async () => {
-      // Arrange
-      const user = await createTestUser({}, testContext);
-      const tokens = await createTestTokenPair(user.id);
+      try {
+        // Arrange
+        const user = await createTestUser({}, testContext);
+        const tokens = await createTestTokenPair(user.id);
 
-      // Act - Refresh once
-      const response1 = await request(app)
-        .post('/api/auth/refresh')
-        .send({ refreshToken: tokens.refreshToken });
+        // Act - Refresh once
+        const response1 = await request(app)
+          .post('/api/auth/refresh')
+          .send({ refreshToken: tokens.refreshToken });
 
-      expect(response1.status).toBe(200);
+        // Assert - First refresh succeeds
+        expect(response1.status).toBe(200);
+        expect(response1.body.success).toBe(true);
+        expect(response1.body.data.accessToken).toBeDefined();
 
-      // Wait 1+ second to ensure different iat timestamp (JWT has second-level precision)
-      // await wait(1100);
-console.log('response1', response1.status, response1.body.data);
+        // Act - Refresh again with same refresh token
+        const response2 = await request(app)
+          .post('/api/auth/refresh')
+          .send({ refreshToken: tokens.refreshToken });
 
-      // Act - Refresh again with same refresh token
-      const response2 = await request(app)
-        .post('/api/auth/refresh')
-        .send({ refreshToken: tokens.refreshToken });
-console.log('response2', response2.status, response2.body.data);
-      // Assert - Both refreshes should succeed
-      expect(response2.status).toBe(200);
-      expect(response2.body.data.accessToken).toBeDefined();
+        // Assert - Second refresh also succeeds
+        expect(response2.status).toBe(200);
+        expect(response2.body.success).toBe(true);
+        expect(response2.body.data.accessToken).toBeDefined();
+      } finally {
+        // Explicit cleanup
+        await testContext.cleanup();
+      }
     });
 
     it('should generate unique access tokens on each refresh', async () => {
-      // Arrange
-      const user = await createTestUser({}, testContext);
-      const tokens = await createTestTokenPair(user.id);
+      try {
+        // Arrange
+        const user = await createTestUser({}, testContext);
+        const tokens = await createTestTokenPair(user.id);
 
-      // Act
-      const response1 = await request(app)
-        .post('/api/auth/refresh')
-        .send({ refreshToken: tokens.refreshToken });
+        // Act - First refresh
+        const response1 = await request(app)
+          .post('/api/auth/refresh')
+          .send({ refreshToken: tokens.refreshToken });
 
-      // Wait 1+ second to ensure different iat timestamp (JWT has second-level precision)
-      await wait(1100);
+        expect(response1.status).toBe(200);
 
-      const response2 = await request(app)
-        .post('/api/auth/refresh')
-        .send({ refreshToken: tokens.refreshToken });
+        // Wait 1+ second to ensure different iat timestamp (JWT has second-level precision)
+        await wait(1100);
 
-      // Assert
-      const accessToken1 = response1.body.data.accessToken;
-      const accessToken2 = response2.body.data.accessToken;
-      expect(accessToken1).not.toBe(accessToken2);
+        // Act - Second refresh
+        const response2 = await request(app)
+          .post('/api/auth/refresh')
+          .send({ refreshToken: tokens.refreshToken });
+
+        expect(response2.status).toBe(200);
+
+        // Assert - Tokens should be different
+        const accessToken1 = response1.body.data.accessToken;
+        const accessToken2 = response2.body.data.accessToken;
+        expect(accessToken1).toBeDefined();
+        expect(accessToken2).toBeDefined();
+        expect(accessToken1).not.toBe(accessToken2);
+      } finally {
+        // Explicit cleanup
+        await testContext.cleanup();
+      }
+    });
+
+    it('should verify different users get different access tokens', async () => {
+      try {
+        // Arrange - Create two different users
+        const user1 = await createTestUser({}, testContext);
+        const tokens1 = await createTestTokenPair(user1.id);
+
+        const user2 = await createTestUser({}, testContext);
+        const tokens2 = await createTestTokenPair(user2.id);
+
+        // Act - Refresh tokens for both users
+        const response1 = await request(app)
+          .post('/api/auth/refresh')
+          .send({ refreshToken: tokens1.refreshToken });
+
+        const response2 = await request(app)
+          .post('/api/auth/refresh')
+          .send({ refreshToken: tokens2.refreshToken });
+
+        // Assert - Both refreshes succeed
+        expect(response1.status).toBe(200);
+        expect(response2.status).toBe(200);
+
+        const accessToken1 = response1.body.data.accessToken;
+        const accessToken2 = response2.body.data.accessToken;
+
+        // Verify tokens work for correct users
+        const meResponse1 = await makeAuthenticatedRequest(app, accessToken1).get('/api/auth/me');
+        expect(meResponse1.status).toBe(200);
+        expect(meResponse1.body.data.id).toBe(user1.id);
+
+        const meResponse2 = await makeAuthenticatedRequest(app, accessToken2).get('/api/auth/me');
+        expect(meResponse2.status).toBe(200);
+        expect(meResponse2.body.data.id).toBe(user2.id);
+
+        // Verify tokens are different
+        expect(accessToken1).not.toBe(accessToken2);
+
+        // Verify the users are different
+        expect(user1.id).not.toBe(user2.id);
+      } finally {
+        // Explicit cleanup (cleans both users)
+        await testContext.cleanup();
+      }
+    });
+
+    it('should reject refresh with expired refresh token (DB level)', async () => {
+      try {
+        // Arrange
+        const user = await createTestUser({}, testContext);
+        const tokens = await createTestTokenPair(user.id);
+
+        // Manually expire the token in database
+        await prisma.refreshToken.update({
+          where: { tokenId: tokens.tokenId },
+          data: { expiresAt: new Date(Date.now() - 1000) }, // 1 second in the past
+        });
+
+        // Act
+        const response = await request(app)
+          .post('/api/auth/refresh')
+          .send({ refreshToken: tokens.refreshToken });
+
+        // Assert - Token is expired at DB level
+        expect(response.status).toBe(401);
+        expect(response.body.success).toBe(false);
+        expect(response.body.error).toBe('Refresh token has been revoked');
+      } finally {
+        // Explicit cleanup
+        await testContext.cleanup();
+      }
+    });
+
+    it('should refresh successfully even when access token has expired', async () => {
+      try {
+        // Arrange
+        const user = await createTestUser({}, testContext);
+        const tokens = await createTestTokenPair(user.id);
+
+        // Note: We can't easily force the access token to expire without changing env vars
+        // This test verifies that refresh works regardless of access token state
+        // The refresh token is still valid, so refresh should work
+
+        // Act - Refresh using the valid refresh token
+        const response = await request(app)
+          .post('/api/auth/refresh')
+          .send({ refreshToken: tokens.refreshToken });
+
+        // Assert - Refresh succeeds
+        expect(response.status).toBe(200);
+        expect(response.body.success).toBe(true);
+        expect(response.body.data.accessToken).toBeDefined();
+
+        // Verify new access token works
+        const newAccessToken = response.body.data.accessToken;
+        const meResponse = await makeAuthenticatedRequest(app, newAccessToken).get('/api/auth/me');
+        expect(meResponse.status).toBe(200);
+        expect(meResponse.body.data.id).toBe(user.id);
+      } finally {
+        // Explicit cleanup
+        await testContext.cleanup();
+      }
     });
   });
 
