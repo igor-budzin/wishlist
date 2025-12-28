@@ -2,15 +2,26 @@ import { describe, it, expect, beforeAll, afterAll, afterEach, beforeEach } from
 import request from 'supertest';
 import app from '../../src/app.js';
 import { prisma } from '../../src/lib/prisma.js';
+import { container } from '../../src/container.js';
+import { TYPES } from '../../src/types.js';
+import type { IJwtService } from '../../src/features/auth/jwt.service.js';
 import {
   createTestUser,
   createTestTokenPair,
   cleanupAllTestData,
+  makeAuthenticatedRequest,
   wait,
   TestContext,
 } from '../../src/features/auth/test-helpers/auth-test-helpers.js';
+import {
+  registerMockOAuthStrategies,
+  createMockGoogleProfile,
+  createMockFacebookProfile,
+  createMockGitHubProfile,
+} from '../../src/features/auth/test-helpers/mock-oauth-strategies.js';
 
 describe('Auth E2E Tests', () => {
+  const jwtService = container.get<IJwtService>(TYPES.JwtService);
   let testContext: TestContext;
 
   beforeAll(async () => {
@@ -126,59 +137,59 @@ describe('Auth E2E Tests', () => {
 
   describe.sequential('Token Refresh Flow', () => {
     it('should reject refresh when refresh token not provided', async () => {
-      //   // Arrange - No resources needed
+      // Arrange - No resources needed
 
-      //   // Act
-      //   const response = await request(app).post('/api/auth/refresh').send({});
+      // Act
+      const response = await request(app).post('/api/auth/refresh').send({});
 
-      //   // Assert
-      //   expect(response.status).toBe(400);
-      //   expect(response.body.success).toBe(false);
-      //   expect(response.body.error).toBe('Refresh token is required');
-      // });
+      // Assert
+      expect(response.status).toBe(400);
+      expect(response.body.success).toBe(false);
+      expect(response.body.error).toBe('Refresh token is required');
+    });
 
-      // it('should reject refresh with invalid refresh token', async () => {
-      //   // Arrange
-      //   const invalidRefreshToken = 'invalid.refresh.token';
+    it('should reject refresh with invalid refresh token', async () => {
+      // Arrange
+      const invalidRefreshToken = 'invalid.refresh.token';
 
-      //   // Act
-      //   const response = await request(app)
-      //     .post('/api/auth/refresh')
-      //     .send({ refreshToken: invalidRefreshToken });
+      // Act
+      const response = await request(app)
+        .post('/api/auth/refresh')
+        .send({ refreshToken: invalidRefreshToken });
 
-      //   // Assert
-      //   expect(response.status).toBe(401);
-      //   expect(response.body.success).toBe(false);
-      //   expect(response.body.error).toBe('Invalid or expired refresh token');
-      // });
+      // Assert
+      expect(response.status).toBe(401);
+      expect(response.body.success).toBe(false);
+      expect(response.body.error).toBe('Invalid or expired refresh token');
+    });
 
-      // it('should generate new access token with valid refresh token', async () => {
-      //   try {
-      //     // Arrange
-      //     const user = await createTestUser({}, testContext);
-      //     const tokens = await createTestTokenPair(user.id);
+    it('should generate new access token with valid refresh token', async () => {
+      try {
+        // Arrange
+        const user = await createTestUser({}, testContext);
+        const tokens = await createTestTokenPair(user.id);
 
-      //     // Act
-      //     const response = await request(app)
-      //       .post('/api/auth/refresh')
-      //       .send({ refreshToken: tokens.refreshToken });
+        // Act
+        const response = await request(app)
+          .post('/api/auth/refresh')
+          .send({ refreshToken: tokens.refreshToken });
 
-      //     // Assert
-      //     expect(response.status).toBe(200);
-      //     expect(response.body.success).toBe(true);
-      //     expect(response.body.data.accessToken).toBeDefined();
-      //     expect(typeof response.body.data.accessToken).toBe('string');
+        // Assert
+        expect(response.status).toBe(200);
+        expect(response.body.success).toBe(true);
+        expect(response.body.data.accessToken).toBeDefined();
+        expect(typeof response.body.data.accessToken).toBe('string');
 
-      //     // Verify new access token works
-      //     const newAccessToken = response.body.data.accessToken;
-      //     const meResponse = await makeAuthenticatedRequest(app, newAccessToken).get('/api/auth/me');
-      //     expect(meResponse.status).toBe(200);
-      //     expect(meResponse.body.data.id).toBe(user.id);
-      //   } finally {
-      //     // Explicit cleanup
-      //     await testContext.cleanup();
-      //   }
-      // });
+        // Verify new access token works
+        const newAccessToken = response.body.data.accessToken;
+        const meResponse = await makeAuthenticatedRequest(app, newAccessToken).get('/api/auth/me');
+        expect(meResponse.status).toBe(200);
+        expect(meResponse.body.data.id).toBe(user.id);
+      } finally {
+        // Explicit cleanup
+        await testContext.cleanup();
+      }
+    });
 
       // it('should reject refresh with revoked refresh token', async () => {
       //   try {
@@ -415,103 +426,103 @@ describe('Auth E2E Tests', () => {
       //     await testContext.cleanup();
       //   }
       // });
+  });
+
+  describe.sequential('Logout & Token Revocation', () => {
+    it('should revoke refresh token on logout', async () => {
+      // Arrange
+      const user = await createTestUser({}, testContext);
+      const tokens = await createTestTokenPair(user.id);
+
+      // Act - Logout
+      const logoutResponse = await request(app)
+        .post('/api/auth/logout')
+        .send({ refreshToken: tokens.refreshToken });
+
+      // Assert - Logout succeeded
+      expect(logoutResponse.status).toBe(200);
+      expect(logoutResponse.body.success).toBe(true);
+
+      // Verify token is revoked in database
+      const tokenInDb = await prisma.refreshToken.findUnique({
+        where: { tokenId: tokens.tokenId },
+      });
+      expect(tokenInDb).not.toBeNull();
+      expect(tokenInDb!.revoked).toBe(true);
     });
 
-    describe.sequential('Logout & Token Revocation', () => {
-      it('should revoke refresh token on logout', async () => {
-        // Arrange
-        const user = await createTestUser({}, testContext);
-        const tokens = await createTestTokenPair(user.id);
+    it('should succeed logout without refresh token', async () => {
+      // Act
+      const response = await request(app).post('/api/auth/logout').send({});
 
-        // Act - Logout
-        const logoutResponse = await request(app)
-          .post('/api/auth/logout')
-          .send({ refreshToken: tokens.refreshToken });
-
-        // Assert - Logout succeeded
-        expect(logoutResponse.status).toBe(200);
-        expect(logoutResponse.body.success).toBe(true);
-
-        // Verify token is revoked in database
-        const tokenInDb = await prisma.refreshToken.findUnique({
-          where: { tokenId: tokens.tokenId },
-        });
-        expect(tokenInDb).not.toBeNull();
-        expect(tokenInDb!.revoked).toBe(true);
-      });
-
-      it('should succeed logout without refresh token', async () => {
-        // Act
-        const response = await request(app).post('/api/auth/logout').send({});
-
-        // Assert
-        expect(response.status).toBe(200);
-        expect(response.body.success).toBe(true);
-        expect(response.body.data).toBeNull();
-      });
-
-      it('should prevent using revoked token for refresh', async () => {
-        // Arrange
-        const user = await createTestUser({}, testContext);
-        const tokens = await createTestTokenPair(user.id);
-
-        // Logout (revokes token)
-        await request(app).post('/api/auth/logout').send({ refreshToken: tokens.refreshToken });
-
-        // Act - Try to refresh with revoked token
-        const response = await request(app)
-          .post('/api/auth/refresh')
-          .send({ refreshToken: tokens.refreshToken });
-
-        // Assert
-        expect(response.status).toBe(401);
-        expect(response.body.error).toBe('Refresh token has been revoked');
-      });
-
-      it('should still allow access token use after logout until expiry', async () => {
-        // Arrange
-        const user = await createTestUser({}, testContext);
-        const tokens = await createTestTokenPair(user.id);
-
-        // Logout (revokes refresh token)
-        await request(app).post('/api/auth/logout').send({ refreshToken: tokens.refreshToken });
-
-        // Act - Try to use access token (should still work)
-        const response = await makeAuthenticatedRequest(app, tokens.accessToken).get(
-          '/api/auth/me'
-        );
-
-        // Assert - Access token still valid (logout doesn't invalidate it immediately)
-        expect(response.status).toBe(200);
-        expect(response.body.data.id).toBe(user.id);
-      });
-
-      it('should handle logout with invalid refresh token gracefully', async () => {
-        // Arrange
-        const invalidToken = 'invalid.refresh.token';
-
-        // Act
-        const response = await request(app)
-          .post('/api/auth/logout')
-          .send({ refreshToken: invalidToken });
-
-        // Assert - Should succeed (logout is idempotent)
-        expect(response.status).toBe(200);
-        expect(response.body.success).toBe(true);
-      });
+      // Assert
+      expect(response.status).toBe(200);
+      expect(response.body.success).toBe(true);
+      expect(response.body.data).toBeNull();
     });
 
-    // OAuth tests are skipped because they require complex Passport.js integration
-    // The mock strategies need to be properly integrated with Passport's authentication flow
-    // For now, the JWT token tests cover the core authentication functionality
-    describe.skip('OAuth Callback Flow (Mocked)', () => {
-      let mockStrategies: ReturnType<typeof registerMockOAuthStrategies>;
+    it('should prevent using revoked token for refresh', async () => {
+      // Arrange
+      const user = await createTestUser({}, testContext);
+      const tokens = await createTestTokenPair(user.id);
 
-      beforeEach(() => {
-        mockStrategies = registerMockOAuthStrategies();
-      });
+      // Logout (revokes token)
+      await request(app).post('/api/auth/logout').send({ refreshToken: tokens.refreshToken });
 
-      it('should create new user on first Google OAuth login', async () => {
+      // Act - Try to refresh with revoked token
+      const response = await request(app)
+        .post('/api/auth/refresh')
+        .send({ refreshToken: tokens.refreshToken });
+
+      // Assert
+      expect(response.status).toBe(401);
+      expect(response.body.error).toBe('Refresh token has been revoked');
+    });
+
+    it('should still allow access token use after logout until expiry', async () => {
+      // Arrange
+      const user = await createTestUser({}, testContext);
+      const tokens = await createTestTokenPair(user.id);
+
+      // Logout (revokes refresh token)
+      await request(app).post('/api/auth/logout').send({ refreshToken: tokens.refreshToken });
+
+      // Act - Try to use access token (should still work)
+      const response = await makeAuthenticatedRequest(app, tokens.accessToken).get(
+        '/api/auth/me'
+      );
+
+      // Assert - Access token still valid (logout doesn't invalidate it immediately)
+      expect(response.status).toBe(200);
+      expect(response.body.data.id).toBe(user.id);
+    });
+
+    it('should handle logout with invalid refresh token gracefully', async () => {
+      // Arrange
+      const invalidToken = 'invalid.refresh.token';
+
+      // Act
+      const response = await request(app)
+        .post('/api/auth/logout')
+        .send({ refreshToken: invalidToken });
+
+      // Assert - Should succeed (logout is idempotent)
+      expect(response.status).toBe(200);
+      expect(response.body.success).toBe(true);
+    });
+  });
+
+  // OAuth tests are skipped because they require complex Passport.js integration
+  // The mock strategies need to be properly integrated with Passport's authentication flow
+  // For now, the JWT token tests cover the core authentication functionality
+  describe.skip('OAuth Callback Flow (Mocked)', () => {
+    let mockStrategies: ReturnType<typeof registerMockOAuthStrategies>;
+
+    beforeEach(() => {
+      mockStrategies = registerMockOAuthStrategies();
+    });
+
+    it('should create new user on first Google OAuth login', async () => {
         // Arrange
         const mockProfile = createMockGoogleProfile({
           id: 'google-new-user-123',
@@ -675,6 +686,5 @@ describe('Auth E2E Tests', () => {
         expect(user!.provider).toBe('github');
         expect(user!.providerId).toBe('github-test-123');
       });
-    });
   });
 });
