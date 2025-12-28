@@ -2,26 +2,15 @@ import { describe, it, expect, beforeAll, afterAll, afterEach, beforeEach } from
 import request from 'supertest';
 import app from '../../src/app.js';
 import { prisma } from '../../src/lib/prisma.js';
-import { container } from '../../src/container.js';
-import { TYPES } from '../../src/types.js';
-import type { IJwtService } from '../../src/features/auth/jwt.service.js';
 import {
   createTestUser,
   createTestTokenPair,
   cleanupAllTestData,
-  makeAuthenticatedRequest,
   wait,
   TestContext,
 } from '../../src/features/auth/test-helpers/auth-test-helpers.js';
-import {
-  registerMockOAuthStrategies,
-  createMockGoogleProfile,
-  createMockFacebookProfile,
-  createMockGitHubProfile,
-} from '../../src/features/auth/test-helpers/mock-oauth-strategies.js';
 
 describe('Auth E2E Tests', () => {
-  const jwtService = container.get<IJwtService>(TYPES.JwtService);
   let testContext: TestContext;
 
   beforeAll(async () => {
