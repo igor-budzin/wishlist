@@ -39,7 +39,6 @@ describe('Social OAuth Browser E2E Tests', () => {
   });
 
   afterEach(async () => {
-    // Close page and context after each test
     if (page) {
       await page.close();
     }
@@ -47,7 +46,6 @@ describe('Social OAuth Browser E2E Tests', () => {
       await context.close();
     }
 
-    // Clean up test data after each test
     await cleanupAllTestData();
   });
 
