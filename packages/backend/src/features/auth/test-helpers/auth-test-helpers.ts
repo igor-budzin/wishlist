@@ -28,10 +28,40 @@ export interface TokenPair {
 }
 
 /**
+ * Test context to track resources created during a test
+ * Enables isolated cleanup per test
+ */
+export class TestContext {
+  private userIds: Set<string> = new Set();
+
+  trackUser(userId: string): void {
+    this.userIds.add(userId);
+  }
+
+  async cleanup(): Promise<void> {
+    // Delete only the users created in this test context
+    // Cascade will automatically delete associated refresh tokens
+    if (this.userIds.size > 0) {
+      await prisma.user.deleteMany({
+        where: {
+          id: {
+            in: Array.from(this.userIds),
+          },
+        },
+      });
+      this.userIds.clear();
+    }
+  }
+}
+
+/**
  * Create a test user in the database with a unique email
+ * @param overrides - Optional fields to override
+ * @param context - Optional test context to track the user for cleanup
  */
 export async function createTestUser(
-  overrides: Partial<Omit<User, 'id' | 'createdAt' | 'updatedAt'>> = {}
+  overrides: Partial<Omit<User, 'id' | 'createdAt' | 'updatedAt'>> = {},
+  context?: TestContext
 ): Promise<TestUser> {
   const timestamp = Date.now();
   const randomSuffix = Math.random().toString(36).substring(7);
@@ -47,6 +77,11 @@ export async function createTestUser(
   const user = await prisma.user.create({
     data: { ...defaultUser, ...overrides },
   });
+
+  // Track user in context for isolated cleanup
+  if (context) {
+    context.trackUser(user.id);
+  }
 
   return user;
 }
