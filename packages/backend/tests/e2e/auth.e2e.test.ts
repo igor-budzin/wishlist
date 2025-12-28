@@ -276,23 +276,40 @@ describe('Auth E2E Tests', () => {
         const user = await createTestUser({}, testContext);
         const tokens = await createTestTokenPair(user.id);
 
+        // Verify token exists before first refresh
+        const tokenCheck1 = await prisma.refreshToken.findUnique({
+          where: { tokenId: tokens.tokenId },
+        });
+        expect(tokenCheck1).toBeTruthy();
+        expect(tokenCheck1!.revoked).toBe(false);
+
         // Act - First refresh
         const response1 = await request(app)
           .post('/api/auth/refresh')
           .send({ refreshToken: tokens.refreshToken });
-        console.log('response1 status', response1.status);
-        console.log('response1', response1.body.data);
         expect(response1.status).toBe(200);
+
+        // Verify token still exists after first refresh
+        const tokenCheck2 = await prisma.refreshToken.findUnique({
+          where: { tokenId: tokens.tokenId },
+        });
+        expect(tokenCheck2).toBeTruthy();
+        expect(tokenCheck2!.revoked).toBe(false);
 
         // Wait 1+ second to ensure different iat timestamp (JWT has second-level precision)
         await wait(1100);
+
+        // Verify token still exists before second refresh
+        const tokenCheck3 = await prisma.refreshToken.findUnique({
+          where: { tokenId: tokens.tokenId },
+        });
+        expect(tokenCheck3).toBeTruthy();
+        expect(tokenCheck3!.revoked).toBe(false);
 
         // Act - Second refresh
         const response2 = await request(app)
           .post('/api/auth/refresh')
           .send({ refreshToken: tokens.refreshToken });
-        console.log('response2 status', response1.status);
-        console.log('response2', response2.body.data);
         expect(response2.status).toBe(200);
 
         // Assert - Tokens should be different

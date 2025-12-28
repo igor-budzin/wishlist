@@ -116,7 +116,7 @@ export async function createTestTokenPair(userId: string): Promise<TokenPair> {
   const user = await prisma.user.findUnique({
     where: { id: userId },
   });
-console.log('user', user);
+
   if (!user) {
     throw new Error(`User with id ${userId} not found`);
   }
@@ -134,7 +134,25 @@ console.log('user', user);
   // Store refresh token in database
   await authService.storeRefreshToken(user.id, tokens.tokenId, tokens.expiresAt);
 
-  return tokens;
+  // CRITICAL FIX: Verify token is visible in database before returning
+  // This handles connection pool lag in CI environments
+  const maxRetries = 5;
+  for (let i = 0; i < maxRetries; i++) {
+    const storedToken = await prisma.refreshToken.findUnique({
+      where: { tokenId: tokens.tokenId },
+    });
+
+    if (storedToken && !storedToken.revoked) {
+      return tokens;
+    }
+
+    // Wait 100ms before retry
+    if (i < maxRetries - 1) {
+      await new Promise((resolve) => setTimeout(resolve, 100));
+    }
+  }
+
+  throw new Error(`Failed to verify refresh token storage for tokenId: ${tokens.tokenId}`);
 }
 
 /**
