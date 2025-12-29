@@ -206,14 +206,14 @@ jobs:
 
       - name: Start application stack with docker-compose
         run: |
-          docker-compose -f docker-compose.test.yml up -d
+          docker compose -f docker-compose.test.yml up -d
           echo "Waiting for services to be healthy..."
 
       - name: Wait for services to be ready
         run: |
-          timeout 120 sh -c 'until docker-compose -f docker-compose.test.yml ps | grep -q "healthy"; do echo "Waiting for services..."; sleep 2; done'
+          timeout 120 sh -c 'until docker compose -f docker-compose.test.yml ps | grep -q "healthy"; do echo "Waiting for services..."; sleep 2; done'
           echo "Services are ready!"
-          docker-compose -f docker-compose.test.yml ps
+          docker compose -f docker-compose.test.yml ps
 
       - name: Run E2E browser tests
         env:
@@ -228,15 +228,15 @@ jobs:
         if: failure()
         run: |
           echo "=== Backend logs ==="
-          docker-compose -f docker-compose.test.yml logs backend
+          docker compose -f docker-compose.test.yml logs backend
           echo "=== Frontend logs ==="
-          docker-compose -f docker-compose.test.yml logs frontend
+          docker compose -f docker-compose.test.yml logs frontend
           echo "=== Postgres logs ==="
-          docker-compose -f docker-compose.test.yml logs postgres
+          docker compose -f docker-compose.test.yml logs postgres
 
       - name: Stop docker-compose
         if: always()
-        run: docker-compose -f docker-compose.test.yml down -v
+        run: docker compose -f docker-compose.test.yml down -v
 
   build:
     name: Build Packages

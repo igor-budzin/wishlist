@@ -228,11 +228,11 @@ npx prisma migrate dev --schema=packages/backend/prisma/schema.prisma
 npm test
 
 # Run E2E tests with docker-compose
-docker-compose -f docker-compose.test.yml up -d
+docker compose -f docker-compose.test.yml up -d
 # Wait for services to be healthy
-docker-compose -f docker-compose.test.yml ps
+docker compose -f docker-compose.test.yml ps
 npm run test:e2e:browser --workspace=@wishlist/backend
-docker-compose -f docker-compose.test.yml down -v
+docker compose -f docker-compose.test.yml down -v
 
 # Run smoke tests only (faster)
 npm run test:smoke
