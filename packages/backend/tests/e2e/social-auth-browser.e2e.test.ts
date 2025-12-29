@@ -26,7 +26,7 @@ import { cleanupAllTestData } from '../../src/features/auth/test-helpers/auth-te
 describe('Social OAuth Browser E2E Tests', () => {
   const BACKEND_URL = process.env.BACKEND_URL || 'http://localhost:3002';
   const FRONTEND_URL = process.env.FRONTEND_URL || 'http://localhost:3000';
-  const TIMEOUT = 30000; // 30 seconds
+  const TIMEOUT = 3000; // 30 seconds
 
   let browser: Browser;
   let context: BrowserContext;
