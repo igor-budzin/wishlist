@@ -57,7 +57,7 @@ describe('Social OAuth Browser E2E Tests', () => {
       page = await context.newPage();
 
       // Act
-      await page.goto(`${FRONTEND_URL}/login`, { waitUntil: 'networkidle' });
+      await page.goto(`${FRONTEND_URL}/login`, { waitUntil: 'domcontentloaded' });
 
       // Assert - Check page title and content
       await page.waitForSelector('text=Welcome back', { timeout: TIMEOUT });
@@ -91,14 +91,14 @@ describe('Social OAuth Browser E2E Tests', () => {
       // Login first using test endpoint
       const testEmail = `test-redirect-${Date.now()}@test.e2e.local`;
       await page.goto(`${BACKEND_URL}/api/auth/test-login?email=${testEmail}`, {
-        waitUntil: 'networkidle',
+        waitUntil: 'load',
       });
 
       // Wait for redirect and tokens to be stored
       await page.waitForURL(`${FRONTEND_URL}/**`, { timeout: TIMEOUT });
 
       // Act - Try to navigate to login page
-      await page.goto(`${FRONTEND_URL}/login`, { waitUntil: 'networkidle' });
+      await page.goto(`${FRONTEND_URL}/login`, { waitUntil: 'domcontentloaded' });
 
       // Assert - Should be redirected to home page
       await page.waitForURL(`${FRONTEND_URL}/`, { timeout: TIMEOUT });
@@ -116,7 +116,7 @@ describe('Social OAuth Browser E2E Tests', () => {
 
       // Act - Navigate to test login endpoint (simulates OAuth callback)
       await page.goto(`${BACKEND_URL}/api/auth/test-login?email=${testEmail}`, {
-        waitUntil: 'networkidle',
+        waitUntil: 'load',
       });
 
       // Wait for redirect to auth callback page
@@ -146,7 +146,7 @@ describe('Social OAuth Browser E2E Tests', () => {
 
       // Act - Complete login flow
       await page.goto(`${BACKEND_URL}/api/auth/test-login?email=${testEmail}`, {
-        waitUntil: 'networkidle',
+        waitUntil: 'load',
       });
 
       // Wait for redirect to home page
@@ -174,7 +174,7 @@ describe('Social OAuth Browser E2E Tests', () => {
 
       // Act - Complete login flow
       await page.goto(`${BACKEND_URL}/api/auth/test-login?email=${testEmail}`, {
-        waitUntil: 'networkidle',
+        waitUntil: 'load',
       });
       await page.waitForURL(`${FRONTEND_URL}/`, { timeout: TIMEOUT });
 
@@ -201,7 +201,7 @@ describe('Social OAuth Browser E2E Tests', () => {
       expect(response.status).toBe(200);
       expect(response.body.success).toBe(true);
       expect(response.body.data.email).toBe(testEmail);
-      expect(response.body.data.provider).toBe('test');
+      expect(response.body.data.provider).toBe('google'); // test-login defaults to 'google' provider
     });
 
     it('should handle login errors gracefully', async () => {
@@ -210,7 +210,7 @@ describe('Social OAuth Browser E2E Tests', () => {
       page = await context.newPage();
 
       // Act - Navigate to login page with error parameter
-      await page.goto(`${FRONTEND_URL}/login?error=auth_failed`, { waitUntil: 'networkidle' });
+      await page.goto(`${FRONTEND_URL}/login?error=auth_failed`, { waitUntil: 'domcontentloaded' });
 
       // Assert - Error toast should be displayed
       // Note: Exact selector depends on your toast implementation (sonner)
@@ -230,12 +230,12 @@ describe('Social OAuth Browser E2E Tests', () => {
 
       // Complete login
       await page.goto(`${BACKEND_URL}/api/auth/test-login?email=${testEmail}`, {
-        waitUntil: 'networkidle',
+        waitUntil: 'load',
       });
       await page.waitForURL(`${FRONTEND_URL}/`, { timeout: TIMEOUT });
 
       // Act - Reload the page
-      await page.reload({ waitUntil: 'networkidle' });
+      await page.reload({ waitUntil: 'domcontentloaded' });
 
       // Assert - Should still be authenticated
       const addItemButton = page.locator('text=Add Item');
@@ -256,7 +256,7 @@ describe('Social OAuth Browser E2E Tests', () => {
       page = await context.newPage();
 
       // Act - Try to access protected route without authentication
-      await page.goto(`${FRONTEND_URL}/`, { waitUntil: 'networkidle' });
+      await page.goto(`${FRONTEND_URL}/`, { waitUntil: 'domcontentloaded' });
 
       // Assert - Should be redirected to login page
       await page.waitForURL(`${FRONTEND_URL}/login`, { timeout: TIMEOUT });
@@ -272,21 +272,21 @@ describe('Social OAuth Browser E2E Tests', () => {
 
       // Complete login
       await page.goto(`${BACKEND_URL}/api/auth/test-login?email=${testEmail}`, {
-        waitUntil: 'networkidle',
+        waitUntil: 'load',
       });
       await page.waitForURL(`${FRONTEND_URL}/`, { timeout: TIMEOUT });
 
       // Act - Navigate to profile page
-      await page.goto(`${FRONTEND_URL}/profile`, { waitUntil: 'networkidle' });
+      await page.goto(`${FRONTEND_URL}/profile`, { waitUntil: 'domcontentloaded' });
 
       // Assert - Should load profile page successfully
       expect(page.url()).toBe(`${FRONTEND_URL}/profile`);
-      const profileHeading = page.locator('text=/profile/i');
+      const profileHeading = page.locator('h3:has-text("Your profile")');
       await profileHeading.waitFor({ state: 'visible', timeout: TIMEOUT });
       expect(await profileHeading.isVisible()).toBe(true);
 
       // Act - Navigate back to home
-      await page.goto(`${FRONTEND_URL}/`, { waitUntil: 'networkidle' });
+      await page.goto(`${FRONTEND_URL}/`, { waitUntil: 'domcontentloaded' });
 
       // Assert - Should load home page
       expect(page.url()).toBe(`${FRONTEND_URL}/`);
@@ -303,12 +303,12 @@ describe('Social OAuth Browser E2E Tests', () => {
 
       // Complete login
       await page.goto(`${BACKEND_URL}/api/auth/test-login?email=${testEmail}`, {
-        waitUntil: 'networkidle',
+        waitUntil: 'load',
       });
       await page.waitForURL(`${FRONTEND_URL}/`, { timeout: TIMEOUT });
 
       // Navigate to profile page
-      await page.goto(`${FRONTEND_URL}/profile`, { waitUntil: 'networkidle' });
+      await page.goto(`${FRONTEND_URL}/profile`, { waitUntil: 'domcontentloaded' });
 
       // Act - Click sign out button
       const signOutButton = page.locator('button:has-text("Sign out")');
@@ -337,25 +337,25 @@ describe('Social OAuth Browser E2E Tests', () => {
 
       // Complete login
       await page.goto(`${BACKEND_URL}/api/auth/test-login?email=${testEmail}`, {
-        waitUntil: 'networkidle',
+        waitUntil: 'load',
       });
       await page.waitForURL(`${FRONTEND_URL}/`, { timeout: TIMEOUT });
 
       // Navigate to profile and logout
-      await page.goto(`${FRONTEND_URL}/profile`, { waitUntil: 'networkidle' });
+      await page.goto(`${FRONTEND_URL}/profile`, { waitUntil: 'domcontentloaded' });
       const signOutButton = page.locator('button:has-text("Sign out")');
       await signOutButton.click();
       await page.waitForURL(`${FRONTEND_URL}/login`, { timeout: TIMEOUT });
 
       // Act - Try to access home page after logout
-      await page.goto(`${FRONTEND_URL}/`, { waitUntil: 'networkidle' });
+      await page.goto(`${FRONTEND_URL}/`, { waitUntil: 'domcontentloaded' });
 
       // Assert - Should be redirected back to login
       await page.waitForURL(`${FRONTEND_URL}/login`, { timeout: TIMEOUT });
       expect(page.url()).toBe(`${FRONTEND_URL}/login`);
 
       // Act - Try to access profile page after logout
-      await page.goto(`${FRONTEND_URL}/profile`, { waitUntil: 'networkidle' });
+      await page.goto(`${FRONTEND_URL}/profile`, { waitUntil: 'domcontentloaded' });
 
       // Assert - Should be redirected to login
       await page.waitForURL(`${FRONTEND_URL}/login`, { timeout: TIMEOUT });
@@ -373,7 +373,7 @@ describe('Social OAuth Browser E2E Tests', () => {
 
       // Act - Navigate to test login endpoint
       await page.goto(`${BACKEND_URL}/api/auth/test-login?email=${testEmail}`, {
-        waitUntil: 'networkidle',
+        waitUntil: 'load',
       });
 
       // Wait for redirect to home page
@@ -396,12 +396,12 @@ describe('Social OAuth Browser E2E Tests', () => {
 
       // Act - Complete login flow
       await page.goto(`${BACKEND_URL}/api/auth/test-login?email=${testEmail}`, {
-        waitUntil: 'networkidle',
+        waitUntil: 'load',
       });
       await page.waitForURL(`${FRONTEND_URL}/`, { timeout: TIMEOUT });
 
       // Navigate to another page
-      await page.goto(`${FRONTEND_URL}/profile`, { waitUntil: 'networkidle' });
+      await page.goto(`${FRONTEND_URL}/profile`, { waitUntil: 'domcontentloaded' });
 
       // Go back in history
       await page.goBack();
@@ -428,13 +428,13 @@ describe('Social OAuth Browser E2E Tests', () => {
       try {
         // Act - Login with first user
         await page1.goto(`${BACKEND_URL}/api/auth/test-login?email=${testEmail1}`, {
-          waitUntil: 'networkidle',
+          waitUntil: 'load',
         });
         await page1.waitForURL(`${FRONTEND_URL}/`, { timeout: TIMEOUT });
 
         // Act - Login with second user
         await page2.goto(`${BACKEND_URL}/api/auth/test-login?email=${testEmail2}`, {
-          waitUntil: 'networkidle',
+          waitUntil: 'load',
         });
         await page2.waitForURL(`${FRONTEND_URL}/`, { timeout: TIMEOUT });
 
