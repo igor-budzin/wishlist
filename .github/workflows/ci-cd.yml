@@ -83,9 +83,6 @@ jobs:
       - name: Install dependencies
         run: npm ci
 
-      - name: Install Playwright Browsers
-        run: npx playwright install --with-deps chromium
-
       - name: Build shared package
         run: npm run build:shared
 
@@ -94,12 +91,12 @@ jobs:
           DATABASE_URL: postgresql://test_user:test_password@localhost:5432/wishlist_test
         run: npm run db:migrate:dev --workspace=@wishlist/backend
 
-      - name: Run tests with coverage
+      - name: Run tests with coverage (excluding E2E)
         env:
           DATABASE_URL: postgresql://test_user:test_password@localhost:5432/wishlist_test
           NODE_ENV: test
           CI: true
-        run: npm run test -- --coverage
+        run: npm run test -- --coverage --exclude='**/*.e2e.test.ts'
 
       - name: Generate test summary
         if: always()
@@ -247,7 +244,7 @@ jobs:
   build:
     name: Build Packages
     runs-on: ubuntu-latest
-    needs: [test, quality-checks]
+    needs: [test, quality-checks, e2e-tests]
     timeout-minutes: 10
 
     steps:
