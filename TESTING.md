@@ -172,7 +172,6 @@ The smoke tests don't require the dev servers to be running:
    - `auth.e2e.test.ts` - End-to-end authentication flow testing with JWT tokens
 3. **Browser E2E Tests**: Use Playwright to test real browser interactions (requires servers running)
    - `auth-browser.e2e.test.ts` - Manual browser verification tests (placeholder)
-   - `social-auth-browser.e2e.test.ts` - Complete social OAuth flow in real browser
 
 ### Frontend (`packages/frontend/vitest.config.ts`)
 
