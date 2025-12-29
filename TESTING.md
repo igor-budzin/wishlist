@@ -183,24 +183,77 @@ The smoke tests don't require the dev servers to be running:
 
 ## Continuous Integration
 
-To run tests in CI/CD pipelines:
+### CI/CD Pipeline Overview
+
+The project uses GitHub Actions for continuous integration with the following test jobs:
+
+1. **Quality Checks**: Runs linting, formatting, and type checking
+2. **Unit & Integration Tests**: Runs all unit and integration tests with database
+3. **E2E Browser Tests**: Runs browser-based end-to-end tests in docker-compose environment
+4. **Build**: Verifies all packages build successfully
+
+### Running Tests in CI
+
+The CI pipeline automatically runs on pull requests to the `main` branch. See [.github/workflows/ci-cd.yml](.github/workflows/ci-cd.yml) for the full configuration.
+
+### E2E Tests in CI
+
+The E2E tests run in a complete application stack using docker-compose:
+
+- **Configuration**: `docker-compose.test.yml`
+- **Services**: PostgreSQL, Backend, Frontend
+- **Browser**: Chromium (via Playwright)
+- **Environment**: Test mode with test login endpoint enabled
+
+The workflow:
+
+1. Builds Docker images for frontend and backend
+2. Starts all services with docker-compose
+3. Waits for health checks to pass
+4. Runs browser-based E2E tests
+5. Captures logs on failure
+6. Tears down the environment
+
+### Running CI Tests Locally
+
+To run the same tests locally as in CI:
 
 ```bash
-# Ensure infrastructure is available
-docker-compose up -d
-
-# Wait for database to be ready
-sleep 5
-
-# Run database setup
-npm run db:push --workspace=@wishlist/backend
-
-# Run all tests
+# Run unit and integration tests
+docker-compose up -d postgres
+npm ci
+npm run build:shared
+npx prisma generate --schema=packages/backend/prisma/schema.prisma
+npx prisma migrate dev --schema=packages/backend/prisma/schema.prisma
 npm test
 
-# Or run smoke tests only (faster)
+# Run E2E tests with docker-compose
+docker-compose -f docker-compose.test.yml up -d
+# Wait for services to be healthy
+docker-compose -f docker-compose.test.yml ps
+npm run test:e2e:browser --workspace=@wishlist/backend
+docker-compose -f docker-compose.test.yml down -v
+
+# Run smoke tests only (faster)
 npm run test:smoke
 ```
+
+### docker-compose.test.yml
+
+This configuration is specifically designed for CI/CD environments:
+
+- Uses production-like Docker builds
+- Configures test database credentials
+- Sets `NODE_ENV=test` to enable test endpoints
+- Includes health checks for all services
+- Uses bridge networking for service communication
+
+Key differences from development docker-compose:
+
+- Frontend runs on nginx (production setup) instead of Vite dev server
+- Backend runs compiled JavaScript instead of tsx watch mode
+- All services have health checks for startup coordination
+- Uses test-specific environment variables
 
 ## End-to-End (E2E) Testing
 
