@@ -1,4 +1,5 @@
-import { describe, it, expect, beforeAll, afterEach } from 'vitest';
+import { describe, it, beforeAll, afterEach } from 'vitest';
+import { expect } from 'vitest';
 import { chromium, Browser, Page, BrowserContext } from 'playwright';
 import { cleanupAllTestData } from '../../src/features/auth/test-helpers/auth-test-helpers.js';
 
@@ -153,12 +154,14 @@ describe('Social OAuth Browser E2E Tests', () => {
 
       // Assert - Authenticated UI elements should be visible
       // Note: Exact selectors depend on your HomePage implementation
-      await expect(page.locator('text=Add Item')).toBeVisible({ timeout: TIMEOUT });
+      const addItemButton = page.locator('text=Add Item');
+      await addItemButton.waitFor({ state: 'visible', timeout: TIMEOUT });
+      expect(await addItemButton.isVisible()).toBe(true);
 
       // Check that user can access their profile
       const profileLink = page.locator('a[href="/profile"]');
       if ((await profileLink.count()) > 0) {
-        await expect(profileLink).toBeVisible();
+        expect(await profileLink.isVisible()).toBe(true);
       }
     });
 
@@ -211,9 +214,9 @@ describe('Social OAuth Browser E2E Tests', () => {
 
       // Assert - Error toast should be displayed
       // Note: Exact selector depends on your toast implementation (sonner)
-      await expect(page.locator('text=/authentication failed/i')).toBeVisible({
-        timeout: TIMEOUT,
-      });
+      const errorToast = page.locator('text=/authentication failed/i');
+      await errorToast.waitFor({ state: 'visible', timeout: TIMEOUT });
+      expect(await errorToast.isVisible()).toBe(true);
     });
   });
 
@@ -235,7 +238,9 @@ describe('Social OAuth Browser E2E Tests', () => {
       await page.reload({ waitUntil: 'networkidle' });
 
       // Assert - Should still be authenticated
-      await expect(page.locator('text=Add Item')).toBeVisible({ timeout: TIMEOUT });
+      const addItemButton = page.locator('text=Add Item');
+      await addItemButton.waitFor({ state: 'visible', timeout: TIMEOUT });
+      expect(await addItemButton.isVisible()).toBe(true);
 
       // Verify tokens are still in localStorage
       const accessToken = await page.evaluate(() => localStorage.getItem('access_token'));
@@ -276,7 +281,9 @@ describe('Social OAuth Browser E2E Tests', () => {
 
       // Assert - Should load profile page successfully
       expect(page.url()).toBe(`${FRONTEND_URL}/profile`);
-      await expect(page.locator('text=/profile/i')).toBeVisible({ timeout: TIMEOUT });
+      const profileHeading = page.locator('text=/profile/i');
+      await profileHeading.waitFor({ state: 'visible', timeout: TIMEOUT });
+      expect(await profileHeading.isVisible()).toBe(true);
 
       // Act - Navigate back to home
       await page.goto(`${FRONTEND_URL}/`, { waitUntil: 'networkidle' });
