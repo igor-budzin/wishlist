@@ -1,5 +1,6 @@
 import { useEffect } from 'react';
 import { useNavigate, useSearchParams } from 'react-router-dom';
+import { useTranslation } from 'react-i18next';
 import { toast } from 'sonner';
 import { Google, Facebook, GitHub } from '../components/icons';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '../components/ui/card';
@@ -10,6 +11,7 @@ import { useAuth } from '../contexts/AuthContext';
 const API_URL = import.meta.env.VITE_API_URL || 'http://localhost:3002';
 
 export default function LoginPage() {
+  const { t } = useTranslation();
   const navigate = useNavigate();
   const [searchParams] = useSearchParams();
   const { isAuthenticated, loading } = useAuth();
@@ -51,8 +53,8 @@ export default function LoginPage() {
       <main className="container max-w-screen-2xl flex items-center justify-center py-12 md:py-16">
         <Card className="w-full max-w-md">
           <CardHeader className="space-y-2 text-center">
-            <CardTitle className="text-2xl">Welcome back</CardTitle>
-            <CardDescription>Sign in to your account to continue</CardDescription>
+            <CardTitle className="text-2xl">{t('auth.welcomeBack')}</CardTitle>
+            <CardDescription>{t('auth.signInDescription')}</CardDescription>
           </CardHeader>
           <CardContent className="space-y-3">
             <Button
@@ -61,7 +63,7 @@ export default function LoginPage() {
               onClick={() => handleSocialLogin('Google')}
             >
               <Google className="mr-2 h-5 w-5" />
-              Continue with Google
+              {t('auth.continueWithProvider', { provider: 'Google' })}
             </Button>
             {/* APPLE AUTH DISABLED - Uncomment to re-enable
             <Button
@@ -70,7 +72,7 @@ export default function LoginPage() {
               onClick={() => handleSocialLogin('Apple')}
             >
               <Apple className="mr-2 h-5 w-5" />
-              Continue with Apple
+              {t('auth.continueWithProvider', { provider: 'Apple' })}
             </Button>
             */}
             <Button
@@ -79,7 +81,7 @@ export default function LoginPage() {
               onClick={() => handleSocialLogin('Facebook')}
             >
               <Facebook className="mr-2 h-5 w-5" />
-              Continue with Facebook
+              {t('auth.continueWithProvider', { provider: 'Facebook' })}
             </Button>
             <Button
               variant="outline"
@@ -87,7 +89,7 @@ export default function LoginPage() {
               onClick={() => handleSocialLogin('GitHub')}
             >
               <GitHub className="mr-2 h-5 w-5" />
-              Continue with GitHub
+              {t('auth.continueWithProvider', { provider: 'GitHub' })}
             </Button>
           </CardContent>
         </Card>

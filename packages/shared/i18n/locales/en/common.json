@@ -49,6 +49,9 @@
     "loginWith": "Sign in with {{provider}}"
   },
   "auth": {
+    "welcomeBack": "Welcome back",
+    "signInDescription": "Sign in to your account to continue",
+    "continueWithProvider": "Continue with {{provider}}",
     "providerMismatch": "Email Already Registered",
     "providerMismatchDescription": "This email is already registered with {{provider}}. Please use {{provider}} to log in.",
     "continueWith": "Continue with {{provider}}",

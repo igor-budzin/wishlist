@@ -49,6 +49,9 @@
     "loginWith": "Увійти через {{provider}}"
   },
   "auth": {
+    "welcomeBack": "Ласкаво просимо",
+    "signInDescription": "Увійдіть у свій обліковий запис, щоб продовжити",
+    "continueWithProvider": "Продовжити з {{provider}}",
     "providerMismatch": "Email вже зареєстровано",
     "providerMismatchDescription": "Ця електронна адреса вже зареєстрована через {{provider}}. Будь ласка, використовуйте {{provider}} для входу.",
     "continueWith": "Продовжити з {{provider}}",
