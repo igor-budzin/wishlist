@@ -31,5 +31,6 @@ npm-debug.log*
 coverage/
 .nyc_output/
 
+# Claude Code
+.claude/
 .playwright-mcp
-.claude/settings.local.json

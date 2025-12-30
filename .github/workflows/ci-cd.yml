@@ -91,7 +91,7 @@ jobs:
           DATABASE_URL: postgresql://test_user:test_password@localhost:5432/wishlist_test
         run: npm run db:migrate:dev --workspace=@wishlist/backend
 
-      - name: Run tests with coverage
+      - name: Run tests with coverage (excluding E2E)
         env:
           DATABASE_URL: postgresql://test_user:test_password@localhost:5432/wishlist_test
           NODE_ENV: test
@@ -180,10 +180,75 @@ jobs:
 
             _Check the Actions summary for detailed coverage metrics._
 
+  e2e-tests:
+    name: E2E Browser Tests
+    runs-on: ubuntu-latest
+    timeout-minutes: 20
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: '20'
+          cache: 'npm'
+
+      - name: Install dependencies
+        run: npm ci
+
+      - name: Build shared package
+        run: npm run build:shared
+
+      - name: Generate Prisma Client
+        run: npx prisma generate --schema=packages/backend/prisma/schema.prisma
+
+      - name: Install Playwright Browsers
+        run: npx playwright install --with-deps chromium
+
+      - name: Clean up existing Docker volumes
+        run: docker compose -f docker-compose.test.yml down -v || true
+
+      - name: Start application stack with docker-compose
+        run: |
+          docker compose -f docker-compose.test.yml up -d
+          echo "Waiting for services to be healthy..."
+
+      - name: Wait for services to be ready
+        run: |
+          timeout 120 sh -c 'until docker compose -f docker-compose.test.yml ps | grep -q "healthy"; do echo "Waiting for services..."; sleep 2; done'
+          echo "Services are ready!"
+          docker compose -f docker-compose.test.yml ps
+
+      - name: Run E2E browser tests
+        env:
+          BACKEND_URL: http://localhost:3002
+          FRONTEND_URL: http://localhost:3000
+          DATABASE_URL: postgresql://test_user:test_password@localhost:5432/wishlist_test
+          NODE_ENV: test
+          CI: true
+        working-directory: packages/backend
+        run: npm run test:e2e:browser
+
+      - name: Show docker logs on failure
+        if: failure()
+        run: |
+          echo "=== Backend logs ==="
+          docker compose -f docker-compose.test.yml logs backend
+          echo "=== Frontend logs ==="
+          docker compose -f docker-compose.test.yml logs frontend
+          echo "=== Postgres logs ==="
+          docker compose -f docker-compose.test.yml logs postgres
+
+      - name: Stop docker-compose
+        if: always()
+        run: docker compose -f docker-compose.test.yml down -v
+
   build:
     name: Build Packages
     runs-on: ubuntu-latest
-    needs: [test, quality-checks]
+    needs: [test, quality-checks, e2e-tests]
     timeout-minutes: 10
 
     steps:

@@ -38,6 +38,15 @@ cd packages/backend && npm test
 # Run backend smoke tests only
 cd packages/backend && npm run test:smoke
 
+# Run E2E tests (requires frontend and backend servers running)
+cd packages/backend && npm run test:e2e
+
+# Run browser-based E2E tests for authentication (requires servers)
+cd packages/backend && npm run test:e2e:browser
+
+# Run browser-based E2E tests for social OAuth flow (requires servers)
+cd packages/backend && npm run test:e2e:social-auth
+
 # Run tests in watch mode (re-runs on file changes)
 cd packages/backend && npm run test:watch
 
@@ -160,6 +169,9 @@ The smoke tests don't require the dev servers to be running:
 2. **Integration Tests**: Use real database connection
    - `smoke.test.ts` - API endpoints and database connectivity (6 tests)
    - `link-analysis.controller.test.ts` - Link analysis endpoints (2 tests)
+   - `auth.e2e.test.ts` - End-to-end authentication flow testing with JWT tokens
+3. **Browser E2E Tests**: Use Playwright to test real browser interactions (requires servers running)
+   - `auth-browser.e2e.test.ts` - Manual browser verification tests (placeholder)
 
 ### Frontend (`packages/frontend/vitest.config.ts`)
 
@@ -170,24 +182,136 @@ The smoke tests don't require the dev servers to be running:
 
 ## Continuous Integration
 
-To run tests in CI/CD pipelines:
+### CI/CD Pipeline Overview
+
+The project uses GitHub Actions for continuous integration with the following test jobs:
+
+1. **Quality Checks**: Runs linting, formatting, and type checking
+2. **Unit & Integration Tests**: Runs all unit and integration tests with database
+3. **E2E Browser Tests**: Runs browser-based end-to-end tests in docker-compose environment
+4. **Build**: Verifies all packages build successfully
+
+### Running Tests in CI
+
+The CI pipeline automatically runs on pull requests to the `main` branch. See [.github/workflows/ci-cd.yml](.github/workflows/ci-cd.yml) for the full configuration.
+
+### E2E Tests in CI
+
+The E2E tests run in a complete application stack using docker-compose:
+
+- **Configuration**: `docker-compose.test.yml`
+- **Services**: PostgreSQL, Backend, Frontend
+- **Browser**: Chromium (via Playwright)
+- **Environment**: Test mode with test login endpoint enabled
+
+The workflow:
+
+1. Builds Docker images for frontend and backend
+2. Starts all services with docker-compose
+3. Waits for health checks to pass
+4. Runs browser-based E2E tests
+5. Captures logs on failure
+6. Tears down the environment
+
+### Running CI Tests Locally
+
+To run the same tests locally as in CI:
 
 ```bash
-# Ensure infrastructure is available
-docker-compose up -d
-
-# Wait for database to be ready
-sleep 5
-
-# Run database setup
-npm run db:push --workspace=@wishlist/backend
-
-# Run all tests
+# Run unit and integration tests
+docker-compose up -d postgres
+npm ci
+npm run build:shared
+npx prisma generate --schema=packages/backend/prisma/schema.prisma
+npx prisma migrate dev --schema=packages/backend/prisma/schema.prisma
 npm test
 
-# Or run smoke tests only (faster)
+# Run E2E tests with docker-compose
+docker compose -f docker-compose.test.yml up -d
+# Wait for services to be healthy
+docker compose -f docker-compose.test.yml ps
+npm run test:e2e:browser --workspace=@wishlist/backend
+docker compose -f docker-compose.test.yml down -v
+
+# Run smoke tests only (faster)
 npm run test:smoke
 ```
+
+### docker-compose.test.yml
+
+This configuration is specifically designed for CI/CD environments:
+
+- Uses production-like Docker builds
+- Configures test database credentials
+- Sets `NODE_ENV=test` to enable test endpoints
+- Includes health checks for all services
+- Uses bridge networking for service communication
+
+Key differences from development docker-compose:
+
+- Frontend runs on nginx (production setup) instead of Vite dev server
+- Backend runs compiled JavaScript instead of tsx watch mode
+- All services have health checks for startup coordination
+- Uses test-specific environment variables
+
+## End-to-End (E2E) Testing
+
+### Social OAuth Browser E2E Tests
+
+The `social-auth-browser.e2e.test.ts` file contains comprehensive browser-based E2E tests for the social authentication flow using Playwright. These tests verify the complete OAuth flow in a real browser environment.
+
+**Prerequisites**:
+
+- Frontend server running on `http://localhost:3000`
+- Backend server running on `http://localhost:3002`
+- Test environment (`NODE_ENV=test`) with test login endpoint enabled
+
+**Test Coverage**:
+
+1. **Login Page UI**
+   - Displays all OAuth provider buttons (Google, Facebook, GitHub)
+   - Redirects authenticated users away from login page
+
+2. **OAuth Login Flow**
+   - Completes OAuth login and stores JWT tokens in localStorage
+   - Displays authenticated UI after successful login
+   - Allows authenticated API requests with stored tokens
+   - Handles login errors gracefully
+
+3. **Authenticated State Management**
+   - Persists authentication across page refreshes
+   - Protects routes and redirects to login when not authenticated
+   - Allows navigation between authenticated pages
+
+4. **Logout Flow**
+   - Clears tokens and redirects to login after logout
+   - Prevents access to protected pages after logout
+
+5. **Token Security**
+   - Clears tokens from URL hash after storing them
+   - Does not expose tokens in browser history
+
+6. **Multiple Users**
+   - Handles different users in different browser contexts
+
+**Running the Tests**:
+
+```bash
+# Start the servers first
+npm run dev  # in root directory
+
+# In another terminal, run the E2E tests
+cd packages/backend && npm run test:e2e:social-auth
+```
+
+**Test Implementation Details**:
+
+The tests use a test-only endpoint (`/api/auth/test-login`) that simulates the OAuth callback without requiring actual OAuth provider interaction. This endpoint:
+
+- Creates or finds a test user in the database
+- Generates JWT access and refresh tokens
+- Redirects to the frontend auth callback page with tokens
+- Follows the same flow as real OAuth providers
 
 ## Writing New Tests
 

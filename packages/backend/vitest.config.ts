@@ -5,6 +5,8 @@ export default defineConfig({
     globals: true,
     environment: 'node',
     setupFiles: ['./src/test-utils/setup.ts'],
+    // Exclude E2E tests by default (run them separately with specific test commands)
+    exclude: ['**/node_modules/**', '**/dist/**', '**/e2e/**'],
     coverage: {
       provider: 'v8',
       reporter: ['text', 'json', 'html'],
@@ -14,6 +16,7 @@ export default defineConfig({
         '**/*.test.ts',
         '**/*.spec.ts',
         '**/test-utils/**',
+        '**/e2e/**',
       ],
     },
     testTimeout: 30000,
