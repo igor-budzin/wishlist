@@ -10,6 +10,7 @@ import { Badge } from '../components/ui/badge';
 import { Button } from '../components/ui/button';
 import { Input } from '../components/ui/input';
 import { Label } from '../components/ui/label';
+import { Avatar, AvatarFallback, AvatarImage } from '../components/ui/avatar';
 import { useWishlist } from '../contexts/WishlistContext';
 import { useAuth } from '../contexts/AuthContext';
 
@@ -79,9 +80,12 @@ export default function ProfilePage() {
           </CardHeader>
           <CardContent className="flex flex-col gap-6 md:flex-row md:items-center">
             <div className="flex items-center gap-4">
-              <div className="flex h-16 w-16 items-center justify-center rounded-full bg-primary/10 text-lg font-semibold text-primary">
-                {initials}
-              </div>
+              <Avatar className="h-16 w-16">
+                <AvatarImage src={user.avatar || undefined} alt={user.name} />
+                <AvatarFallback className="bg-primary/10 text-lg font-semibold text-primary">
+                  {initials}
+                </AvatarFallback>
+              </Avatar>
               <div className="space-y-1">
                 <p className="text-base font-medium leading-tight">{user.name}</p>
                 <p className="text-sm text-muted-foreground">{user.email}</p>
