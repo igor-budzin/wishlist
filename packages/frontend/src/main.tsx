@@ -5,7 +5,11 @@ import App from './components/App';
 import { ThemeProvider } from './components/theme-provider';
 import { AuthProvider } from './contexts/AuthContext';
 import { ProtectedLayout } from './components/ProtectedLayout';
+import { initI18n } from './lib/i18n';
 import './styles/index.css';
+
+// Initialize i18n
+initI18n();
 
 // Lazy load page components for code splitting
 const HomePage = lazy(() => import('./pages/HomePage'));

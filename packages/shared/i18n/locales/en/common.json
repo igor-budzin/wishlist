@@ -1,0 +1,98 @@
+{
+  "appName": "Wishlist",
+  "save": "Save",
+  "cancel": "Cancel",
+  "delete": "Delete",
+  "edit": "Edit",
+  "add": "Add",
+  "loading": "Loading...",
+  "back": "Back",
+  "login": "Login",
+  "logout": "Log Out",
+  "signIn": "Sign In",
+  "profileNav": "Profile",
+  "home": "Home",
+  "public": "Public",
+  "private": "Private",
+  "priority": {
+    "low": "Low",
+    "medium": "Medium",
+    "high": "High"
+  },
+  "item": {
+    "title": "Title",
+    "description": "Description",
+    "url": "URL",
+    "price": "Price",
+    "currency": "Currency",
+    "priority": "Priority",
+    "addNew": "Add New Item",
+    "addItem": "Add Item",
+    "editItem": "Edit Item",
+    "addFromLink": "Add from Link"
+  },
+  "action": {
+    "analyzing": "Analyzing...",
+    "paste": "Paste URL and Analyze",
+    "enterUrl": "Enter URL to analyze"
+  },
+  "message": {
+    "itemAdded": "Item added successfully!",
+    "itemUpdated": "Item updated successfully!",
+    "itemDeleted": "Item deleted successfully!",
+    "failedToAdd": "Failed to add item",
+    "failedToUpdate": "Failed to update item",
+    "failedToDelete": "Failed to delete item",
+    "failedToConnect": "Failed to connect to server",
+    "sessionExpired": "Session expired. Please log in again.",
+    "noItems": "No items yet. Add your first wishlist item!",
+    "loginWith": "Sign in with {{provider}}"
+  },
+  "auth": {
+    "welcomeBack": "Welcome back",
+    "signInDescription": "Sign in to your account to continue",
+    "continueWithProvider": "Continue with {{provider}}",
+    "providerMismatch": "Email Already Registered",
+    "providerMismatchDescription": "This email is already registered with {{provider}}. Please use {{provider}} to log in.",
+    "continueWith": "Continue with {{provider}}",
+    "tryAgain": "Try Another Account"
+  },
+  "subscriptions": {
+    "title": "Subscriptions",
+    "description": "Manage your subscription settings"
+  },
+  "profile": {
+    "title": "Your profile",
+    "description": "Manage how your information appears in your wishlist.",
+    "editProfile": "Edit profile",
+    "changeAvatar": "Change avatar",
+    "accountDetails": "Account details",
+    "accountDetailsDescription": "These details are currently read-only. Editing will be available soon.",
+    "fullName": "Full name",
+    "emailAddress": "Email address",
+    "wishlistStats": "Wishlist stats",
+    "wishlistStatsDescription": "A quick overview of how you are using your wishlist.",
+    "loadingStats": "Loading your wishlist stats...",
+    "totalItems": "Total items",
+    "allPriorities": "All priorities",
+    "highPriority": "High priority",
+    "important": "Important",
+    "mediumPriority": "Medium priority",
+    "niceToHave": "Nice to have",
+    "lowPriority": "Low priority",
+    "someday": "Someday",
+    "accountActions": "Account actions",
+    "subscriptionsTitle": "Subscriptions",
+    "subscriptionsDescription": "Manage who you follow to get updates about their new wishes.",
+    "manageSubscriptions": "Manage subscriptions",
+    "signOut": "Sign out",
+    "signOutDescription": "You'll be able to securely sign out of your account from here.",
+    "language": "Language",
+    "languageDescription": "Choose your preferred language for the application.",
+    "languageChanged": "Language changed successfully!"
+  },
+  "languages": {
+    "en": "English",
+    "uk": "Українська"
+  }
+}

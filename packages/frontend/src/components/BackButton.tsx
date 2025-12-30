@@ -1,5 +1,6 @@
 import type { ComponentProps } from 'react';
 import { useNavigate } from 'react-router-dom';
+import { useTranslation } from 'react-i18next';
 
 import { ArrowLeft } from './icons';
 import { Button } from './ui/button';
@@ -10,13 +11,9 @@ interface BackButtonProps extends ComponentProps<typeof Button> {
   label?: string;
 }
 
-export function BackButton({
-  to = '/',
-  label = 'Back to Wishlist',
-  className,
-  ...buttonProps
-}: BackButtonProps) {
+export function BackButton({ to = '/', label, className, ...buttonProps }: BackButtonProps) {
   const navigate = useNavigate();
+  const { t } = useTranslation();
 
   return (
     <Button
@@ -27,7 +24,7 @@ export function BackButton({
       onClick={() => navigate(to)}
     >
       <ArrowLeft className="mr-2 h-4 w-4" />
-      {label}
+      {label || t('back')}
     </Button>
   );
 }

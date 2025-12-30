@@ -7,6 +7,7 @@ import authRoutes from './routes/auth.routes.js';
 import userRoutes from './routes/users.routes.js';
 import linkAnalysisRoutes from './routes/link-analysis.routes.js';
 import { errorHandler } from './middleware/errorHandler.js';
+import { languageMiddleware } from './middleware/language.js';
 import { configurePassport } from './features/auth/passport.config.js';
 import { container } from './container.js';
 import { TYPES } from './types.js';
@@ -33,6 +34,9 @@ app.use(
 // Body parsing
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
+
+// Language detection from Accept-Language header
+app.use(languageMiddleware);
 
 // Passport initialization
 configurePassport(authService, logger);

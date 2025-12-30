@@ -33,6 +33,8 @@
     "express": "^4.18.2",
     "express-static-gzip": "^2.1.8",
     "helmet": "^8.1.0",
+    "i18next": "^25.7.3",
+    "i18next-fs-backend": "^2.6.1",
     "inversify": "^7.10.7",
     "jsonwebtoken": "^9.0.3",
     "openai": "^6.15.0",

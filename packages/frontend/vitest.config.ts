@@ -15,6 +15,7 @@ export default defineConfig({
   },
   resolve: {
     alias: {
+      '@wishlist/shared/i18n': path.resolve(__dirname, '../shared/i18n'),
       '@wishlist/shared': path.resolve(__dirname, '../shared/src'),
     },
   },

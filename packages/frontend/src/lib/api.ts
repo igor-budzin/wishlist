@@ -1,4 +1,14 @@
+import i18next from './i18n';
+
 const API_URL = import.meta.env.VITE_API_URL || 'http://localhost:3002';
+
+/**
+ * Get current language for Accept-Language header
+ */
+function getAcceptLanguageHeader(): string {
+  const language = i18next.language || 'en';
+  return language;
+}
 
 /**
  * Refresh the access token using the refresh token
@@ -15,6 +25,7 @@ async function refreshAccessToken(): Promise<boolean> {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json',
+        'Accept-Language': getAcceptLanguageHeader(),
       },
       body: JSON.stringify({ refreshToken }),
     });
@@ -50,6 +61,9 @@ export async function apiRequest(url: string, options: RequestInit = {}): Promis
   if (accessToken) {
     headers.set('Authorization', `Bearer ${accessToken}`);
   }
+
+  // Add Accept-Language header
+  headers.set('Accept-Language', getAcceptLanguageHeader());
 
   // Make the request
   const response = await fetch(url, {

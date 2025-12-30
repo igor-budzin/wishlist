@@ -1,0 +1,98 @@
+{
+  "appName": "Список бажань",
+  "save": "Зберегти",
+  "cancel": "Скасувати",
+  "delete": "Видалити",
+  "edit": "Редагувати",
+  "add": "Додати",
+  "loading": "Завантаження...",
+  "back": "Назад",
+  "login": "Увійти",
+  "logout": "Вийти",
+  "signIn": "Увійти",
+  "profileNav": "Профіль",
+  "home": "Головна",
+  "public": "Публічний",
+  "private": "Приватний",
+  "priority": {
+    "low": "Низький",
+    "medium": "Середній",
+    "high": "Високий"
+  },
+  "item": {
+    "title": "Назва",
+    "description": "Опис",
+    "url": "Посилання",
+    "price": "Ціна",
+    "currency": "Валюта",
+    "priority": "Пріоритет",
+    "addNew": "Додати новий елемент",
+    "addItem": "Додати елемент",
+    "editItem": "Редагувати елемент",
+    "addFromLink": "Додати з посилання"
+  },
+  "action": {
+    "analyzing": "Аналіз...",
+    "paste": "Вставити URL і проаналізувати",
+    "enterUrl": "Введіть URL для аналізу"
+  },
+  "message": {
+    "itemAdded": "Елемент успішно додано!",
+    "itemUpdated": "Елемент успішно оновлено!",
+    "itemDeleted": "Елемент успішно видалено!",
+    "failedToAdd": "Не вдалося додати елемент",
+    "failedToUpdate": "Не вдалося оновити елемент",
+    "failedToDelete": "Не вдалося видалити елемент",
+    "failedToConnect": "Не вдалося підключитися до сервера",
+    "sessionExpired": "Сесія закінчилася. Будь ласка, увійдіть знову.",
+    "noItems": "Ще немає елементів. Додайте ваш перший елемент списку бажань!",
+    "loginWith": "Увійти через {{provider}}"
+  },
+  "auth": {
+    "welcomeBack": "Ласкаво просимо",
+    "signInDescription": "Увійдіть у свій обліковий запис, щоб продовжити",
+    "continueWithProvider": "Продовжити з {{provider}}",
+    "providerMismatch": "Email вже зареєстровано",
+    "providerMismatchDescription": "Ця електронна адреса вже зареєстрована через {{provider}}. Будь ласка, використовуйте {{provider}} для входу.",
+    "continueWith": "Продовжити з {{provider}}",
+    "tryAgain": "Спробувати інший обліковий запис"
+  },
+  "subscriptions": {
+    "title": "Підписки",
+    "description": "Керуйте налаштуваннями підписок"
+  },
+  "profile": {
+    "title": "Ваш профіль",
+    "description": "Керуйте тим, як ваша інформація відображається у вашому списку бажань.",
+    "editProfile": "Редагувати профіль",
+    "changeAvatar": "Змінити аватар",
+    "accountDetails": "Деталі облікового запису",
+    "accountDetailsDescription": "Наразі ці деталі доступні лише для читання. Редагування буде доступне найближчим часом.",
+    "fullName": "Повне ім'я",
+    "emailAddress": "Електронна адреса",
+    "wishlistStats": "Статистика списку бажань",
+    "wishlistStatsDescription": "Короткий огляд того, як ви використовуєте свій список бажань.",
+    "loadingStats": "Завантаження статистики вашого списку бажань...",
+    "totalItems": "Всього елементів",
+    "allPriorities": "Всі пріоритети",
+    "highPriority": "Високий пріоритет",
+    "important": "Важливо",
+    "mediumPriority": "Середній пріоритет",
+    "niceToHave": "Було б непогано",
+    "lowPriority": "Низький пріоритет",
+    "someday": "Колись",
+    "accountActions": "Дії з обліковим записом",
+    "subscriptionsTitle": "Підписки",
+    "subscriptionsDescription": "Керуйте тим, на кого ви підписані, щоб отримувати оновлення про їхні нові бажання.",
+    "manageSubscriptions": "Керувати підписками",
+    "signOut": "Вийти",
+    "signOutDescription": "Ви зможете безпечно вийти зі свого облікового запису звідси.",
+    "language": "Мова",
+    "languageDescription": "Виберіть вашу бажану мову для додатку.",
+    "languageChanged": "Мову успішно змінено!"
+  },
+  "languages": {
+    "en": "English",
+    "uk": "Українська"
+  }
+}

@@ -3,11 +3,12 @@
   "compilerOptions": {
     "composite": true,
     "outDir": "./dist",
-    "rootDir": "./src",
+    "rootDir": ".",
     "noEmit": false,
     "moduleResolution": "node",
-    "allowImportingTsExtensions": false
+    "allowImportingTsExtensions": false,
+    "resolveJsonModule": true
   },
-  "include": ["src/**/*"],
+  "include": ["src/**/*", "i18n/**/*.ts", "i18n/**/*.json"],
   "exclude": ["node_modules", "dist"]
 }

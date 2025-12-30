@@ -29,7 +29,7 @@ export class LinkAnalysisController {
         if (error.message.includes('OPENAI_API_KEY')) {
           const response: ApiResponse<null> = {
             success: false,
-            error: 'AI service not configured',
+            error: req.t('linkAnalysis.serviceNotConfigured', { ns: 'errors' }),
           };
           res.status(503).json(response);
           return;
@@ -39,7 +39,7 @@ export class LinkAnalysisController {
         if (error.message.includes('Failed to extract') || error.message.includes('HTTP')) {
           const response: ApiResponse<null> = {
             success: false,
-            error: 'Failed to fetch URL content',
+            error: req.t('linkAnalysis.fetchFailed', { ns: 'errors' }),
           };
           res.status(400).json(response);
           return;
@@ -49,7 +49,7 @@ export class LinkAnalysisController {
         if (error.message.includes('Failed to analyze')) {
           const response: ApiResponse<null> = {
             success: false,
-            error: 'AI service temporarily unavailable',
+            error: req.t('linkAnalysis.serviceUnavailable', { ns: 'errors' }),
           };
           res.status(503).json(response);
           return;
