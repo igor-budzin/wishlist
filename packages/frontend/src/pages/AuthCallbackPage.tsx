@@ -1,31 +1,40 @@
 import { useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
+import { useAuth } from '../contexts/AuthContext';
 
 export default function AuthCallbackPage() {
   const navigate = useNavigate();
+  const { checkAuth } = useAuth();
 
   useEffect(() => {
-    // Parse tokens from URL fragment (#access_token=...&refresh_token=...)
-    const hash = window.location.hash.substring(1); // Remove the '#'
-    const params = new URLSearchParams(hash);
-    const accessToken = params.get('access_token');
-    const refreshToken = params.get('refresh_token');
+    const handleCallback = async () => {
+      // Parse tokens from URL fragment (#access_token=...&refresh_token=...)
+      const hash = window.location.hash.substring(1); // Remove the '#'
+      const params = new URLSearchParams(hash);
+      const accessToken = params.get('access_token');
+      const refreshToken = params.get('refresh_token');
 
-    if (accessToken && refreshToken) {
-      // Store tokens in localStorage
-      localStorage.setItem('access_token', accessToken);
-      localStorage.setItem('refresh_token', refreshToken);
+      if (accessToken && refreshToken) {
+        // Store tokens in localStorage
+        localStorage.setItem('access_token', accessToken);
+        localStorage.setItem('refresh_token', refreshToken);
 
-      // Clear URL hash for security
-      window.history.replaceState(null, '', '/');
+        // Clear URL hash for security
+        window.history.replaceState(null, '', '/');
 
-      // Redirect to home page
-      navigate('/', { replace: true });
-    } else {
-      // No tokens found - authentication failed
-      navigate('/login?error=auth_failed', { replace: true });
-    }
-  }, [navigate]);
+        // Update auth state with the new tokens
+        await checkAuth();
+
+        // Redirect to home page
+        navigate('/', { replace: true });
+      } else {
+        // No tokens found - authentication failed
+        navigate('/login?error=auth_failed', { replace: true });
+      }
+    };
+
+    handleCallback();
+  }, [navigate, checkAuth]);
 
   return (
     <div className="flex min-h-screen items-center justify-center bg-gradient-to-br from-purple-50 to-pink-50">
