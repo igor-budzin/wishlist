@@ -21,25 +21,23 @@ declare module 'i18next' {
  * Must be called before server starts
  */
 export async function initI18n(): Promise<void> {
-  await i18next
-    .use(Backend)
-    .init({
-      lng: 'en', // default language
-      fallbackLng: 'en',
-      defaultNS,
-      ns: ['common', 'errors', 'validation'],
-      supportedLngs: supportedLanguages,
-      preload: supportedLanguages,
-      backend: {
-        // Path to translation files in shared package
-        loadPath: path.join(__dirname, '../../../shared/i18n/locales/{{lng}}/{{ns}}.json'),
-      },
-      interpolation: {
-        escapeValue: false, // not needed for server-side
-      },
-      returnNull: false,
-      returnEmptyString: false,
-    });
+  await i18next.use(Backend).init({
+    lng: 'en', // default language
+    fallbackLng: 'en',
+    defaultNS,
+    ns: ['common', 'errors', 'validation'],
+    supportedLngs: supportedLanguages,
+    preload: supportedLanguages,
+    backend: {
+      // Path to translation files in shared package
+      loadPath: path.join(__dirname, '../../../shared/i18n/locales/{{lng}}/{{ns}}.json'),
+    },
+    interpolation: {
+      escapeValue: false, // not needed for server-side
+    },
+    returnNull: false,
+    returnEmptyString: false,
+  });
 }
 
 /**

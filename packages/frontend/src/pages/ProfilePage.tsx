@@ -73,9 +73,7 @@ export default function ProfilePage() {
           <CardHeader className="flex flex-col gap-4 md:flex-row md:items-center md:justify-between">
             <div className="space-y-1.5">
               <CardTitle>{t('profile.title')}</CardTitle>
-              <CardDescription>
-                {t('profile.description')}
-              </CardDescription>
+              <CardDescription>{t('profile.description')}</CardDescription>
             </div>
             <Button variant="outline" size="sm" onClick={handleEditProfile}>
               {t('profile.editProfile')}
@@ -107,9 +105,7 @@ export default function ProfilePage() {
         <Card>
           <CardHeader>
             <CardTitle>{t('profile.accountDetails')}</CardTitle>
-            <CardDescription>
-              {t('profile.accountDetailsDescription')}
-            </CardDescription>
+            <CardDescription>{t('profile.accountDetailsDescription')}</CardDescription>
           </CardHeader>
           <CardContent className="space-y-4">
             <div className="grid gap-4 md:grid-cols-2">
@@ -137,28 +133,36 @@ export default function ProfilePage() {
             ) : (
               <div className="grid gap-4 md:grid-cols-4">
                 <div className="space-y-1 rounded-lg border bg-card p-4">
-                  <p className="text-xs font-medium text-muted-foreground">{t('profile.totalItems')}</p>
+                  <p className="text-xs font-medium text-muted-foreground">
+                    {t('profile.totalItems')}
+                  </p>
                   <p className="text-2xl font-semibold">{stats.total}</p>
                   <Badge variant="outline" className="mt-1">
                     {t('profile.allPriorities')}
                   </Badge>
                 </div>
                 <div className="space-y-1 rounded-lg border bg-card p-4">
-                  <p className="text-xs font-medium text-muted-foreground">{t('profile.highPriority')}</p>
+                  <p className="text-xs font-medium text-muted-foreground">
+                    {t('profile.highPriority')}
+                  </p>
                   <p className="text-2xl font-semibold">{stats.high}</p>
                   <Badge variant="destructive" className="mt-1">
                     {t('profile.important')}
                   </Badge>
                 </div>
                 <div className="space-y-1 rounded-lg border bg-card p-4">
-                  <p className="text-xs font-medium text-muted-foreground">{t('profile.mediumPriority')}</p>
+                  <p className="text-xs font-medium text-muted-foreground">
+                    {t('profile.mediumPriority')}
+                  </p>
                   <p className="text-2xl font-semibold">{stats.medium}</p>
                   <Badge variant="warning" className="mt-1">
                     {t('profile.niceToHave')}
                   </Badge>
                 </div>
                 <div className="space-y-1 rounded-lg border bg-card p-4">
-                  <p className="text-xs font-medium text-muted-foreground">{t('profile.lowPriority')}</p>
+                  <p className="text-xs font-medium text-muted-foreground">
+                    {t('profile.lowPriority')}
+                  </p>
                   <p className="text-2xl font-semibold">{stats.low}</p>
                   <Badge variant="success" className="mt-1">
                     {t('profile.someday')}
@@ -178,9 +182,7 @@ export default function ProfilePage() {
             <div className="flex flex-col gap-3 md:flex-row md:items-center md:justify-between">
               <div className="space-y-1">
                 <p className="text-sm font-medium">{t('profile.language')}</p>
-                <p className="text-xs text-muted-foreground">
-                  {t('profile.languageDescription')}
-                </p>
+                <p className="text-xs text-muted-foreground">{t('profile.languageDescription')}</p>
               </div>
               <div className="flex gap-2">
                 <LanguageSelector />
@@ -204,9 +206,7 @@ export default function ProfilePage() {
             <div className="flex flex-col gap-3 md:flex-row md:items-center md:justify-between">
               <div className="space-y-1">
                 <p className="text-sm font-medium">{t('profile.signOut')}</p>
-                <p className="text-xs text-muted-foreground">
-                  {t('profile.signOutDescription')}
-                </p>
+                <p className="text-xs text-muted-foreground">{t('profile.signOutDescription')}</p>
               </div>
               <div className="flex gap-2">
                 <Button variant="outline" size="sm" onClick={handleSignOut}>

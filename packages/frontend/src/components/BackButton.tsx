@@ -11,12 +11,7 @@ interface BackButtonProps extends ComponentProps<typeof Button> {
   label?: string;
 }
 
-export function BackButton({
-  to = '/',
-  label,
-  className,
-  ...buttonProps
-}: BackButtonProps) {
+export function BackButton({ to = '/', label, className, ...buttonProps }: BackButtonProps) {
   const navigate = useNavigate();
   const { t } = useTranslation();
 

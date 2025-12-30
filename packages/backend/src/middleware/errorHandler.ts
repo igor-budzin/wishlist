@@ -10,7 +10,10 @@ export const errorHandler = (err: Error, req: Request, res: Response, _next: Nex
 
   const response: ApiResponse<null> = {
     success: false,
-    error: process.env.NODE_ENV === 'production' ? req.t('internalError', { ns: 'errors' }) : err.message,
+    error:
+      process.env.NODE_ENV === 'production'
+        ? req.t('internalError', { ns: 'errors' })
+        : err.message,
   };
 
   res.status(500).json(response);

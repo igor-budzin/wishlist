@@ -64,10 +64,7 @@ const CURRENCY_CODES = [
 
 export const wishlistItemSchema = z
   .object({
-    title: z
-      .string()
-      .min(1, 'validation.title.required')
-      .max(100, 'validation.title.maxLength'),
+    title: z.string().min(1, 'validation.title.required').max(100, 'validation.title.maxLength'),
     description: z
       .string()
       .max(500, 'validation.description.maxLength')

@@ -13,8 +13,8 @@ export const validate = (schema: ZodSchema) => {
           .map((issue) => {
             // Check if message is a translation key (contains a dot)
             const translatedMessage = issue.message.includes('.')
-              // eslint-disable-next-line @typescript-eslint/no-explicit-any
-              ? (req.t as any)(issue.message.split('.').slice(1).join('.'), { ns: 'validation' })
+              ? // eslint-disable-next-line @typescript-eslint/no-explicit-any
+                (req.t as any)(issue.message.split('.').slice(1).join('.'), { ns: 'validation' })
               : issue.message;
             const path = issue.path.length > 0 ? `${issue.path.join('.')}:` : '';
             return `${path} ${translatedMessage}`;

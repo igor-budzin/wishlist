@@ -1,12 +1,6 @@
 import { useTranslation } from 'react-i18next';
 import { toast } from 'sonner';
-import {
-  Select,
-  SelectContent,
-  SelectItem,
-  SelectTrigger,
-  SelectValue,
-} from './ui/select';
+import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from './ui/select';
 import { supportedLanguages } from '@wishlist/shared/i18n';
 
 export function LanguageSelector() {
