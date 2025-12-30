@@ -12,9 +12,11 @@ import { supportedLanguages } from '@wishlist/shared/i18n';
 export function LanguageSelector() {
   const { t, i18n } = useTranslation();
 
-  const handleLanguageChange = (language: string) => {
-    i18n.changeLanguage(language);
-    toast.success(t('profile.languageChanged'));
+  const handleLanguageChange = async (language: string) => {
+    await i18n.changeLanguage(language);
+    // Get the translation in the NEW language after change
+    const message = i18n.t('profile.languageChanged');
+    toast.success(message);
   };
 
   return (
