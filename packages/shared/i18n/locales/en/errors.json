@@ -1,0 +1,20 @@
+{
+  "notFound": "Resource not found",
+  "unauthorized": "Unauthorized access",
+  "forbidden": "Access forbidden",
+  "internalError": "Internal server error",
+  "wishlist": {
+    "itemNotFound": "Wishlist item not found"
+  },
+  "auth": {
+    "providerConflict": "This email is already registered with {{provider}}. Please use {{provider}} to log in.",
+    "invalidCredentials": "Invalid credentials",
+    "tokenExpired": "Token expired"
+  },
+  "linkAnalysis": {
+    "serviceNotConfigured": "AI service not configured",
+    "fetchFailed": "Failed to fetch URL content",
+    "serviceUnavailable": "AI service temporarily unavailable",
+    "invalidUrl": "Invalid URL provided"
+  }
+}

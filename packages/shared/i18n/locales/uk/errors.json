@@ -1,0 +1,20 @@
+{
+  "notFound": "Ресурс не знайдено",
+  "unauthorized": "Несанкціонований доступ",
+  "forbidden": "Доступ заборонено",
+  "internalError": "Внутрішня помилка сервера",
+  "wishlist": {
+    "itemNotFound": "Елемент списку бажань не знайдено"
+  },
+  "auth": {
+    "providerConflict": "Ця електронна адреса вже зареєстрована через {{provider}}. Будь ласка, використовуйте {{provider}} для входу.",
+    "invalidCredentials": "Невірні облікові дані",
+    "tokenExpired": "Термін дії токена закінчився"
+  },
+  "linkAnalysis": {
+    "serviceNotConfigured": "AI сервіс не налаштовано",
+    "fetchFailed": "Не вдалося отримати вміст URL",
+    "serviceUnavailable": "AI сервіс тимчасово недоступний",
+    "invalidUrl": "Надано невірний URL"
+  }
+}

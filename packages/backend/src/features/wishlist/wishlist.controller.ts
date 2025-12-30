@@ -36,7 +36,7 @@ export class WishlistItemController {
       if (error instanceof Error && error.message.includes('not found')) {
         const response: ApiResponse<null> = {
           success: false,
-          error: error.message,
+          error: req.t('wishlist.itemNotFound', { ns: 'errors' }),
         };
         res.status(404).json(response);
       } else {
@@ -74,7 +74,7 @@ export class WishlistItemController {
       if (error instanceof Error && error.message.includes('not found')) {
         const response: ApiResponse<null> = {
           success: false,
-          error: error.message,
+          error: req.t('wishlist.itemNotFound', { ns: 'errors' }),
         };
         res.status(404).json(response);
       } else {
@@ -97,7 +97,7 @@ export class WishlistItemController {
       if (error instanceof Error && error.message.includes('not found')) {
         const response: ApiResponse<null> = {
           success: false,
-          error: error.message,
+          error: req.t('wishlist.itemNotFound', { ns: 'errors' }),
         };
         res.status(404).json(response);
       } else {

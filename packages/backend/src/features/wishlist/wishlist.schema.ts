@@ -44,13 +44,13 @@ export const currencyCodeSchema = z.enum(CURRENCY_CODES);
 
 export const createWishlistItemSchema = z
   .object({
-    title: z.string().min(1, 'Title is required').max(255),
+    title: z.string().min(1, 'validation.title.required').max(255),
     description: z.string().max(1000).optional(),
-    url: z.string().url('Invalid URL format').optional().or(z.literal('')),
+    url: z.string().url('validation.url.invalid').optional().or(z.literal('')),
 
     priceAmount: z
       .string()
-      .regex(/^\d+(\.\d{1,2})?$/, 'Price must be a valid number with up to 2 decimal places')
+      .regex(/^\d+(\.\d{1,2})?$/, 'validation.price.invalid')
       .optional()
       .or(z.literal('')),
     priceCurrency: currencyCodeSchema.optional().or(z.literal('')),
@@ -66,7 +66,7 @@ export const createWishlistItemSchema = z
       return true;
     },
     {
-      message: 'If currency is specified, price amount must also be provided',
+      message: 'validation.priceAndCurrency',
       path: ['priceAmount'],
     }
   );
@@ -75,11 +75,11 @@ export const updateWishlistItemSchema = z
   .object({
     title: z.string().min(1).max(255).optional(),
     description: z.string().max(1000).optional().nullable(),
-    url: z.string().url('Invalid URL format').optional().nullable().or(z.literal('')),
+    url: z.string().url('validation.url.invalid').optional().nullable().or(z.literal('')),
 
     priceAmount: z
       .string()
-      .regex(/^\d+(\.\d{1,2})?$/, 'Price must be a valid number with up to 2 decimal places')
+      .regex(/^\d+(\.\d{1,2})?$/, 'validation.price.invalid')
       .optional()
       .nullable()
       .or(z.literal('')),
@@ -96,7 +96,7 @@ export const updateWishlistItemSchema = z
       return true;
     },
     {
-      message: 'If currency is specified, price amount must also be provided',
+      message: 'validation.priceAndCurrency',
       path: ['priceAmount'],
     }
   );

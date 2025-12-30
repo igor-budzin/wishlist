@@ -1,0 +1,31 @@
+{
+  "required": "This field is required",
+  "title": {
+    "required": "Title is required",
+    "maxLength": "Title must be less than {{max}} characters"
+  },
+  "description": {
+    "maxLength": "Description must be less than {{max}} characters"
+  },
+  "url": {
+    "invalid": "Must be a valid URL",
+    "required": "URL is required"
+  },
+  "price": {
+    "invalid": "Price must be a valid number with up to 2 decimal places",
+    "required": "Price amount is required when currency is specified",
+    "positive": "Price must be a positive number"
+  },
+  "currency": {
+    "required": "Currency is required when price is specified",
+    "invalid": "Invalid currency code"
+  },
+  "email": {
+    "invalid": "Invalid email address",
+    "required": "Email is required"
+  },
+  "priority": {
+    "invalid": "Priority must be LOW, MEDIUM, or HIGH"
+  },
+  "priceAndCurrency": "If currency is specified, price amount must also be provided"
+}
