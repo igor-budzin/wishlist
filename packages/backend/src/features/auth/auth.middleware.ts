@@ -4,6 +4,7 @@ import type { ApiResponse } from '@wishlist/shared';
 import { container } from '../../container.js';
 import { TYPES } from '../../types.js';
 import type { IJwtService } from './jwt.service.js';
+import type { IUserRepository } from '../users/user.repository.js';
 
 // Extend Express Request type to include user
 declare global {
@@ -17,7 +18,7 @@ declare global {
  * Middleware that requires authentication via JWT.
  * Returns 401 if user is not authenticated.
  */
-export function requireAuth(req: Request, res: Response, next: NextFunction): void {
+export async function requireAuth(req: Request, res: Response, next: NextFunction): Promise<void> {
   // Extract token from Authorization header
   const authHeader = req.headers.authorization;
 
@@ -47,15 +48,27 @@ export function requireAuth(req: Request, res: Response, next: NextFunction): vo
     return;
   }
 
+  // Fetch user data from database to get complete profile
+  const userRepository = container.get<IUserRepository>(TYPES.UserRepository);
+  const user = await userRepository.findById(payload.userId);
+
+  if (!user) {
+    const response: ApiResponse<null> = {
+      success: false,
+      error: 'User not found',
+    };
+    res.status(401).json(response);
+    return;
+  }
+
   // Attach user info to request
-  // Note: We trust the JWT claims and don't fetch from DB for performance
   req.user = {
-    id: payload.userId,
-    email: payload.email,
+    id: user.id,
+    email: user.email,
     provider: payload.provider,
-    name: '', // Not in token, would need DB fetch
-    avatar: null, // Not in token, would need DB fetch
-    createdAt: new Date(), // Not in token, would need DB fetch
+    name: user.name,
+    avatar: user.avatar,
+    createdAt: user.createdAt,
   };
 
   next();
