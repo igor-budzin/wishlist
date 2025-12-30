@@ -371,20 +371,36 @@ describe('Social OAuth Browser E2E Tests', () => {
 
       const testEmail = `test-security-${Date.now()}@test.e2e.local`;
 
-      // Act - Navigate to test login endpoint
+      // Act - Navigate to test login endpoint which redirects to auth callback with tokens
       await page.goto(`${BACKEND_URL}/api/auth/test-login?email=${testEmail}`, {
         waitUntil: 'load',
       });
 
-      // Wait for redirect to home page
+      // The flow is: test-login -> /auth/callback#access_token=X&refresh_token=Y -> /
+      // We need to wait for the callback page to process tokens and redirect to home
+
+      // Wait for redirect to auth callback page (may have hash with tokens)
+      await page.waitForURL(`${FRONTEND_URL}/auth/callback**`, { timeout: TIMEOUT });
+
+      // Verify tokens are present in the URL hash initially (before they're cleared)
+      const callbackUrl = page.url();
+      expect(callbackUrl).toContain('/auth/callback');
+
+      // Now wait for the final redirect to home page after auth is complete
       await page.waitForURL(`${FRONTEND_URL}/`, { timeout: TIMEOUT });
 
-      // Assert - URL hash should be cleared (no tokens in URL)
-      const currentUrl = page.url();
-      expect(currentUrl).toBe(`${FRONTEND_URL}/`);
-      expect(currentUrl).not.toContain('access_token');
-      expect(currentUrl).not.toContain('refresh_token');
-      expect(currentUrl).not.toContain('#');
+      // Assert - URL should be clean (no hash, no tokens)
+      const finalUrl = page.url();
+      expect(finalUrl).toBe(`${FRONTEND_URL}/`);
+      expect(finalUrl).not.toContain('access_token');
+      expect(finalUrl).not.toContain('refresh_token');
+      expect(finalUrl).not.toContain('#');
+
+      // Verify tokens were stored in localStorage (not in URL)
+      const accessToken = await page.evaluate(() => localStorage.getItem('access_token'));
+      const refreshToken = await page.evaluate(() => localStorage.getItem('refresh_token'));
+      expect(accessToken).toBeTruthy();
+      expect(refreshToken).toBeTruthy();
     });
 
     it('should not expose tokens in browser history', async () => {
