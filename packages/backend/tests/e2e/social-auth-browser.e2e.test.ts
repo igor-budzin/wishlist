@@ -33,7 +33,7 @@ describe('Social OAuth Browser E2E Tests', () => {
 
   beforeAll(async () => {
     browser = await chromium.launch({
-      headless: true,
+      headless: false,
       args: ['--no-sandbox', '--disable-setuid-sandbox'],
     });
   });
@@ -82,28 +82,28 @@ describe('Social OAuth Browser E2E Tests', () => {
       expect(await githubButton.count()).toBeGreaterThan(0);
     });
 
-  //   it('should redirect authenticated users away from login page', async () => {
-  //     // Arrange
-  //     context = await browser.newContext();
-  //     page = await context.newPage();
-      
-  //     // Login first using test endpoint
-  //     const testEmail = `test-redirect-${Date.now()}@test.e2e.local`;
-  //     await page.goto(`${BACKEND_URL}/api/auth/test-login?email=${testEmail}`, {
-  //       waitUntil: 'load',
-  //     });
-      
-  //     // Wait for redirect and tokens to be stored
-  //     await page.waitForURL(`${FRONTEND_URL}/**`, { timeout: TIMEOUT });
+    // it('should redirect authenticated users away from login page', async () => {
+    //   // Arrange
+    //   context = await browser.newContext();
+    //   page = await context.newPage();
 
-  //     // Act - Try to navigate to login page
-  //     await page.goto(`${FRONTEND_URL}/login`, { waitUntil: 'domcontentloaded' });
+    //   // Login first using test endpoint
+    //   const testEmail = `test-redirect-${Date.now()}@test.e2e.local`;
+    //   await page.goto(`${BACKEND_URL}/api/auth/test-login?email=${testEmail}`, {
+    //     waitUntil: 'load',
+    //   });
 
-  //     // Assert - Should be redirected to home page
-  //     await page.waitForURL(`${FRONTEND_URL}/`, { timeout: TIMEOUT });
-  //     expect(page.url()).toBe(`${FRONTEND_URL}/`);
-  //   });
-  // });
+    //   // Wait for redirect and tokens to be stored
+    //   await page.waitForURL(`${FRONTEND_URL}/**`, { timeout: TIMEOUT });
+
+    //   // Act - Try to navigate to login page
+    //   await page.goto(`${FRONTEND_URL}/login`, { waitUntil: 'domcontentloaded' });
+
+    //   // Assert - Should be redirected to home page
+    //   await page.waitForURL(`${FRONTEND_URL}/`, { timeout: TIMEOUT });
+    //   expect(page.url()).toBe(`${FRONTEND_URL}/`);
+    // });
+  });
 
   describe('OAuth Login Flow (Test Endpoint)', () => {
     it('should complete OAuth login flow and store tokens in localStorage', async () => {
