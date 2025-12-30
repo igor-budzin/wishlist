@@ -1,10 +1,12 @@
 import { useMemo } from 'react';
 import { useNavigate } from 'react-router-dom';
+import { useTranslation } from 'react-i18next';
 import { toast } from 'sonner';
 
 import { AppHeader } from '../components/AppHeader';
 import { BackButton } from '../components/BackButton';
 import { ShareProfileButton } from '../components/ShareProfileButton';
+import { LanguageSelector } from '../components/LanguageSelector';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '../components/ui/card';
 import { Badge } from '../components/ui/badge';
 import { Button } from '../components/ui/button';
@@ -15,6 +17,7 @@ import { useWishlist } from '../contexts/WishlistContext';
 import { useAuth } from '../contexts/AuthContext';
 
 export default function ProfilePage() {
+  const { t } = useTranslation();
   const navigate = useNavigate();
   const { items, loading } = useWishlist();
   const { user, logout } = useAuth();
@@ -69,13 +72,13 @@ export default function ProfilePage() {
         <Card>
           <CardHeader className="flex flex-col gap-4 md:flex-row md:items-center md:justify-between">
             <div className="space-y-1.5">
-              <CardTitle>Your profile</CardTitle>
+              <CardTitle>{t('profile.title')}</CardTitle>
               <CardDescription>
-                Manage how your information appears in your wishlist.
+                {t('profile.description')}
               </CardDescription>
             </div>
             <Button variant="outline" size="sm" onClick={handleEditProfile}>
-              Edit profile
+              {t('profile.editProfile')}
             </Button>
           </CardHeader>
           <CardContent className="flex flex-col gap-6 md:flex-row md:items-center">
@@ -94,7 +97,7 @@ export default function ProfilePage() {
             </div>
             <div className="md:ml-auto">
               <Button variant="outline" size="sm" onClick={handleChangeAvatar}>
-                Change avatar
+                {t('profile.changeAvatar')}
               </Button>
             </div>
           </CardContent>
@@ -103,19 +106,19 @@ export default function ProfilePage() {
         {/* Account details */}
         <Card>
           <CardHeader>
-            <CardTitle>Account details</CardTitle>
+            <CardTitle>{t('profile.accountDetails')}</CardTitle>
             <CardDescription>
-              These details are currently read-only. Editing will be available soon.
+              {t('profile.accountDetailsDescription')}
             </CardDescription>
           </CardHeader>
           <CardContent className="space-y-4">
             <div className="grid gap-4 md:grid-cols-2">
               <div className="space-y-2">
-                <Label htmlFor="name">Full name</Label>
+                <Label htmlFor="name">{t('profile.fullName')}</Label>
                 <Input id="name" value={user.name} readOnly />
               </div>
               <div className="space-y-2">
-                <Label htmlFor="email">Email address</Label>
+                <Label htmlFor="email">{t('profile.emailAddress')}</Label>
                 <Input id="email" type="email" value={user.email} readOnly />
               </div>
             </div>
@@ -125,40 +128,40 @@ export default function ProfilePage() {
         {/* Wishlist stats */}
         <Card>
           <CardHeader>
-            <CardTitle>Wishlist stats</CardTitle>
-            <CardDescription>A quick overview of how you are using your wishlist.</CardDescription>
+            <CardTitle>{t('profile.wishlistStats')}</CardTitle>
+            <CardDescription>{t('profile.wishlistStatsDescription')}</CardDescription>
           </CardHeader>
           <CardContent>
             {loading ? (
-              <p className="text-sm text-muted-foreground">Loading your wishlist stats...</p>
+              <p className="text-sm text-muted-foreground">{t('profile.loadingStats')}</p>
             ) : (
               <div className="grid gap-4 md:grid-cols-4">
                 <div className="space-y-1 rounded-lg border bg-card p-4">
-                  <p className="text-xs font-medium text-muted-foreground">Total items</p>
+                  <p className="text-xs font-medium text-muted-foreground">{t('profile.totalItems')}</p>
                   <p className="text-2xl font-semibold">{stats.total}</p>
                   <Badge variant="outline" className="mt-1">
-                    All priorities
+                    {t('profile.allPriorities')}
                   </Badge>
                 </div>
                 <div className="space-y-1 rounded-lg border bg-card p-4">
-                  <p className="text-xs font-medium text-muted-foreground">High priority</p>
+                  <p className="text-xs font-medium text-muted-foreground">{t('profile.highPriority')}</p>
                   <p className="text-2xl font-semibold">{stats.high}</p>
                   <Badge variant="destructive" className="mt-1">
-                    Important
+                    {t('profile.important')}
                   </Badge>
                 </div>
                 <div className="space-y-1 rounded-lg border bg-card p-4">
-                  <p className="text-xs font-medium text-muted-foreground">Medium priority</p>
+                  <p className="text-xs font-medium text-muted-foreground">{t('profile.mediumPriority')}</p>
                   <p className="text-2xl font-semibold">{stats.medium}</p>
                   <Badge variant="warning" className="mt-1">
-                    Nice to have
+                    {t('profile.niceToHave')}
                   </Badge>
                 </div>
                 <div className="space-y-1 rounded-lg border bg-card p-4">
-                  <p className="text-xs font-medium text-muted-foreground">Low priority</p>
+                  <p className="text-xs font-medium text-muted-foreground">{t('profile.lowPriority')}</p>
                   <p className="text-2xl font-semibold">{stats.low}</p>
                   <Badge variant="success" className="mt-1">
-                    Someday
+                    {t('profile.someday')}
                   </Badge>
                 </div>
               </div>
@@ -169,33 +172,45 @@ export default function ProfilePage() {
         {/* Account actions */}
         <Card>
           <CardHeader>
-            <CardTitle>Account actions</CardTitle>
+            <CardTitle>{t('profile.accountActions')}</CardTitle>
           </CardHeader>
           <CardContent className="space-y-4">
             <div className="flex flex-col gap-3 md:flex-row md:items-center md:justify-between">
               <div className="space-y-1">
-                <p className="text-sm font-medium">Subscriptions</p>
+                <p className="text-sm font-medium">{t('profile.language')}</p>
                 <p className="text-xs text-muted-foreground">
-                  Manage who you follow to get updates about their new wishes.
+                  {t('profile.languageDescription')}
+                </p>
+              </div>
+              <div className="flex gap-2">
+                <LanguageSelector />
+              </div>
+            </div>
+
+            <div className="flex flex-col gap-3 md:flex-row md:items-center md:justify-between">
+              <div className="space-y-1">
+                <p className="text-sm font-medium">{t('profile.subscriptionsTitle')}</p>
+                <p className="text-xs text-muted-foreground">
+                  {t('profile.subscriptionsDescription')}
                 </p>
               </div>
               <div className="flex gap-2">
                 <Button variant="outline" size="sm" onClick={() => navigate('/subscriptions')}>
-                  Manage subscriptions
+                  {t('profile.manageSubscriptions')}
                 </Button>
               </div>
             </div>
 
             <div className="flex flex-col gap-3 md:flex-row md:items-center md:justify-between">
               <div className="space-y-1">
-                <p className="text-sm font-medium">Sign out</p>
+                <p className="text-sm font-medium">{t('profile.signOut')}</p>
                 <p className="text-xs text-muted-foreground">
-                  You&apos;ll be able to securely sign out of your account from here.
+                  {t('profile.signOutDescription')}
                 </p>
               </div>
               <div className="flex gap-2">
                 <Button variant="outline" size="sm" onClick={handleSignOut}>
-                  Sign out
+                  {t('profile.signOut')}
                 </Button>
               </div>
             </div>

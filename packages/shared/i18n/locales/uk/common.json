@@ -10,7 +10,7 @@
   "login": "Увійти",
   "logout": "Вийти",
   "signIn": "Увійти",
-  "profile": "Профіль",
+  "profileNav": "Профіль",
   "home": "Головна",
   "public": "Публічний",
   "private": "Приватний",
@@ -60,5 +60,39 @@
   "subscriptions": {
     "title": "Підписки",
     "description": "Керуйте налаштуваннями підписок"
+  },
+  "profile": {
+    "title": "Ваш профіль",
+    "description": "Керуйте тим, як ваша інформація відображається у вашому списку бажань.",
+    "editProfile": "Редагувати профіль",
+    "changeAvatar": "Змінити аватар",
+    "accountDetails": "Деталі облікового запису",
+    "accountDetailsDescription": "Наразі ці деталі доступні лише для читання. Редагування буде доступне найближчим часом.",
+    "fullName": "Повне ім'я",
+    "emailAddress": "Електронна адреса",
+    "wishlistStats": "Статистика списку бажань",
+    "wishlistStatsDescription": "Короткий огляд того, як ви використовуєте свій список бажань.",
+    "loadingStats": "Завантаження статистики вашого списку бажань...",
+    "totalItems": "Всього елементів",
+    "allPriorities": "Всі пріоритети",
+    "highPriority": "Високий пріоритет",
+    "important": "Важливо",
+    "mediumPriority": "Середній пріоритет",
+    "niceToHave": "Було б непогано",
+    "lowPriority": "Низький пріоритет",
+    "someday": "Колись",
+    "accountActions": "Дії з обліковим записом",
+    "subscriptionsTitle": "Підписки",
+    "subscriptionsDescription": "Керуйте тим, на кого ви підписані, щоб отримувати оновлення про їхні нові бажання.",
+    "manageSubscriptions": "Керувати підписками",
+    "signOut": "Вийти",
+    "signOutDescription": "Ви зможете безпечно вийти зі свого облікового запису звідси.",
+    "language": "Мова",
+    "languageDescription": "Виберіть вашу бажану мову для додатку.",
+    "languageChanged": "Мову успішно змінено!"
+  },
+  "languages": {
+    "en": "English",
+    "uk": "Українська"
   }
 }

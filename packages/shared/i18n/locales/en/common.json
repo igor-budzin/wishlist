@@ -10,7 +10,7 @@
   "login": "Login",
   "logout": "Log Out",
   "signIn": "Sign In",
-  "profile": "Profile",
+  "profileNav": "Profile",
   "home": "Home",
   "public": "Public",
   "private": "Private",
@@ -60,5 +60,39 @@
   "subscriptions": {
     "title": "Subscriptions",
     "description": "Manage your subscription settings"
+  },
+  "profile": {
+    "title": "Your profile",
+    "description": "Manage how your information appears in your wishlist.",
+    "editProfile": "Edit profile",
+    "changeAvatar": "Change avatar",
+    "accountDetails": "Account details",
+    "accountDetailsDescription": "These details are currently read-only. Editing will be available soon.",
+    "fullName": "Full name",
+    "emailAddress": "Email address",
+    "wishlistStats": "Wishlist stats",
+    "wishlistStatsDescription": "A quick overview of how you are using your wishlist.",
+    "loadingStats": "Loading your wishlist stats...",
+    "totalItems": "Total items",
+    "allPriorities": "All priorities",
+    "highPriority": "High priority",
+    "important": "Important",
+    "mediumPriority": "Medium priority",
+    "niceToHave": "Nice to have",
+    "lowPriority": "Low priority",
+    "someday": "Someday",
+    "accountActions": "Account actions",
+    "subscriptionsTitle": "Subscriptions",
+    "subscriptionsDescription": "Manage who you follow to get updates about their new wishes.",
+    "manageSubscriptions": "Manage subscriptions",
+    "signOut": "Sign out",
+    "signOutDescription": "You'll be able to securely sign out of your account from here.",
+    "language": "Language",
+    "languageDescription": "Choose your preferred language for the application.",
+    "languageChanged": "Language changed successfully!"
+  },
+  "languages": {
+    "en": "English",
+    "uk": "Українська"
   }
 }
