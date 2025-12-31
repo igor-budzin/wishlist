@@ -34,3 +34,5 @@ coverage/
 # Claude Code
 .claude/
 .playwright-mcp
+
+out
