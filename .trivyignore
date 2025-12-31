@@ -6,4 +6,10 @@
 # CVE-2023-12345
 # GHSA-xxxx-yyyy-zzzz
 
-# Add your exceptions below with comments explaining why they're safe to ignore
+# Directory exclusions (additional to --skip-dirs)
+# Note: Trivy should skip these via command flags, but patterns here provide extra safety
+# Pattern format: Use ** for recursive matching
+# **/node_modules/**
+# **/.git/**
+
+# Add your CVE exceptions below with comments explaining why they're safe to ignore

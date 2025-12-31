@@ -155,14 +155,17 @@ choco install trivy
 ### Scan Filesystem
 
 ```bash
-# Scan current directory
+# Scan current directory (automatically excludes node_modules and .git)
 trivy fs .
 
 # Scan with specific severity
 trivy fs --severity HIGH,CRITICAL .
 
-# Exclude directories
-trivy fs --skip-dirs node_modules,.git .
+# Explicitly exclude additional directories
+trivy fs --skip-dirs node_modules,.git,dist,build .
+
+# Set via environment variable (alternative method)
+TRIVY_SKIP_DIRS=node_modules,.git trivy fs .
 ```
 
 ### Scan Docker Images
@@ -184,6 +187,37 @@ trivy image --severity HIGH,CRITICAL wishlist-backend:test
 trivy fs --scanners secret .
 ```
 
+## Troubleshooting
+
+### Trivy Scanning node_modules
+
+If Trivy is scanning `node_modules` despite exclusion settings:
+
+**Solution 1: Verify skip-dirs is set correctly**
+
+```bash
+# The workflow uses both parameter and environment variable
+skip-dirs: 'node_modules,.git'
+env:
+  TRIVY_SKIP_DIRS: 'node_modules,.git'
+```
+
+**Solution 2: Check if you're running locally**
+
+```bash
+# Always explicitly exclude when running locally
+trivy fs --skip-dirs node_modules,.git --severity HIGH,CRITICAL .
+```
+
+**Solution 3: Verify .trivyignore patterns**
+
+```
+# In .trivyignore (for CVEs only, not directories)
+# Note: .trivyignore is for CVE IDs, not directory patterns
+```
+
+**Important:** Trivy filesystem scans check `package-lock.json` for vulnerabilities, which is correct behavior. It should NOT scan individual files inside `node_modules/`. If you see vulnerability reports, they're coming from dependency analysis of lock files, not file scanning.
+
 ## Best Practices
 
 1. **Keep dependencies updated** - Regularly run `npm update` and `npm audit`
@@ -193,6 +227,7 @@ trivy fs --scanners secret .
 5. **Use latest base images** - Keep Docker base images up to date
 6. **Follow Node.js LTS** - Use actively supported Node.js versions
 7. **Review PRs for security** - Check for new dependencies and configuration changes
+8. **Understand scan behavior** - Trivy analyzes lock files (correct) vs scanning source files (unnecessary)
 
 ## Security Incident Response
 

@@ -48,9 +48,11 @@ jobs:
           format: 'table'
           exit-code: '1'
           severity: 'HIGH,CRITICAL'
-          skip-dirs: '.git,node_modules'
+          skip-dirs: 'node_modules,.git'
           scanners: 'vuln,secret,misconfig'
           trivyignores: '.trivyignore'
+        env:
+          TRIVY_SKIP_DIRS: 'node_modules,.git'
 
       # Generate detailed report for artifacts
       - name: Generate filesystem scan report
@@ -62,8 +64,10 @@ jobs:
           format: 'sarif'
           output: 'trivy-fs-results.sarif'
           severity: 'HIGH,CRITICAL'
-          skip-dirs: '.git,node_modules'
+          skip-dirs: 'node_modules,.git'
           scanners: 'vuln,secret,misconfig'
+        env:
+          TRIVY_SKIP_DIRS: 'node_modules,.git'
 
       # Upload SARIF report to GitHub Security tab
       - name: Upload filesystem scan results
