@@ -1,0 +1,20 @@
+---
+import Layout from '../layouts/Layout.astro';
+import { Header } from '../components/Header';
+import Hero from '../components/Hero.astro';
+import HowItWorks from '../components/HowItWorks.astro';
+import Features from '../components/Features.astro';
+import CTA from '../components/CTA.astro';
+import Footer from '../components/Footer.astro';
+---
+
+<Layout title="Wish Master - A Smarter Way to Keep Your Wishes">
+  <div class="w-full">
+    <Header client:load />
+    <Hero />
+    <HowItWorks />
+    <Features />
+    <CTA />
+    <Footer />
+  </div>
+</Layout>
