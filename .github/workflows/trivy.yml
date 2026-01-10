@@ -5,12 +5,13 @@
 
 name: trivy
 
+# Disabled - can be re-enabled by uncommenting the triggers below
 on:
-  push:
-    branches: [ "main" ]
-  pull_request:
-    # The branches below must be a subset of the branches above
-    branches: [ "main" ]
+  workflow_dispatch: # Manual trigger only
+  # push:
+  #   branches: [ "main" ]
+  # pull_request:
+  #   branches: [ "main" ]
 
 permissions:
   contents: read
