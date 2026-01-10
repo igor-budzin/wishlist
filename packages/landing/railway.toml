@@ -1,0 +1,10 @@
+# Railway configuration for landing service
+[build]
+builder = "dockerfile"
+dockerfilePath = "packages/landing/Dockerfile"
+
+[deploy]
+healthcheckPath = "/health"
+healthcheckTimeout = 100
+restartPolicyType = "on_failure"
+restartPolicyMaxRetries = 2

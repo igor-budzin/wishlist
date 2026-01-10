@@ -278,4 +278,5 @@ jobs:
           test -d packages/shared/dist || (echo "Shared build failed" && exit 1)
           test -d packages/frontend/dist || (echo "Frontend build failed" && exit 1)
           test -d packages/backend/dist || (echo "Backend build failed" && exit 1)
+          test -d packages/landing/dist || (echo "Landing build failed" && exit 1)
 
