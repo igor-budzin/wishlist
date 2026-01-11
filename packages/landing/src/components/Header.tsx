@@ -70,12 +70,12 @@ export function Header({ loginUrl }: HeaderProps) {
               Features
             </button>
             <button
-              onClick={() => scrollToSection('testimonials')}
+              onClick={() => scrollToSection('see-in-action')}
               className={`transition-colors ${
                 isScrolled ? 'text-gray-600 hover:text-[#4F46E5]' : 'text-white/90 hover:text-white'
               }`}
             >
-              Testimonials
+              See In Action
             </button>
           </nav>
 
