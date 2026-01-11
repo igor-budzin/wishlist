@@ -16,6 +16,12 @@ COPY tsconfig.json ./
 # Copy landing source
 COPY packages/landing ./packages/landing
 
+# Declare build arguments for Astro environment variables
+ARG PUBLIC_APP_URL
+
+# Set as environment variable so Astro can access during build
+ENV PUBLIC_APP_URL=$PUBLIC_APP_URL
+
 # Build landing with Astro
 RUN npm run build:landing
 
