@@ -1,0 +1,296 @@
+---
+import Layout from '../layouts/Layout.astro';
+import { Header } from '../components/Header';
+import Footer from '../components/Footer.astro';
+import { Target, Sparkles, BookOpen, Heart, Shield, Lightbulb, Mail } from 'lucide-react';
+
+const appUrl = import.meta.env.PUBLIC_APP_URL;
+const loginUrl = `${appUrl}/login`;
+
+const values = [
+  {
+    icon: 'sparkles',
+    title: 'Simplicity',
+    description: 'We believe the best tools get out of your way. Adding a wish should take seconds, not minutes.',
+  },
+  {
+    icon: 'shield',
+    title: 'Privacy',
+    description: 'Your wishes are yours. We never sell your data or share your wishlists without your permission.',
+  },
+  {
+    icon: 'lightbulb',
+    title: 'Innovation',
+    description: 'We continuously improve our AI to provide better descriptions, images, and organization.',
+  },
+  {
+    icon: 'heart',
+    title: 'Joy',
+    description: 'Gifting should be fun! We design every feature to bring delight to both wishers and gift-givers.',
+  },
+];
+---
+
+<Layout title="About Us - Wish Master">
+  <div class="w-full">
+    <Header client:load loginUrl={loginUrl} navLinks={[]} variant="solid" />
+
+    <!-- Hero Section -->
+    <section class="pt-32 pb-16 md:pt-40 md:pb-24 bg-gradient-to-br from-[#4F46E5] to-[#6366F1] text-white">
+      <div class="container mx-auto px-4 md:px-8 lg:px-16 max-w-4xl text-center">
+        <h1 class="text-4xl md:text-5xl lg:text-6xl mb-6">About Wish Master</h1>
+        <p class="text-xl md:text-2xl text-indigo-100">
+          We remove the guesswork from gifts by helping people share what they truly want
+        </p>
+      </div>
+    </section>
+
+    <main class="py-16 md:py-24 bg-white">
+      <div class="container mx-auto px-4 md:px-8 lg:px-16 max-w-5xl">
+
+        <!-- Mission Section -->
+        <section class="mb-20">
+          <div class="flex flex-col md:flex-row items-center gap-8">
+            <div class="w-20 h-20 bg-gradient-to-br from-[#4F46E5] to-[#6366F1] rounded-2xl flex items-center justify-center shrink-0">
+              <Target className="size-10 text-white" />
+            </div>
+            <div>
+              <h2 class="text-3xl text-gray-900 mb-4">Our Mission</h2>
+              <p class="text-lg text-gray-600">
+                At Wish Master, we believe that sharing wishes should be simple, delightful, and meaningful.
+                Our mission is to help people organize their dreams and make gifting easier for everyone.
+              </p>
+            </div>
+          </div>
+        </section>
+
+        <!-- What We Do Section -->
+        <section class="mb-20">
+          <div class="flex flex-col md:flex-row-reverse items-center gap-8">
+            <div class="w-20 h-20 bg-gradient-to-br from-[#4F46E5] to-[#6366F1] rounded-2xl flex items-center justify-center shrink-0">
+              <Sparkles className="size-10 text-white" />
+            </div>
+            <div>
+              <h2 class="text-3xl text-gray-900 mb-4">What We Do</h2>
+              <p class="text-lg text-gray-600 mb-4">
+                Wish Master is a modern wishlist platform that uses AI to transform simple product links
+                into beautifully organized wish items. No more copying and pasting descriptions or
+                downloading images manually - just paste a link and let our AI do the rest.
+              </p>
+              <p class="text-lg text-gray-600">
+                Whether you're planning a birthday, wedding, holiday, or just keeping track of things
+                you'd love to have someday, Wish Master makes it easy to save, organize, and share
+                your wishes with friends and family.
+              </p>
+            </div>
+          </div>
+        </section>
+
+        <!-- Our Story Section -->
+        <section class="mb-20">
+          <div class="flex flex-col md:flex-row items-center gap-8">
+            <div class="w-20 h-20 bg-gradient-to-br from-[#4F46E5] to-[#6366F1] rounded-2xl flex items-center justify-center shrink-0">
+              <BookOpen className="size-10 text-white" />
+            </div>
+            <div>
+              <h2 class="text-3xl text-gray-900 mb-4">Our Story</h2>
+              <p class="text-lg text-gray-600 mb-4">
+                Wish Master was born from a simple frustration: the traditional wishlist experience
+                was broken. Spreadsheets were clunky, bookmarks got lost, and sharing links without
+                context was confusing for gift-givers.
+              </p>
+              <p class="text-lg text-gray-600">
+                We set out to create a smarter solution - one that leverages modern AI technology
+                to automatically enrich product information, making wishlists more informative and
+                visually appealing.
+              </p>
+            </div>
+          </div>
+        </section>
+
+        <!-- Values Section -->
+        <section class="mb-20">
+          <h2 class="text-3xl text-gray-900 mb-12 text-center">Our Values</h2>
+          <div class="grid md:grid-cols-2 gap-6">
+            {values.map((value) => (
+              <div class="group p-6 rounded-2xl border border-gray-200 hover:border-[#4F46E5] hover:shadow-lg transition-all duration-300 cursor-default bg-white">
+                <div class="flex items-start gap-4">
+                  <div class="w-12 h-12 bg-[#4F46E5]/10 rounded-xl flex items-center justify-center shrink-0 group-hover:bg-[#4F46E5] transition-colors duration-300">
+                    {value.icon === 'sparkles' && <Sparkles className="size-6 text-[#4F46E5] group-hover:text-white transition-colors duration-300" />}
+                    {value.icon === 'shield' && <Shield className="size-6 text-[#4F46E5] group-hover:text-white transition-colors duration-300" />}
+                    {value.icon === 'lightbulb' && <Lightbulb className="size-6 text-[#4F46E5] group-hover:text-white transition-colors duration-300" />}
+                    {value.icon === 'heart' && <Heart className="size-6 text-[#4F46E5] group-hover:text-white transition-colors duration-300" />}
+                  </div>
+                  <div>
+                    <h3 class="text-xl text-gray-900 mb-2 group-hover:text-[#4F46E5] transition-colors duration-300">{value.title}</h3>
+                    <p class="text-gray-600">{value.description}</p>
+                  </div>
+                </div>
+              </div>
+            ))}
+          </div>
+        </section>
+
+        <!-- Contact Section -->
+        <section>
+          <div class="bg-gradient-to-br from-[#4F46E5] to-[#6366F1] rounded-3xl p-8 md:p-12 text-center text-white relative overflow-hidden">
+            <!-- Animated background particles -->
+            <div class="absolute inset-0 overflow-hidden">
+              <div class="particle particle-1"></div>
+              <div class="particle particle-2"></div>
+              <div class="particle particle-3"></div>
+              <div class="particle particle-4"></div>
+            </div>
+
+            <!-- Decorative circles -->
+            <div class="absolute -top-10 -left-10 w-40 h-40 bg-white/10 rounded-full blur-2xl floating-circle"></div>
+            <div class="absolute -bottom-10 -right-10 w-60 h-60 bg-white/10 rounded-full blur-2xl floating-circle-delayed"></div>
+
+            <div class="relative z-10">
+              <div class="w-16 h-16 bg-white/20 rounded-2xl flex items-center justify-center mx-auto mb-6 pulse-icon">
+                <Mail className="size-8 text-white" />
+              </div>
+              <h2 class="text-3xl mb-4">Get In Touch</h2>
+              <p class="text-lg text-indigo-100 mb-6 max-w-xl mx-auto">
+                We'd love to hear from you! Whether you have questions, feedback, or just want to say hello,
+                don't hesitate to reach out.
+              </p>
+              <a
+                href="mailto:hello@wishmaster.app"
+                class="contact-button inline-flex items-center gap-2 bg-white text-[#4F46E5] px-8 py-3 rounded-full text-lg font-medium hover:bg-indigo-50 transition-all duration-300"
+              >
+                <Mail className="size-5" />
+                hello@wishmaster.app
+              </a>
+            </div>
+          </div>
+        </section>
+
+      </div>
+    </main>
+    <Footer />
+  </div>
+</Layout>
+
+<style>
+  /* Floating particles */
+  .particle {
+    position: absolute;
+    width: 8px;
+    height: 8px;
+    background: rgba(255, 255, 255, 0.3);
+    border-radius: 50%;
+  }
+
+  .particle-1 {
+    top: 20%;
+    left: 10%;
+    animation: particleFloat 8s ease-in-out infinite;
+  }
+
+  .particle-2 {
+    top: 60%;
+    left: 80%;
+    animation: particleFloat 10s ease-in-out infinite;
+    animation-delay: -2s;
+  }
+
+  .particle-3 {
+    top: 80%;
+    left: 20%;
+    animation: particleFloat 12s ease-in-out infinite;
+    animation-delay: -4s;
+  }
+
+  .particle-4 {
+    top: 30%;
+    left: 70%;
+    animation: particleFloat 9s ease-in-out infinite;
+    animation-delay: -6s;
+  }
+
+  @keyframes particleFloat {
+    0%, 100% {
+      transform: translate(0, 0) scale(1);
+      opacity: 0.3;
+    }
+    25% {
+      transform: translate(20px, -30px) scale(1.2);
+      opacity: 0.6;
+    }
+    50% {
+      transform: translate(-10px, -60px) scale(0.8);
+      opacity: 0.4;
+    }
+    75% {
+      transform: translate(30px, -30px) scale(1.1);
+      opacity: 0.5;
+    }
+  }
+
+  /* Floating circles */
+  @keyframes float {
+    0%, 100% {
+      transform: translate(0, 0) rotate(0deg);
+    }
+    33% {
+      transform: translate(20px, -20px) rotate(5deg);
+    }
+    66% {
+      transform: translate(-10px, 10px) rotate(-5deg);
+    }
+  }
+
+  .floating-circle {
+    animation: float 8s ease-in-out infinite;
+  }
+
+  .floating-circle-delayed {
+    animation: float 10s ease-in-out infinite;
+    animation-delay: -5s;
+  }
+
+  /* Pulse animation for mail icon */
+  @keyframes iconBounce {
+    0%, 100% {
+      transform: scale(1);
+    }
+    50% {
+      transform: scale(1.05);
+    }
+  }
+
+  .pulse-icon {
+    animation: iconBounce 2s ease-in-out infinite;
+  }
+
+  /* Contact button */
+  .contact-button {
+    position: relative;
+    overflow: hidden;
+    transition: transform 0.3s ease-out, box-shadow 0.3s ease-out;
+  }
+
+  .contact-button:hover {
+    transform: scale(1.05);
+    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.2);
+  }
+
+  .contact-button::before {
+    content: '';
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    width: 0;
+    height: 0;
+    background: rgba(79, 70, 229, 0.1);
+    border-radius: 50%;
+    transform: translate(-50%, -50%);
+    transition: width 0.6s ease-out, height 0.6s ease-out;
+  }
+
+  .contact-button:hover::before {
+    width: 300px;
+    height: 300px;
+  }
+</style>
