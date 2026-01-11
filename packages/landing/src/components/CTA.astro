@@ -1,5 +1,6 @@
 ---
-
+const appUrl = import.meta.env.PUBLIC_APP_URL;
+const loginUrl = `${appUrl}/login`;
 ---
 
 <section class="py-20 md:py-32 bg-gradient-to-br from-[#4F46E5] to-[#6366F1] text-white">
@@ -13,11 +14,12 @@
         It's free to start and takes less than a minute.
       </p>
       <div class="flex flex-col sm:flex-row gap-4 justify-center pt-4">
-        <button
+        <a
+          href={loginUrl}
           class="bg-white text-[#4F46E5] hover:bg-gray-100 rounded-full px-10 text-lg h-10 inline-flex items-center justify-center font-medium transition-all"
         >
           Start Your Wishlist Today
-        </button>
+        </a>
       </div>
       <p class="text-sm text-indigo-200">
         No credit card required
