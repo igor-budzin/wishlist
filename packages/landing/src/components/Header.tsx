@@ -35,7 +35,7 @@ export function Header({ loginUrl }: HeaderProps) {
           : 'bg-white/95 md:bg-transparent backdrop-blur-sm md:backdrop-blur-none shadow-sm md:shadow-none'
       }`}
     >
-      <div className="container mx-auto px-4">
+      <div className="container mx-auto px-4 md:px-8 lg:px-16">
         <div className="flex items-center justify-between h-16 md:h-20">
           {/* Logo */}
           <div className="flex items-center gap-2">
