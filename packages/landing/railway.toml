@@ -4,7 +4,7 @@ builder = "dockerfile"
 dockerfilePath = "packages/landing/Dockerfile"
 
 [build.buildArgs]
-PUBLIC_APP_URL = https://${{UI.RAILWAY_PUBLIC_DOMAIN}}
+PUBLIC_APP_URL = "https://${{UI.RAILWAY_PUBLIC_DOMAIN}}"
 
 [deploy]
 restartPolicyType = "on_failure"
