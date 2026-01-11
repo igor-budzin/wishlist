@@ -1,0 +1,149 @@
+---
+import Layout from '../layouts/Layout.astro';
+import { Header } from '../components/Header';
+import Footer from '../components/Footer.astro';
+
+const appUrl = import.meta.env.PUBLIC_APP_URL;
+const loginUrl = `${appUrl}/login`;
+---
+
+<Layout title="Terms of Service - Wish Master">
+  <div class="w-full">
+    <Header client:load loginUrl={loginUrl} />
+    <main class="py-20 md:py-32 bg-white">
+      <div class="container mx-auto px-4 md:px-8 lg:px-16 max-w-4xl">
+        <h1 class="text-4xl md:text-5xl mb-8 text-gray-900">Terms of Service</h1>
+        <p class="text-gray-600 mb-8">Last updated: January 11, 2026</p>
+
+        <div class="prose prose-lg max-w-none text-gray-700 space-y-8">
+          <section>
+            <h2 class="text-2xl text-gray-900 mb-4">1. Acceptance of Terms</h2>
+            <p>
+              By accessing or using Wish Master, you agree to be bound by these Terms of Service. If you do not
+              agree to these terms, please do not use our service.
+            </p>
+          </section>
+
+          <section>
+            <h2 class="text-2xl text-gray-900 mb-4">2. Description of Service</h2>
+            <p>
+              Wish Master is a wishlist management platform that allows users to save, organize, and share
+              product wishes. Our service uses AI technology to automatically generate descriptions and
+              extract product information from links you provide.
+            </p>
+          </section>
+
+          <section>
+            <h2 class="text-2xl text-gray-900 mb-4">3. User Accounts</h2>
+            <ul class="list-disc pl-6 space-y-2 mt-4">
+              <li>You must provide accurate and complete information when creating an account.</li>
+              <li>You are responsible for maintaining the security of your account credentials.</li>
+              <li>You must notify us immediately of any unauthorized use of your account.</li>
+            </ul>
+          </section>
+
+          <section>
+            <h2 class="text-2xl text-gray-900 mb-4">4. Acceptable Use</h2>
+            <p>You agree not to:</p>
+            <ul class="list-disc pl-6 space-y-2 mt-4">
+              <li>Use the service for any illegal or unauthorized purpose</li>
+              <li>Upload malicious content or attempt to compromise our systems</li>
+              <li>Harass, abuse, or harm other users</li>
+              <li>Violate any applicable laws or regulations</li>
+              <li>Attempt to reverse engineer or copy our service</li>
+              <li>Use automated systems to access the service without permission</li>
+            </ul>
+          </section>
+
+          <section>
+            <h2 class="text-2xl text-gray-900 mb-4">5. User Content</h2>
+            <p>
+              You retain ownership of content you submit to Wish Master. By submitting content, you grant us
+              a non-exclusive, worldwide license to use, store, and display your content as necessary to
+              provide the service.
+            </p>
+            <p class="mt-4">
+              You are responsible for ensuring you have the right to share any content you submit. We may
+              remove content that violates these terms or applicable laws.
+            </p>
+          </section>
+
+          <section>
+            <h2 class="text-2xl text-gray-900 mb-4">6. AI-Generated Content</h2>
+            <p>
+              Our service uses artificial intelligence to generate product descriptions and extract information.
+              While we strive for accuracy, AI-generated content may contain errors. You should verify important
+              information independently.
+            </p>
+          </section>
+
+          <section>
+            <h2 class="text-2xl text-gray-900 mb-4">7. Third-Party Links</h2>
+            <p>
+              Our service may contain links to third-party websites. We are not responsible for the content,
+              privacy practices, or availability of these external sites. Your interactions with third-party
+              sites are governed by their own terms and policies.
+            </p>
+          </section>
+
+          <section>
+            <h2 class="text-2xl text-gray-900 mb-4">8. Intellectual Property</h2>
+            <p>
+              The Wish Master service, including its design, features, and content (excluding user content),
+              is protected by copyright, trademark, and other intellectual property laws. You may not copy,
+              modify, or distribute our intellectual property without permission.
+            </p>
+          </section>
+
+          <section>
+            <h2 class="text-2xl text-gray-900 mb-4">9. Disclaimer of Warranties</h2>
+            <p>
+              The service is provided "as is" without warranties of any kind, either express or implied.
+              We do not guarantee that the service will be uninterrupted, error-free, or secure.
+            </p>
+          </section>
+
+          <section>
+            <h2 class="text-2xl text-gray-900 mb-4">10. Limitation of Liability</h2>
+            <p>
+              To the maximum extent permitted by law, Wish Master shall not be liable for any indirect,
+              incidental, special, consequential, or punitive damages arising from your use of the service.
+            </p>
+          </section>
+
+          <section>
+            <h2 class="text-2xl text-gray-900 mb-4">11. Termination</h2>
+            <p>
+              We may suspend or terminate your access to the service at any time for violations of these
+              terms or for any other reason. You may also delete your account at any time.
+            </p>
+          </section>
+
+          <section>
+            <h2 class="text-2xl text-gray-900 mb-4">12. Changes to Terms</h2>
+            <p>
+              We may modify these terms at any time. We will notify users of significant changes. Continued
+              use of the service after changes constitutes acceptance of the new terms.
+            </p>
+          </section>
+
+          <section>
+            <h2 class="text-2xl text-gray-900 mb-4">13. Governing Law</h2>
+            <p>
+              These terms shall be governed by and construed in accordance with applicable laws, without
+              regard to conflict of law principles.
+            </p>
+          </section>
+
+          <section>
+            <h2 class="text-2xl text-gray-900 mb-4">14. Contact</h2>
+            <p>
+              For questions about these Terms of Service, please contact us at legal@wishmaster.app.
+            </p>
+          </section>
+        </div>
+      </div>
+    </main>
+    <Footer />
+  </div>
+</Layout>

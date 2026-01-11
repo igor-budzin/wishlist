@@ -38,7 +38,7 @@ export function Header({ loginUrl }: HeaderProps) {
       <div className="container mx-auto px-4 md:px-8 lg:px-16">
         <div className="flex items-center justify-between h-16 md:h-20">
           {/* Logo */}
-          <div className="flex items-center gap-2">
+          <a href="/" className="flex items-center gap-2 hover:opacity-90 transition-opacity">
             <div className="w-8 h-8 bg-gradient-to-br from-[#4F46E5] to-[#6366F1] rounded-lg flex items-center justify-center">
               <Sparkles className="size-5 text-white" />
             </div>
@@ -49,7 +49,7 @@ export function Header({ loginUrl }: HeaderProps) {
             >
               Wish Master
             </span>
-          </div>
+          </a>
 
           {/* Desktop Navigation */}
           <nav className="hidden md:flex items-center gap-8">
@@ -121,10 +121,10 @@ export function Header({ loginUrl }: HeaderProps) {
                 Features
               </button>
               <button
-                onClick={() => scrollToSection('testimonials')}
+                onClick={() => scrollToSection('see-in-action')}
                 className="text-left text-gray-600 hover:text-[#4F46E5] transition-colors py-2"
               >
-                Testimonials
+                See In Action
               </button>
               <div className="flex flex-col gap-2 pt-4 border-t border-gray-200">
                 <a href={loginUrl}>
