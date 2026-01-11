@@ -2,7 +2,11 @@ import { useState, useEffect } from 'react';
 import { Sparkles, Menu, X } from 'lucide-react';
 import { Button } from './Button';
 
-export function Header() {
+interface HeaderProps {
+  loginUrl: string;
+}
+
+export function Header({ loginUrl }: HeaderProps) {
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
   const [isScrolled, setIsScrolled] = useState(false);
 
@@ -77,15 +81,17 @@ export function Header() {
 
           {/* Auth Buttons - Desktop */}
           <div className="hidden md:flex items-center gap-3">
-            <Button
-              className={`rounded-full transition-colors ${
-                isScrolled
-                  ? 'bg-[#4F46E5] hover:bg-[#4338CA] text-white'
-                  : 'bg-white text-[#4F46E5] hover:bg-white/90'
-              }`}
-            >
-              Log In
-            </Button>
+            <a href={loginUrl}>
+              <Button
+                className={`rounded-full transition-colors ${
+                  isScrolled
+                    ? 'bg-[#4F46E5] hover:bg-[#4338CA] text-white'
+                    : 'bg-white text-[#4F46E5] hover:bg-white/90'
+                }`}
+              >
+                Log In
+              </Button>
+            </a>
           </div>
 
           {/* Mobile Menu Button */}
@@ -121,9 +127,11 @@ export function Header() {
                 Testimonials
               </button>
               <div className="flex flex-col gap-2 pt-4 border-t border-gray-200">
-                <Button className="w-full bg-[#4F46E5] hover:bg-[#4338CA] text-white">
-                  Log In
-                </Button>
+                <a href={loginUrl}>
+                  <Button className="w-full bg-[#4F46E5] hover:bg-[#4338CA] text-white">
+                    Log In
+                  </Button>
+                </a>
               </div>
             </nav>
           </div>

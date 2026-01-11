@@ -1,5 +1,8 @@
 ---
 import { Sparkles } from 'lucide-react';
+
+const appUrl = import.meta.env.PUBLIC_APP_URL;
+const loginUrl = `${appUrl}/login`;
 ---
 
 <section class="relative overflow-hidden bg-gradient-to-br from-[#4F46E5] to-[#6366F1] text-white pt-32 md:pt-40">
@@ -14,11 +17,12 @@ import { Sparkles } from 'lucide-react';
           Just paste a link and let our smart technology do the rest.
         </p>
         <div class="flex flex-col sm:flex-row gap-4 pt-4">
-          <button
+          <a
+            href={loginUrl}
             class="bg-white text-[#4F46E5] hover:bg-gray-100 rounded-full px-8 text-lg h-10 inline-flex items-center justify-center font-medium transition-all"
           >
             Try it Free
-          </button>
+          </a>
         </div>
       </div>
       <div class="relative">
