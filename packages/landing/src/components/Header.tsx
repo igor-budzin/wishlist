@@ -79,21 +79,32 @@ export function Header({ loginUrl, navLinks, variant = 'transparent' }: HeaderPr
           </a>
 
           {/* Desktop Navigation */}
-          {hasNavLinks && (
-            <nav className="hidden md:flex items-center gap-8">
-              {links.map((link) => (
-                <button
-                  key={link.sectionId}
-                  onClick={() => scrollToSection(link.sectionId)}
-                  className={`cursor-pointer transition-colors ${
-                    showSolidBg ? 'text-white/90 hover:text-white' : 'text-white/90 hover:text-white'
-                  }`}
-                >
-                  {link.label}
-                </button>
-              ))}
-            </nav>
-          )}
+          <nav className="hidden md:flex items-center gap-8">
+            <button
+              onClick={() => scrollToSection('how-it-works')}
+              className={`transition-colors ${
+                isScrolled ? 'text-gray-600 hover:text-[#4F46E5]' : 'text-white/90 hover:text-white'
+              }`}
+            >
+              How it Works
+            </button>
+            <button
+              onClick={() => scrollToSection('features')}
+              className={`transition-colors ${
+                isScrolled ? 'text-gray-600 hover:text-[#4F46E5]' : 'text-white/90 hover:text-white'
+              }`}
+            >
+              Features
+            </button>
+            <button
+              onClick={() => scrollToSection('see-in-action')}
+              className={`transition-colors ${
+                isScrolled ? 'text-gray-600 hover:text-[#4F46E5]' : 'text-white/90 hover:text-white'
+              }`}
+            >
+              See In Action
+            </button>
+          </nav>
 
           {/* Auth Buttons - Desktop */}
           <div className="hidden md:flex items-center gap-3">
