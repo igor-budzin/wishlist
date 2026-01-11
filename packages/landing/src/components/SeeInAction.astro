@@ -1,10 +1,10 @@
 ---
-import { Link2, Image as ImageIcon } from 'lucide-react';
+import { Link2, Image as ImageIcon, ArrowRight } from 'lucide-react';
 ---
 
 <section class="py-20 md:py-32 bg-white" id="see-in-action">
   <div class="container mx-auto px-4">
-    <div class="text-center max-w-3xl mx-auto mb-16">
+    <div class="text-center max-w-3xl mx-auto mb-16 scroll-animate-action">
       <h2 class="text-4xl md:text-5xl mb-4 text-gray-900">See It In Action</h2>
       <p class="text-xl text-gray-600">
         Watch how Wish Master transforms a simple product link into a beautifully organized wish
@@ -13,10 +13,10 @@ import { Link2, Image as ImageIcon } from 'lucide-react';
 
     <div class="max-w-5xl mx-auto">
       {/* Before & After Comparison */}
-      <div class="grid md:grid-cols-2 gap-8 mb-12">
+      <div class="grid md:grid-cols-2 gap-8 mb-12 items-center">
         {/* Before */}
-        <div class="space-y-4">
-          <div class="bg-gray-100 rounded-xl p-6">
+        <div class="space-y-4 scroll-animate-action" style="--delay: 100ms">
+          <div class="bg-gray-100 rounded-xl p-6 hover:shadow-lg transition-shadow duration-300">
             <h3 class="text-xl mb-3 text-gray-900 flex items-center gap-2">
               <span class="text-2xl">❌</span> Before: Just a Link
             </h3>
@@ -34,18 +34,25 @@ import { Link2, Image as ImageIcon } from 'lucide-react';
           </div>
         </div>
 
+        {/* Arrow indicator for desktop */}
+        <div class="hidden md:flex absolute left-1/2 -translate-x-1/2 z-10">
+          <div class="w-12 h-12 bg-[#4F46E5] rounded-full flex items-center justify-center arrow-pulse">
+            <ArrowRight className="size-6 text-white" />
+          </div>
+        </div>
+
         {/* After */}
-        <div class="space-y-4">
+        <div class="space-y-4 scroll-animate-action" style="--delay: 300ms">
           <div
-            class="bg-gradient-to-br from-[#4F46E5]/10 to-[#6366F1]/10 rounded-xl p-6 border-2 border-[#4F46E5]/20"
+            class="bg-gradient-to-br from-[#4F46E5]/10 to-[#6366F1]/10 rounded-xl p-6 border-2 border-[#4F46E5]/20 hover:shadow-lg hover:border-[#4F46E5]/40 transition-all duration-300 after-card"
           >
             <h3 class="text-xl mb-3 text-gray-900 flex items-center gap-2">
-              <span class="text-2xl">✨</span> After: AI Magic
+              <span class="text-2xl sparkle-animation">✨</span> After: AI Magic
             </h3>
             <div class="bg-white rounded-lg p-4 space-y-3 shadow-lg">
               <div class="flex gap-3">
                 <div
-                  class="w-20 h-20 bg-gradient-to-br from-[#4F46E5] to-[#6366F1] rounded-lg flex items-center justify-center shrink-0"
+                  class="w-20 h-20 bg-gradient-to-br from-[#4F46E5] to-[#6366F1] rounded-lg flex items-center justify-center shrink-0 image-placeholder"
                 >
                   <ImageIcon class="size-8 text-white" />
                 </div>
@@ -57,10 +64,10 @@ import { Link2, Image as ImageIcon } from 'lucide-react';
                 </div>
               </div>
               <div class="flex items-center gap-2 text-sm">
-                <span class="px-2 py-1 bg-[#4F46E5]/10 text-[#4F46E5] rounded-full"
+                <span class="px-2 py-1 bg-[#4F46E5]/10 text-[#4F46E5] rounded-full tag-animation"
                   >Electronics</span
                 >
-                <span class="text-gray-900">$299</span>
+                <span class="text-gray-900 price-animation">$299</span>
               </div>
             </div>
           </div>
@@ -69,3 +76,106 @@ import { Link2, Image as ImageIcon } from 'lucide-react';
     </div>
   </div>
 </section>
+
+<style>
+  .scroll-animate-action {
+    opacity: 0;
+    transform: translateY(30px);
+    transition: opacity 0.6s ease-out, transform 0.6s ease-out;
+    transition-delay: var(--delay, 0ms);
+  }
+
+  .scroll-animate-action.visible {
+    opacity: 1;
+    transform: translateY(0);
+  }
+
+  @keyframes pulse {
+    0%, 100% {
+      transform: scale(1);
+      box-shadow: 0 0 0 0 rgba(79, 70, 229, 0.4);
+    }
+    50% {
+      transform: scale(1.05);
+      box-shadow: 0 0 0 10px rgba(79, 70, 229, 0);
+    }
+  }
+
+  .arrow-pulse {
+    animation: pulse 2s ease-in-out infinite;
+  }
+
+  @keyframes sparkle {
+    0%, 100% {
+      transform: scale(1) rotate(0deg);
+    }
+    50% {
+      transform: scale(1.2) rotate(10deg);
+    }
+  }
+
+  .sparkle-animation {
+    display: inline-block;
+    animation: sparkle 2s ease-in-out infinite;
+  }
+
+  .after-card.visible .image-placeholder {
+    animation: slideIn 0.5s ease-out 0.3s forwards;
+  }
+
+  .after-card.visible .tag-animation {
+    animation: fadeInUp 0.4s ease-out 0.5s forwards;
+    opacity: 0;
+  }
+
+  .after-card.visible .price-animation {
+    animation: fadeInUp 0.4s ease-out 0.6s forwards;
+    opacity: 0;
+  }
+
+  @keyframes slideIn {
+    from {
+      opacity: 0;
+      transform: translateX(-20px);
+    }
+    to {
+      opacity: 1;
+      transform: translateX(0);
+    }
+  }
+
+  @keyframes fadeInUp {
+    from {
+      opacity: 0;
+      transform: translateY(10px);
+    }
+    to {
+      opacity: 1;
+      transform: translateY(0);
+    }
+  }
+</style>
+
+<script>
+  const observerOptions = {
+    root: null,
+    rootMargin: '0px',
+    threshold: 0.1
+  };
+
+  const observer = new IntersectionObserver((entries) => {
+    entries.forEach(entry => {
+      if (entry.isIntersecting) {
+        entry.target.classList.add('visible');
+      }
+    });
+  }, observerOptions);
+
+  document.querySelectorAll('#see-in-action .scroll-animate-action').forEach(el => {
+    observer.observe(el);
+  });
+
+  document.querySelectorAll('#see-in-action .after-card').forEach(el => {
+    observer.observe(el);
+  });
+</script>
