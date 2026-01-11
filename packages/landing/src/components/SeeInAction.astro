@@ -1,0 +1,71 @@
+---
+import { Link2, Image as ImageIcon } from 'lucide-react';
+---
+
+<section class="py-20 md:py-16 bg-white" id="example">
+  <div class="container mx-auto px-4">
+    <div class="text-center max-w-3xl mx-auto mb-16">
+      <h2 class="text-4xl md:text-5xl mb-4 text-gray-900">See It In Action</h2>
+      <p class="text-xl text-gray-600">
+        Watch how Wish Master transforms a simple product link into a beautifully organized wish
+      </p>
+    </div>
+
+    <div class="max-w-5xl mx-auto">
+      {/* Before & After Comparison */}
+      <div class="grid md:grid-cols-2 gap-8 mb-12">
+        {/* Before */}
+        <div class="space-y-4">
+          <div class="bg-gray-100 rounded-xl p-6">
+            <h3 class="text-xl mb-3 text-gray-900 flex items-center gap-2">
+              <span class="text-2xl">❌</span> Before: Just a Link
+            </h3>
+            <div class="bg-white rounded-lg p-4 space-y-3">
+              <div class="flex items-center gap-2">
+                <Link2 className="size-4 text-gray-400" />
+                <p class="text-sm text-gray-500 font-mono break-all">
+                  https://example.com/product/amazing-headphones-xyz123
+                </p>
+              </div>
+              <p class="text-sm text-gray-400 italic">
+                No description, no image, hard to remember what it was...
+              </p>
+            </div>
+          </div>
+        </div>
+
+        {/* After */}
+        <div class="space-y-4">
+          <div
+            class="bg-gradient-to-br from-[#4F46E5]/10 to-[#6366F1]/10 rounded-xl p-6 border-2 border-[#4F46E5]/20"
+          >
+            <h3 class="text-xl mb-3 text-gray-900 flex items-center gap-2">
+              <span class="text-2xl">✨</span> After: AI Magic
+            </h3>
+            <div class="bg-white rounded-lg p-4 space-y-3 shadow-lg">
+              <div class="flex gap-3">
+                <div
+                  class="w-20 h-20 bg-gradient-to-br from-[#4F46E5] to-[#6366F1] rounded-lg flex items-center justify-center shrink-0"
+                >
+                  <ImageIcon class="size-8 text-white" />
+                </div>
+                <div class="flex-1">
+                  <h4 class="text-gray-900 mb-1">Premium Wireless Headphones</h4>
+                  <p class="text-sm text-gray-600">
+                    High-quality noise-canceling headphones with 30-hour battery life
+                  </p>
+                </div>
+              </div>
+              <div class="flex items-center gap-2 text-sm">
+                <span class="px-2 py-1 bg-[#4F46E5]/10 text-[#4F46E5] rounded-full"
+                  >Electronics</span
+                >
+                <span class="text-gray-900">$299</span>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
