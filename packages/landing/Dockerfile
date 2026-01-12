@@ -26,14 +26,17 @@ ARG PUBLIC_APP_URL
 # Set as environment variable so Astro can access during build
 ENV PUBLIC_APP_URL=$PUBLIC_APP_URL
 
+# Build shared package first (landing depends on it)
+RUN npm run build:shared
+
 # Build landing with Astro
 RUN npm run build:landing
 
 # Stage 2: Serve with nginx + Brotli support
 FROM fholzer/nginx-brotli:latest
 
-# Copy custom nginx configuration
-COPY packages/landing/nginx.conf /etc/nginx/conf.d/default.conf
+# Copy custom nginx configuration from builder stage
+COPY --from=builder /app/packages/landing/nginx.conf /etc/nginx/conf.d/default.conf
 
 # Copy built static files from builder
 COPY --from=builder /app/packages/landing/dist /usr/share/nginx/html
