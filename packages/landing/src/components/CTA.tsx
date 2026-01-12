@@ -12,18 +12,18 @@ export function CTA({ loginUrl }: CTAProps) {
     const observerOptions = {
       root: null,
       rootMargin: '0px',
-      threshold: 0.1
+      threshold: 0.1,
     };
 
     const observer = new IntersectionObserver((entries) => {
-      entries.forEach(entry => {
+      entries.forEach((entry) => {
         if (entry.isIntersecting) {
           entry.target.classList.add('visible');
         }
       });
     }, observerOptions);
 
-    document.querySelectorAll('.scroll-animate-cta').forEach(el => {
+    document.querySelectorAll('.scroll-animate-cta').forEach((el) => {
       observer.observe(el);
     });
 
@@ -40,13 +40,17 @@ export function CTA({ loginUrl }: CTAProps) {
 
       <div className="container mx-auto px-4 md:px-8 lg:px-16 text-center relative z-10">
         <div className="max-w-3xl mx-auto space-y-6">
-          <h2 className="text-4xl md:text-5xl lg:text-6xl scroll-animate-cta">
-            {t('cta.title')}
-          </h2>
-          <p className="text-xl md:text-2xl text-indigo-100 scroll-animate-cta" style={{ '--delay': '100ms' } as React.CSSProperties}>
+          <h2 className="text-4xl md:text-5xl lg:text-6xl scroll-animate-cta">{t('cta.title')}</h2>
+          <p
+            className="text-xl md:text-2xl text-indigo-100 scroll-animate-cta"
+            style={{ '--delay': '100ms' } as React.CSSProperties}
+          >
             {t('cta.subtitle')}
           </p>
-          <div className="flex flex-col sm:flex-row gap-4 justify-center pt-4 scroll-animate-cta" style={{ '--delay': '200ms' } as React.CSSProperties}>
+          <div
+            className="flex flex-col sm:flex-row gap-4 justify-center pt-4 scroll-animate-cta"
+            style={{ '--delay': '200ms' } as React.CSSProperties}
+          >
             <a
               href={loginUrl}
               className="bg-white text-[#4F46E5] hover:bg-gray-100 hover:scale-105 rounded-full px-10 text-lg h-12 inline-flex items-center justify-center font-medium transition-all duration-300 cta-button"
@@ -54,7 +58,10 @@ export function CTA({ loginUrl }: CTAProps) {
               {t('cta.button')}
             </a>
           </div>
-          <p className="text-sm text-indigo-200 scroll-animate-cta" style={{ '--delay': '300ms' } as React.CSSProperties}>
+          <p
+            className="text-sm text-indigo-200 scroll-animate-cta"
+            style={{ '--delay': '300ms' } as React.CSSProperties}
+          >
             {t('cta.noCreditCard')}
           </p>
         </div>

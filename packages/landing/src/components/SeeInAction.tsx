@@ -9,22 +9,22 @@ export function SeeInAction() {
     const observerOptions = {
       root: null,
       rootMargin: '0px',
-      threshold: 0.1
+      threshold: 0.1,
     };
 
     const observer = new IntersectionObserver((entries) => {
-      entries.forEach(entry => {
+      entries.forEach((entry) => {
         if (entry.isIntersecting) {
           entry.target.classList.add('visible');
         }
       });
     }, observerOptions);
 
-    document.querySelectorAll('#see-in-action .scroll-animate-action').forEach(el => {
+    document.querySelectorAll('#see-in-action .scroll-animate-action').forEach((el) => {
       observer.observe(el);
     });
 
-    document.querySelectorAll('#see-in-action .after-card').forEach(el => {
+    document.querySelectorAll('#see-in-action .after-card').forEach((el) => {
       observer.observe(el);
     });
 
@@ -36,16 +36,17 @@ export function SeeInAction() {
       <div className="container mx-auto px-4">
         <div className="text-center max-w-3xl mx-auto mb-16 scroll-animate-action">
           <h2 className="text-4xl md:text-5xl mb-4 text-gray-900">{t('seeInAction.title')}</h2>
-          <p className="text-xl text-gray-600">
-            {t('seeInAction.subtitle')}
-          </p>
+          <p className="text-xl text-gray-600">{t('seeInAction.subtitle')}</p>
         </div>
 
         <div className="max-w-5xl mx-auto">
           {/* Before & After Comparison */}
           <div className="grid md:grid-cols-2 gap-8 mb-12 items-center">
             {/* Before */}
-            <div className="space-y-4 scroll-animate-action" style={{ '--delay': '100ms' } as React.CSSProperties}>
+            <div
+              className="space-y-4 scroll-animate-action"
+              style={{ '--delay': '100ms' } as React.CSSProperties}
+            >
               <div className="bg-gray-100 rounded-xl p-6 hover:shadow-lg transition-shadow duration-300">
                 <h3 className="text-xl mb-3 text-gray-900 flex items-center gap-2">
                   <span className="text-2xl">&#10060;</span> {t('seeInAction.before.title')}
@@ -72,18 +73,18 @@ export function SeeInAction() {
             </div>
 
             {/* After */}
-            <div className="space-y-4 scroll-animate-action" style={{ '--delay': '300ms' } as React.CSSProperties}>
-              <div
-                className="bg-gradient-to-br from-[#4F46E5]/10 to-[#6366F1]/10 rounded-xl p-6 border-2 border-[#4F46E5]/20 hover:shadow-lg hover:border-[#4F46E5]/40 transition-all duration-300 after-card"
-              >
+            <div
+              className="space-y-4 scroll-animate-action"
+              style={{ '--delay': '300ms' } as React.CSSProperties}
+            >
+              <div className="bg-gradient-to-br from-[#4F46E5]/10 to-[#6366F1]/10 rounded-xl p-6 border-2 border-[#4F46E5]/20 hover:shadow-lg hover:border-[#4F46E5]/40 transition-all duration-300 after-card">
                 <h3 className="text-xl mb-3 text-gray-900 flex items-center gap-2">
-                  <span className="text-2xl sparkle-animation">&#10024;</span> {t('seeInAction.after.title')}
+                  <span className="text-2xl sparkle-animation">&#10024;</span>{' '}
+                  {t('seeInAction.after.title')}
                 </h3>
                 <div className="bg-white rounded-lg p-4 space-y-3 shadow-lg">
                   <div className="flex gap-3">
-                    <div
-                      className="w-20 h-20 bg-gradient-to-br from-[#4F46E5] to-[#6366F1] rounded-lg flex items-center justify-center shrink-0 image-placeholder"
-                    >
+                    <div className="w-20 h-20 bg-gradient-to-br from-[#4F46E5] to-[#6366F1] rounded-lg flex items-center justify-center shrink-0 image-placeholder">
                       <ImageIcon className="size-8 text-white" />
                     </div>
                     <div className="flex-1">

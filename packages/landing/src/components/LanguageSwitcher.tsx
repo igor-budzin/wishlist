@@ -1,7 +1,12 @@
 import { useState, useRef, useEffect } from 'react';
 import { useTranslation } from 'react-i18next';
 import { Globe, ChevronDown } from 'lucide-react';
-import { changeLanguage, getLanguageOptions, getCurrentLanguage, type SupportedLanguage } from '../lib/i18n';
+import {
+  changeLanguage,
+  getLanguageOptions,
+  getCurrentLanguage,
+  type SupportedLanguage,
+} from '../lib/i18n';
 
 export function LanguageSwitcher() {
   const { t } = useTranslation('landing');

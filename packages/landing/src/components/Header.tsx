@@ -65,9 +65,7 @@ export function Header({ loginUrl, navLinks, variant = 'transparent' }: HeaderPr
           <a href="/" className="flex items-center gap-2 hover:opacity-90 transition-opacity">
             <div
               className={`w-8 h-8 rounded-lg flex items-center justify-center ${
-                showSolidBg
-                  ? 'bg-white/20'
-                  : 'bg-gradient-to-br from-[#4F46E5] to-[#6366F1]'
+                showSolidBg ? 'bg-white/20' : 'bg-gradient-to-br from-[#4F46E5] to-[#6366F1]'
               }`}
             >
               <Sparkles className="size-5 text-white" />
@@ -131,20 +129,26 @@ export function Header({ loginUrl, navLinks, variant = 'transparent' }: HeaderPr
 
         {/* Mobile Navigation */}
         {hasNavLinks && mobileMenuOpen && (
-          <div className={`md:hidden py-4 border-t ${showSolidBg ? 'border-white/20' : 'border-gray-200'}`}>
+          <div
+            className={`md:hidden py-4 border-t ${showSolidBg ? 'border-white/20' : 'border-gray-200'}`}
+          >
             <nav className="flex flex-col gap-4">
               {links.map((link) => (
                 <button
                   key={link.sectionId}
                   onClick={() => scrollToSection(link.sectionId)}
                   className={`text-left cursor-pointer transition-colors py-2 ${
-                    showSolidBg ? 'text-white/90 hover:text-white' : 'text-gray-600 hover:text-[#4F46E5]'
+                    showSolidBg
+                      ? 'text-white/90 hover:text-white'
+                      : 'text-gray-600 hover:text-[#4F46E5]'
                   }`}
                 >
                   {t(link.labelKey)}
                 </button>
               ))}
-              <div className={`flex flex-col gap-2 pt-4 border-t ${showSolidBg ? 'border-white/20' : 'border-gray-200'}`}>
+              <div
+                className={`flex flex-col gap-2 pt-4 border-t ${showSolidBg ? 'border-white/20' : 'border-gray-200'}`}
+              >
                 <a href={loginUrl}>
                   <Button
                     className={`w-full ${

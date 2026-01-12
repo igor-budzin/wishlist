@@ -12,15 +12,21 @@ import {
 
 const LANG_STORAGE_KEY = 'lang';
 
+let initPromise: Promise<typeof i18next> | null = null;
+
 /**
  * Initialize i18next for landing page
  */
-export function initI18n() {
+export function initI18n(): Promise<typeof i18next> {
   if (i18next.isInitialized) {
-    return i18next;
+    return Promise.resolve(i18next);
   }
 
-  i18next
+  if (initPromise) {
+    return initPromise;
+  }
+
+  initPromise = i18next
     .use(LanguageDetector)
     .use(initReactI18next)
     .init({
@@ -50,9 +56,10 @@ export function initI18n() {
       },
       returnNull: false,
       returnEmptyString: false,
-    });
+    })
+    .then(() => i18next);
 
-  return i18next;
+  return initPromise;
 }
 
 /**

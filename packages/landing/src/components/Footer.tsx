@@ -8,10 +8,7 @@ export function Footer() {
     <footer className="bg-gray-900 text-gray-300 py-12">
       <div className="container mx-auto px-4 md:px-8 lg:px-16">
         <div className="flex flex-col items-center space-y-6">
-          <a
-            href="/"
-            className="text-2xl text-white hover:text-gray-200 transition-colors"
-          >
+          <a href="/" className="text-2xl text-white hover:text-gray-200 transition-colors">
             {t('footer.brandName')}
           </a>
           <div className="flex flex-wrap justify-center gap-6">

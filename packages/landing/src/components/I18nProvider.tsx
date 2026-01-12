@@ -7,20 +7,21 @@ interface I18nProviderProps {
 }
 
 export function I18nProvider({ children }: I18nProviderProps) {
-  const [isReady, setIsReady] = useState(false);
+  const [isReady, setIsReady] = useState(i18next.isInitialized);
 
   useEffect(() => {
-    initI18n();
-    setIsReady(true);
-  }, []);
+    if (!isReady) {
+      initI18n().then(() => {
+        setIsReady(true);
+      });
+    }
+  }, [isReady]);
 
   if (!isReady) {
     return null;
   }
 
   return (
-    <I18nextProvider i18n={i18next as I18nextProviderProps['i18n']}>
-      {children}
-    </I18nextProvider>
+    <I18nextProvider i18n={i18next as I18nextProviderProps['i18n']}>{children}</I18nextProvider>
   );
 }

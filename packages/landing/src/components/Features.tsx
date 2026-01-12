@@ -18,18 +18,18 @@ export function Features() {
     const observerOptions = {
       root: null,
       rootMargin: '0px',
-      threshold: 0.1
+      threshold: 0.1,
     };
 
     const observer = new IntersectionObserver((entries) => {
-      entries.forEach(entry => {
+      entries.forEach((entry) => {
         if (entry.isIntersecting) {
           entry.target.classList.add('visible');
         }
       });
     }, observerOptions);
 
-    document.querySelectorAll('#features .scroll-animate-features').forEach(el => {
+    document.querySelectorAll('#features .scroll-animate-features').forEach((el) => {
       observer.observe(el);
     });
 
@@ -38,13 +38,20 @@ export function Features() {
 
   const getIcon = (iconName: string) => {
     switch (iconName) {
-      case 'sparkles': return <Sparkles className="size-7 text-white" />;
-      case 'clock': return <Clock className="size-7 text-white" />;
-      case 'share': return <Share2 className="size-7 text-white" />;
-      case 'smartphone': return <Smartphone className="size-7 text-white" />;
-      case 'shield': return <Shield className="size-7 text-white" />;
-      case 'link': return <Link2 className="size-7 text-white" />;
-      default: return null;
+      case 'sparkles':
+        return <Sparkles className="size-7 text-white" />;
+      case 'clock':
+        return <Clock className="size-7 text-white" />;
+      case 'share':
+        return <Share2 className="size-7 text-white" />;
+      case 'smartphone':
+        return <Smartphone className="size-7 text-white" />;
+      case 'shield':
+        return <Shield className="size-7 text-white" />;
+      case 'link':
+        return <Link2 className="size-7 text-white" />;
+      default:
+        return null;
     }
   };
 
@@ -52,12 +59,8 @@ export function Features() {
     <section className="py-20 md:py-32 bg-white" id="features">
       <div className="container mx-auto px-4 md:px-8 lg:px-16">
         <div className="text-center max-w-3xl mx-auto mb-16 scroll-animate-features">
-          <h2 className="text-4xl md:text-5xl mb-4 text-gray-900">
-            {t('features.title')}
-          </h2>
-          <p className="text-xl text-gray-600">
-            {t('features.subtitle')}
-          </p>
+          <h2 className="text-4xl md:text-5xl mb-4 text-gray-900">{t('features.title')}</h2>
+          <p className="text-xl text-gray-600">{t('features.subtitle')}</p>
         </div>
 
         <div className="grid sm:grid-cols-2 lg:grid-cols-3 gap-8">
@@ -70,12 +73,8 @@ export function Features() {
               <div className="w-14 h-14 rounded-lg bg-gradient-to-br from-[#4F46E5] to-[#6366F1] flex items-center justify-center mb-4 feature-icon">
                 {getIcon(feature.icon)}
               </div>
-              <h3 className="text-xl mb-2 text-gray-900">
-                {t(`features.${feature.key}.title`)}
-              </h3>
-              <p className="text-gray-600">
-                {t(`features.${feature.key}.description`)}
-              </p>
+              <h3 className="text-xl mb-2 text-gray-900">{t(`features.${feature.key}.title`)}</h3>
+              <p className="text-gray-600">{t(`features.${feature.key}.description`)}</p>
             </div>
           ))}
         </div>
