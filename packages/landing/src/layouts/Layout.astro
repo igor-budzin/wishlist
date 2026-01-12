@@ -9,6 +9,16 @@ const { title, description = "Store, manage, and share your dream products with 
 
 <!doctype html>
 <html lang="en">
+<script is:inline>
+  // Set lang attribute based on stored preference or browser language
+  (function() {
+    const storedLang = localStorage.getItem('lang');
+    const browserLang = navigator.language?.split('-')[0];
+    const supportedLangs = ['en', 'uk'];
+    const lang = storedLang || (supportedLangs.includes(browserLang) ? browserLang : 'en');
+    document.documentElement.lang = lang;
+  })();
+</script>
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />

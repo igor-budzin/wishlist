@@ -1,0 +1,320 @@
+{
+  "meta": {
+    "title": "Wish Master - A Smarter Way to Keep Your Wishes",
+    "description": "Store, manage, and share your dream products with AI-powered descriptions."
+  },
+  "nav": {
+    "home": "Home",
+    "howItWorks": "How it Works",
+    "features": "Features",
+    "seeInAction": "See In Action",
+    "logIn": "Log In"
+  },
+  "hero": {
+    "title": "A Smarter Way to Keep Your Wishes",
+    "subtitle": "Save ideas in one place, share your wishes instantly, and make gifting easier than ever.",
+    "cta": "Try it Free",
+    "appName": "Wish Master App",
+    "mockupPlaceholder": "Mockup Placeholder"
+  },
+  "howItWorks": {
+    "title": "How It Works",
+    "subtitle": "Creating your wishlist is as simple as 1-2-3",
+    "step1": {
+      "title": "Find gift you want",
+      "description": "Explore ideas online and pick something you'd truly love to receive as a gift."
+    },
+    "step2": {
+      "title": "Insert link",
+      "description": "Our AI automatically creates a beautiful description with all the details"
+    },
+    "step3": {
+      "title": "Share Your Wishlist",
+      "description": "Share with friends and family so they know exactly what you want"
+    }
+  },
+  "features": {
+    "title": "Powerful Features",
+    "subtitle": "Everything you need to manage and share your wishes",
+    "aiDescription": {
+      "title": "AI Description Generation",
+      "description": "Advanced AI technology automatically generates detailed, accurate descriptions from any product link."
+    },
+    "easyManagement": {
+      "title": "Easy Wish Management",
+      "description": "Organize, categorize, and prioritize your wishes with our intuitive management system."
+    },
+    "seamlessSharing": {
+      "title": "Seamless Sharing",
+      "description": "Share your entire wishlist or individual items with friends and family instantly."
+    },
+    "mobileFriendly": {
+      "title": "Mobile Friendly",
+      "description": "Access your wishlist anywhere, anytime. Fully optimized for mobile devices."
+    },
+    "secureStorage": {
+      "title": "Secure Storage",
+      "description": "Your wishes are safely stored with enterprise-grade security and encryption."
+    },
+    "universalLinks": {
+      "title": "Universal Links",
+      "description": "Works with any online store. Add wishes from Amazon, eBay, and thousands more."
+    }
+  },
+  "seeInAction": {
+    "title": "See It In Action",
+    "subtitle": "Watch how Wish Master transforms a simple product link into a beautifully organized wish",
+    "before": {
+      "title": "Before: Just a Link",
+      "exampleUrl": "https://example.com/product/amazing-headphones-xyz123",
+      "noDescription": "No description, no image, hard to remember what it was..."
+    },
+    "after": {
+      "title": "After: AI Magic",
+      "productTitle": "Premium Wireless Headphones",
+      "productDescription": "High-quality noise-canceling headphones with 30-hour battery life",
+      "category": "Electronics"
+    }
+  },
+  "faq": {
+    "title": "Frequently Asked Questions",
+    "subtitle": "Everything you need to know about Wish Master",
+    "q1": {
+      "question": "How does the AI description generation work?",
+      "answer": "Our AI analyzes the product link you provide and automatically extracts key information like the product name, description, price, and images. It then creates a beautifully formatted wish card with all the essential details, saving you time and ensuring consistency across your wishlist."
+    },
+    "q2": {
+      "question": "Which online stores are supported?",
+      "answer": "Wish Master works with virtually any online store! We support major retailers like Amazon, eBay, Etsy, Target, Walmart, and thousands more. Simply paste any product URL and our AI will do the rest. If you encounter any issues with a specific site, please let us know."
+    },
+    "q3": {
+      "question": "Is my wishlist private?",
+      "answer": "Yes! Your wishlist is completely private by default. You have full control over who can see your wishes. You can choose to share your entire wishlist or specific items with friends and family via a secure link. Only people with the link can view your shared wishes."
+    },
+    "q4": {
+      "question": "How do I share my wishlist?",
+      "answer": "Sharing is super easy! Just click the \"Share\" button on your wishlist, and you'll get a unique link that you can send to anyone. You can share via email, text message, social media, or any other way you prefer. Recipients can view your wishlist without needing to create an account."
+    },
+    "q5": {
+      "question": "Is Wish Master free to use?",
+      "answer": "Yes! Wish Master is completely free to use. You can create unlimited wishlists, add as many items as you want, and share with unlimited people. We may offer premium features in the future, but the core functionality will always remain free. No credit card required to get started!"
+    },
+    "q6": {
+      "question": "Can I edit or delete wishes after adding them?",
+      "answer": "Absolutely! You have full control over your wishes. You can edit the AI-generated descriptions, add notes, change priorities, or delete wishes at any time. The AI provides a great starting point, but you can always customize everything to match your preferences."
+    }
+  },
+  "cta": {
+    "title": "Start Your Wishlist Today",
+    "subtitle": "Join users who are making their wishes come true. It's free to start and takes less than a minute.",
+    "button": "Start Your Wishlist Today",
+    "noCreditCard": "No credit card required"
+  },
+  "footer": {
+    "brandName": "Wish Master",
+    "aboutUs": "About Us",
+    "privacyPolicy": "Privacy Policy",
+    "termsOfService": "Terms of Service",
+    "copyright": "2026 Wish Master. All rights reserved.",
+    "language": "Language"
+  },
+  "about": {
+    "meta": {
+      "title": "About Us - Wish Master"
+    },
+    "hero": {
+      "title": "About Wish Master",
+      "subtitle": "We remove the guesswork from gifts by helping people share what they truly want"
+    },
+    "mission": {
+      "title": "Our Mission",
+      "description": "At Wish Master, we believe that sharing wishes should be simple, delightful, and meaningful. Our mission is to help people organize their dreams and make gifting easier for everyone."
+    },
+    "whatWeDo": {
+      "title": "What We Do",
+      "description1": "Wish Master is a modern wishlist platform that uses AI to transform simple product links into beautifully organized wish items. No more copying and pasting descriptions or downloading images manually - just paste a link and let our AI do the rest.",
+      "description2": "Whether you're planning a birthday, wedding, holiday, or just keeping track of things you'd love to have someday, Wish Master makes it easy to save, organize, and share your wishes with friends and family."
+    },
+    "ourStory": {
+      "title": "Our Story",
+      "description1": "Wish Master was born from a simple frustration: the traditional wishlist experience was broken. Spreadsheets were clunky, bookmarks got lost, and sharing links without context was confusing for gift-givers.",
+      "description2": "We set out to create a smarter solution - one that leverages modern AI technology to automatically enrich product information, making wishlists more informative and visually appealing."
+    },
+    "values": {
+      "title": "Our Values",
+      "simplicity": {
+        "title": "Simplicity",
+        "description": "We believe the best tools get out of your way. Adding a wish should take seconds, not minutes."
+      },
+      "privacy": {
+        "title": "Privacy",
+        "description": "Your wishes are yours. We never sell your data or share your wishlists without your permission."
+      },
+      "innovation": {
+        "title": "Innovation",
+        "description": "We continuously improve our AI to provide better descriptions, images, and organization."
+      },
+      "joy": {
+        "title": "Joy",
+        "description": "Gifting should be fun! We design every feature to bring delight to both wishers and gift-givers."
+      }
+    },
+    "contact": {
+      "title": "Get In Touch",
+      "description": "We'd love to hear from you! Whether you have questions, feedback, or just want to say hello, don't hesitate to reach out."
+    }
+  },
+  "privacyPolicy": {
+    "meta": {
+      "title": "Privacy Policy - Wish Master"
+    },
+    "title": "Privacy Policy",
+    "lastUpdated": "Last updated: January 11, 2026",
+    "sections": {
+      "introduction": {
+        "title": "1. Introduction",
+        "content": "Welcome to Wish Master. We respect your privacy and are committed to protecting your personal data. This privacy policy explains how we collect, use, and safeguard your information when you use our service."
+      },
+      "informationWeCollect": {
+        "title": "2. Information We Collect",
+        "intro": "We may collect the following types of information:",
+        "items": {
+          "account": "<strong>Account Information:</strong> Email address, name, and profile information when you create an account.",
+          "wishlist": "<strong>Wishlist Data:</strong> Product links, descriptions, images, and other content you add to your wishlists.",
+          "usage": "<strong>Usage Data:</strong> Information about how you interact with our service, including pages visited and features used.",
+          "device": "<strong>Device Information:</strong> Browser type, operating system, and device identifiers."
+        }
+      },
+      "howWeUse": {
+        "title": "3. How We Use Your Information",
+        "intro": "We use your information to:",
+        "items": {
+          "provide": "Provide, maintain, and improve our services",
+          "process": "Process and store your wishlists",
+          "generate": "Generate AI-powered descriptions for your wish items",
+          "send": "Send you important updates about the service",
+          "respond": "Respond to your inquiries and support requests",
+          "protect": "Protect against fraud and unauthorized access"
+        }
+      },
+      "dataSharing": {
+        "title": "4. Data Sharing",
+        "intro": "We do not sell your personal information. We may share your data with:",
+        "items": {
+          "serviceProviders": "<strong>Service Providers:</strong> Third-party services that help us operate our platform (hosting, analytics, AI processing).",
+          "legal": "<strong>Legal Requirements:</strong> When required by law or to protect our rights.",
+          "consent": "<strong>With Your Consent:</strong> When you choose to share your wishlists with others."
+        }
+      },
+      "dataSecurity": {
+        "title": "5. Data Security",
+        "content": "We implement appropriate technical and organizational measures to protect your personal data against unauthorized access, alteration, disclosure, or destruction. However, no method of transmission over the Internet is 100% secure."
+      },
+      "yourRights": {
+        "title": "6. Your Rights",
+        "intro": "You have the right to:",
+        "items": {
+          "access": "Access your personal data",
+          "correct": "Correct inaccurate data",
+          "delete": "Request deletion of your data",
+          "export": "Export your data",
+          "optOut": "Opt out of marketing communications"
+        }
+      },
+      "cookies": {
+        "title": "7. Cookies",
+        "content": "We use cookies and similar technologies to enhance your experience, analyze usage, and provide personalized content. You can manage your cookie preferences through your browser settings."
+      },
+      "childrensPrivacy": {
+        "title": "8. Children's Privacy",
+        "content": "Our service is not intended for children under 13. We do not knowingly collect personal information from children under 13. If you believe we have collected such information, please contact us."
+      },
+      "changes": {
+        "title": "9. Changes to This Policy",
+        "content": "We may update this privacy policy from time to time. We will notify you of any changes by posting the new policy on this page and updating the \"Last updated\" date."
+      },
+      "contact": {
+        "title": "10. Contact Us",
+        "content": "If you have any questions about this privacy policy, please contact us at privacy@wishmaster.app."
+      }
+    }
+  },
+  "termsOfService": {
+    "meta": {
+      "title": "Terms of Service - Wish Master"
+    },
+    "title": "Terms of Service",
+    "lastUpdated": "Last updated: January 11, 2026",
+    "sections": {
+      "acceptance": {
+        "title": "1. Acceptance of Terms",
+        "content": "By accessing or using Wish Master, you agree to be bound by these Terms of Service. If you do not agree to these terms, please do not use our service."
+      },
+      "description": {
+        "title": "2. Description of Service",
+        "content": "Wish Master is a wishlist management platform that allows users to save, organize, and share product wishes. Our service uses AI technology to automatically generate descriptions and extract product information from links you provide."
+      },
+      "userAccounts": {
+        "title": "3. User Accounts",
+        "items": {
+          "accurate": "You must provide accurate and complete information when creating an account.",
+          "security": "You are responsible for maintaining the security of your account credentials.",
+          "notify": "You must notify us immediately of any unauthorized use of your account."
+        }
+      },
+      "acceptableUse": {
+        "title": "4. Acceptable Use",
+        "intro": "You agree not to:",
+        "items": {
+          "illegal": "Use the service for any illegal or unauthorized purpose",
+          "malicious": "Upload malicious content or attempt to compromise our systems",
+          "harass": "Harass, abuse, or harm other users",
+          "violate": "Violate any applicable laws or regulations",
+          "reverseEngineer": "Attempt to reverse engineer or copy our service",
+          "automated": "Use automated systems to access the service without permission"
+        }
+      },
+      "userContent": {
+        "title": "5. User Content",
+        "content1": "You retain ownership of content you submit to Wish Master. By submitting content, you grant us a non-exclusive, worldwide license to use, store, and display your content as necessary to provide the service.",
+        "content2": "You are responsible for ensuring you have the right to share any content you submit. We may remove content that violates these terms or applicable laws."
+      },
+      "aiContent": {
+        "title": "6. AI-Generated Content",
+        "content": "Our service uses artificial intelligence to generate product descriptions and extract information. While we strive for accuracy, AI-generated content may contain errors. You should verify important information independently."
+      },
+      "thirdPartyLinks": {
+        "title": "7. Third-Party Links",
+        "content": "Our service may contain links to third-party websites. We are not responsible for the content, privacy practices, or availability of these external sites. Your interactions with third-party sites are governed by their own terms and policies."
+      },
+      "intellectualProperty": {
+        "title": "8. Intellectual Property",
+        "content": "The Wish Master service, including its design, features, and content (excluding user content), is protected by copyright, trademark, and other intellectual property laws. You may not copy, modify, or distribute our intellectual property without permission."
+      },
+      "disclaimer": {
+        "title": "9. Disclaimer of Warranties",
+        "content": "The service is provided \"as is\" without warranties of any kind, either express or implied. We do not guarantee that the service will be uninterrupted, error-free, or secure."
+      },
+      "limitation": {
+        "title": "10. Limitation of Liability",
+        "content": "To the maximum extent permitted by law, Wish Master shall not be liable for any indirect, incidental, special, consequential, or punitive damages arising from your use of the service."
+      },
+      "termination": {
+        "title": "11. Termination",
+        "content": "We may suspend or terminate your access to the service at any time for violations of these terms or for any other reason. You may also delete your account at any time."
+      },
+      "changes": {
+        "title": "12. Changes to Terms",
+        "content": "We may modify these terms at any time. We will notify users of significant changes. Continued use of the service after changes constitutes acceptance of the new terms."
+      },
+      "governingLaw": {
+        "title": "13. Governing Law",
+        "content": "These terms shall be governed by and construed in accordance with applicable laws, without regard to conflict of law principles."
+      },
+      "contact": {
+        "title": "14. Contact",
+        "content": "For questions about these Terms of Service, please contact us at legal@wishmaster.app."
+      }
+    }
+  }
+}

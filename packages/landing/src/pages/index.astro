@@ -1,27 +1,11 @@
 ---
 import Layout from '../layouts/Layout.astro';
-import { Header } from '../components/Header';
-import Hero from '../components/Hero.astro';
-import HowItWorks from '../components/HowItWorks.astro';
-import Features from '../components/Features.astro';
-import CTA from '../components/CTA.astro';
-import Footer from '../components/Footer.astro';
-import SeeInAction from '@/components/SeeInAction.astro';
-import { Faq } from '@/components/Faq';
+import { LandingPage } from '../components/LandingPage';
 
 const appUrl = import.meta.env.PUBLIC_APP_URL;
 const loginUrl = `${appUrl}/login`;
 ---
 
 <Layout title="Wish Master - A Smarter Way to Keep Your Wishes">
-  <div class="w-full">
-    <Header client:load loginUrl={loginUrl} />
-    <Hero />
-    <HowItWorks />
-    <Features />
-    <SeeInAction />
-    <Faq client:load />
-    <CTA />
-    <Footer />
-  </div>
+  <LandingPage client:load loginUrl={loginUrl} />
 </Layout>
