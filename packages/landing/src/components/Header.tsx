@@ -1,9 +1,10 @@
 import { useState, useEffect } from 'react';
+import { useTranslation } from 'react-i18next';
 import { Sparkles, Menu, X } from 'lucide-react';
 import { Button } from './Button';
 
 interface NavLink {
-  label: string;
+  labelKey: string;
   sectionId: string;
 }
 
@@ -14,13 +15,14 @@ interface HeaderProps {
 }
 
 const defaultNavLinks: NavLink[] = [
-  { label: 'Home', sectionId: 'hero' },
-  { label: 'How it Works', sectionId: 'how-it-works' },
-  { label: 'Features', sectionId: 'features' },
-  { label: 'See In Action', sectionId: 'see-in-action' },
+  { labelKey: 'nav.home', sectionId: 'hero' },
+  { labelKey: 'nav.howItWorks', sectionId: 'how-it-works' },
+  { labelKey: 'nav.features', sectionId: 'features' },
+  { labelKey: 'nav.seeInAction', sectionId: 'see-in-action' },
 ];
 
 export function Header({ loginUrl, navLinks, variant = 'transparent' }: HeaderProps) {
+  const { t } = useTranslation('landing');
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
   const [isScrolled, setIsScrolled] = useState(false);
 
@@ -88,7 +90,7 @@ export function Header({ loginUrl, navLinks, variant = 'transparent' }: HeaderPr
                   onClick={() => scrollToSection(link.sectionId)}
                   className="cursor-pointer transition-colors text-white/90 hover:text-white text-lg"
                 >
-                  {link.label}
+                  {t(link.labelKey)}
                 </button>
               ))}
             </nav>
@@ -104,7 +106,7 @@ export function Header({ loginUrl, navLinks, variant = 'transparent' }: HeaderPr
                     : 'bg-white text-[#4F46E5] hover:bg-white/90'
                 }`}
               >
-                Log In
+                {t('nav.logIn')}
               </Button>
             </a>
           </div>
@@ -121,7 +123,7 @@ export function Header({ loginUrl, navLinks, variant = 'transparent' }: HeaderPr
           ) : (
             <a href={loginUrl} className="md:hidden">
               <Button className="bg-white text-[#4F46E5] hover:bg-white/90 rounded-full">
-                Log In
+                {t('nav.logIn')}
               </Button>
             </a>
           )}
@@ -139,7 +141,7 @@ export function Header({ loginUrl, navLinks, variant = 'transparent' }: HeaderPr
                     showSolidBg ? 'text-white/90 hover:text-white' : 'text-gray-600 hover:text-[#4F46E5]'
                   }`}
                 >
-                  {link.label}
+                  {t(link.labelKey)}
                 </button>
               ))}
               <div className={`flex flex-col gap-2 pt-4 border-t ${showSolidBg ? 'border-white/20' : 'border-gray-200'}`}>
@@ -151,7 +153,7 @@ export function Header({ loginUrl, navLinks, variant = 'transparent' }: HeaderPr
                         : 'bg-[#4F46E5] hover:bg-[#4338CA] text-white'
                     }`}
                   >
-                    Log In
+                    {t('nav.logIn')}
                   </Button>
                 </a>
               </div>

@@ -1,0 +1,121 @@
+{
+  "meta": {
+    "title": "Wish Master - A Smarter Way to Keep Your Wishes",
+    "description": "Store, manage, and share your dream products with AI-powered descriptions."
+  },
+  "nav": {
+    "home": "Home",
+    "howItWorks": "How it Works",
+    "features": "Features",
+    "seeInAction": "See In Action",
+    "logIn": "Log In"
+  },
+  "hero": {
+    "title": "A Smarter Way to Keep Your Wishes",
+    "subtitle": "Save ideas in one place, share your wishes instantly, and make gifting easier than ever.",
+    "cta": "Try it Free",
+    "appName": "Wish Master App",
+    "mockupPlaceholder": "Mockup Placeholder"
+  },
+  "howItWorks": {
+    "title": "How It Works",
+    "subtitle": "Creating your wishlist is as simple as 1-2-3",
+    "step1": {
+      "title": "Find gift you want",
+      "description": "Explore ideas online and pick something you'd truly love to receive as a gift."
+    },
+    "step2": {
+      "title": "Insert link",
+      "description": "Our AI automatically creates a beautiful description with all the details"
+    },
+    "step3": {
+      "title": "Share Your Wishlist",
+      "description": "Share with friends and family so they know exactly what you want"
+    }
+  },
+  "features": {
+    "title": "Powerful Features",
+    "subtitle": "Everything you need to manage and share your wishes",
+    "aiDescription": {
+      "title": "AI Description Generation",
+      "description": "Advanced AI technology automatically generates detailed, accurate descriptions from any product link."
+    },
+    "easyManagement": {
+      "title": "Easy Wish Management",
+      "description": "Organize, categorize, and prioritize your wishes with our intuitive management system."
+    },
+    "seamlessSharing": {
+      "title": "Seamless Sharing",
+      "description": "Share your entire wishlist or individual items with friends and family instantly."
+    },
+    "mobileFriendly": {
+      "title": "Mobile Friendly",
+      "description": "Access your wishlist anywhere, anytime. Fully optimized for mobile devices."
+    },
+    "secureStorage": {
+      "title": "Secure Storage",
+      "description": "Your wishes are safely stored with enterprise-grade security and encryption."
+    },
+    "universalLinks": {
+      "title": "Universal Links",
+      "description": "Works with any online store. Add wishes from Amazon, eBay, and thousands more."
+    }
+  },
+  "seeInAction": {
+    "title": "See It In Action",
+    "subtitle": "Watch how Wish Master transforms a simple product link into a beautifully organized wish",
+    "before": {
+      "title": "Before: Just a Link",
+      "exampleUrl": "https://example.com/product/amazing-headphones-xyz123",
+      "noDescription": "No description, no image, hard to remember what it was..."
+    },
+    "after": {
+      "title": "After: AI Magic",
+      "productTitle": "Premium Wireless Headphones",
+      "productDescription": "High-quality noise-canceling headphones with 30-hour battery life",
+      "category": "Electronics"
+    }
+  },
+  "faq": {
+    "title": "Frequently Asked Questions",
+    "subtitle": "Everything you need to know about Wish Master",
+    "q1": {
+      "question": "How does the AI description generation work?",
+      "answer": "Our AI analyzes the product link you provide and automatically extracts key information like the product name, description, price, and images. It then creates a beautifully formatted wish card with all the essential details, saving you time and ensuring consistency across your wishlist."
+    },
+    "q2": {
+      "question": "Which online stores are supported?",
+      "answer": "Wish Master works with virtually any online store! We support major retailers like Amazon, eBay, Etsy, Target, Walmart, and thousands more. Simply paste any product URL and our AI will do the rest. If you encounter any issues with a specific site, please let us know."
+    },
+    "q3": {
+      "question": "Is my wishlist private?",
+      "answer": "Yes! Your wishlist is completely private by default. You have full control over who can see your wishes. You can choose to share your entire wishlist or specific items with friends and family via a secure link. Only people with the link can view your shared wishes."
+    },
+    "q4": {
+      "question": "How do I share my wishlist?",
+      "answer": "Sharing is super easy! Just click the \"Share\" button on your wishlist, and you'll get a unique link that you can send to anyone. You can share via email, text message, social media, or any other way you prefer. Recipients can view your wishlist without needing to create an account."
+    },
+    "q5": {
+      "question": "Is Wish Master free to use?",
+      "answer": "Yes! Wish Master is completely free to use. You can create unlimited wishlists, add as many items as you want, and share with unlimited people. We may offer premium features in the future, but the core functionality will always remain free. No credit card required to get started!"
+    },
+    "q6": {
+      "question": "Can I edit or delete wishes after adding them?",
+      "answer": "Absolutely! You have full control over your wishes. You can edit the AI-generated descriptions, add notes, change priorities, or delete wishes at any time. The AI provides a great starting point, but you can always customize everything to match your preferences."
+    }
+  },
+  "cta": {
+    "title": "Start Your Wishlist Today",
+    "subtitle": "Join users who are making their wishes come true. It's free to start and takes less than a minute.",
+    "button": "Start Your Wishlist Today",
+    "noCreditCard": "No credit card required"
+  },
+  "footer": {
+    "brandName": "Wish Master",
+    "aboutUs": "About Us",
+    "privacyPolicy": "Privacy Policy",
+    "termsOfService": "Terms of Service",
+    "copyright": "2026 Wish Master. All rights reserved.",
+    "language": "Language"
+  }
+}
