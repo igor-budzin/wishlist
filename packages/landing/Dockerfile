@@ -6,12 +6,16 @@ WORKDIR /app
 # Copy package files for all workspaces
 COPY package.json package-lock.json ./
 COPY packages/landing/package.json ./packages/landing/
+COPY packages/shared/package.json ./packages/shared/
 
 # Install all dependencies (including workspaces)
 RUN npm ci
 
 # Copy root tsconfig (needed for builds)
 COPY tsconfig.json ./
+
+# Copy shared package (required by landing for i18n)
+COPY packages/shared ./packages/shared
 
 # Copy landing source
 COPY packages/landing ./packages/landing
